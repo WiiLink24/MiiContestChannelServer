@@ -133,7 +133,7 @@ func (w *WebPanel) AddContestPOST(c *gin.Context) {
 		}
 
 		// Write unencrypted thumbnail
-		err = os.WriteFile(fmt.Sprintf("%s/contest/%d/thumbnail.jpg", w.Config.AssetsPath, contestId), resized, 0666)
+		err = os.WriteFile(fmt.Sprintf("%s/contest/%d/thumbnail.jpg", w.Config.AssetsPath, contestId), resized, 0600)
 		if err != nil {
 			c.HTML(http.StatusInternalServerError, "add_contest.html", gin.H{
 				"Error": err.Error(),
