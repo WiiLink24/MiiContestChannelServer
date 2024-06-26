@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Add Contest | CMOC Control Panel</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit "{{ .ContestInfo.Name }}" - CMOC Control Panel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -39,6 +41,18 @@
   </head>
   <body class="dark:text-white dark:bg-slate-800">
     <main class="container py-20">
+      <p class="hidden" id="contestId">{{ .ContestInfo.ContestId }}</p>
+      <!-- <div class="fixed">
+        <p id="contestId">{{ .ContestInfo.ContestId }}</p>
+        <p id="name">{{ .ContestInfo.Name }}</p>
+        <p id="status">{{ .ContestInfo.Status }}</p>
+        <p id="hasSouvenir">{{ .ContestInfo.HasSouvenir }}</p>
+        <p id="hasThumnail">{{ .ContestInfo.HasThumbnail }}</p>
+        <p id="hasSpecialAward">{{ .ContestInfo.HasSpecialAward }}</p>
+        <p id="openTime">{{ .ContestInfo.OpenTime }}</p>
+        <p id="closeTime">{{ .ContestInfo.CloseTime }}</p>
+      </div> -->
+
       <div class="pb-6 flex items-center justify-between">
         <div class="flex flex-row gap-3 items-center">
           <img
@@ -101,7 +115,8 @@
         >
         <p class="opacity-50">
           CMOC <i class="fa-solid fa-caret-right"></i> Contests
-          <i class="fa-solid fa-caret-right"></i> Add Contest
+          <i class="fa-solid fa-caret-right"></i> Edit Contest
+          <i class="fa-solid fa-caret-right"></i> {{ .ContestInfo.ContestId }}
         </p>
       </div>
       <br />
@@ -120,28 +135,39 @@
           <div class="mt-2 bg-white p-1 rounded-xl flex flex-row items-center">
             <img
               id="thumbnailPreview"
-              src="https://www.wiilink24.com/img/placeholder-portrait.png"
+              src="{{if .ContestInfo.HasThumbnail}}/assets/contest/{{ .ContestInfo.ContestId }}/thumbnail.jpg{{else}}https://www.wiilink24.com/img/placeholder-portrait.png{{end}}"
               alt="Thumbnail Preview"
               class="p-1 mr-40 w-32 h-32 rounded-xl"
             />
             <h2
               id="contestName"
               class="col-start-1 col-span-full text-2xl text-black"
-            ></h2>
+            >{{ .ContestInfo.Name }}</h2>
           </div>
         </div>
         <img
           id="souvenirPreview2"
-          class="w-80 hidden rounded-3xl shadow-2xl z-0 absolute !right-0 -translate-x-full -translate-y-[70%] rotate-3"
+          class="w-80 hidden rounded-3xl shadow-2xl z-0 absolute !right-0 -translate-x-full -translate-y-[70%] rotate-3 {{if .ContestInfo.HasSouvenir}}!block{{end}}"
+          {{if .ContestInfo.HasSouvenir}}src="/assets/contest/{{ .ContestInfo.ContestId }}/souvenir.jpg"{{end}}
         />
       </div>
       <br />
       <br />
-      <div></div>
+      <div
+        class="w-full p-6 mb-8 bg-blue-400 rounded-lg flex flex-row items-center justify-center"
+      >
+        <i class="fa-solid fa-triangle-exclamation mr-3 text-xl"></i> You are
+        currently <b class="ml-1 mr-1">editing</b> the Contest "
+        <p id="name">{{ .ContestInfo.Name }}</p>
+        " with ID "
+        <p id="name">{{ .ContestInfo.ContestId }}</p>
+        ".
+      </div>
       <form
-        action="/panel/contests/add"
+        action="/panel/contests/edit/{{ .ContestInfo.ContestId }}"
         method="post"
         enctype="multipart/form-data"
+        id="editContestForm"
         class="col-start-1 col-span-full main_grid rounded-xl"
       >
         <div
@@ -151,7 +177,9 @@
           <input
             type="text"
             name="name"
+            id="contestInputName"
             required
+            value="{{ .ContestInfo.Name }}"
             placeholder="Contest Name"
             class="border rounded-lg p-2 text-black"
             oninput="updateContestName(event)"
@@ -172,6 +200,7 @@
             name="open_time"
             required
             class="rounded-xl px-5 py-2 border border-slate-200 text-black"
+            value="{{.ContestInfo.OpenTime.Format "2006-01-02"}}"
           />
         </div>
         <div
@@ -179,7 +208,12 @@
         >
           <span>Has Special Award?</span>
           <label class="inline-flex items-center cursor-pointer">
-            <input type="checkbox" name="special_award" class="sr-only peer" />
+            <input
+              type="checkbox"
+              name="special_award"
+              class="sr-only peer"
+              {{if .ContestInfo.HasSpecialAward}}checked{{end}}
+            />
             <div
               class="text-black relative w-full p-4 bg-gray-50 border rounded-xl hover:scale-105 hover:-rotate-1 transition-all peer peer-checked:-rotate-1 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white before:content-['No'] peer-checked:after:content-['Yes'] peer-checked:before:content-[''] after:content-[''] after:text-white after:bg-blue-500 after:border-0 after:rounded-full after:transition-all peer-checked:bg-blue-500"
             ></div>
@@ -189,6 +223,7 @@
           class="input col-start-4 col-span-3 p-2 border rounded-xl bg-neutral-100 dark:bg-slate-600 dark:border-slate-500"
         >
           <span>Thumbnail</span>
+          <input type="hidden" id="defaultImage" name="defaultImage" {{if .ContestInfo.HasThumbnail}}value="/assets/contest/{{ .ContestInfo.ContestId }}/thumbnail.jpg"{{end}}>
           <label
             class="bg-white cursor-pointer p-4 rounded-lg transition-all hover:bg-gray-200 dark:text-black flex items-center justify-between gap-3"
             ><i class="fa-solid fa-circle-plus"></i>Add file
@@ -196,12 +231,14 @@
               type="file"
               name="thumbnail"
               type="image/png"
+              id="input1"
               class="hidden"
               onchange="previewImage(event, 'thumbnailPreview', 'thumbnailPreview2')"
             />
             <img
               id="thumbnailPreview2"
-              class="w-5 scale-150 hidden rounded-md shadow-md rotate-3"
+              class="w-5 scale-150 rounded-md hidden shadow-md rotate-3 {{if .ContestInfo.HasThumbnail}}!block{{end}}"
+              {{if .ContestInfo.HasThumbnail}}src="/assets/contest/{{ .ContestInfo.ContestId }}/thumbnail.jpg"{{end}}
             />
           </label>
         </div>
@@ -209,25 +246,28 @@
           class="input col-start-7 col-span-6 p-2 border rounded-xl bg-neutral-100 dark:bg-slate-600 dark:border-slate-500"
         >
           <span>Souvenir</span>
+          <input type="hidden" id="defaultImage2" name="defaultImage" {{if .ContestInfo.HasSouvenir}}value="/assets/contest/{{ .ContestInfo.ContestId }}/souvenir.jpg"{{end}}}>
           <label
             class="bg-white cursor-pointer p-4 rounded-lg transition-all hover:bg-gray-200 dark:text-black flex items-center justify-between gap-3"
             ><i class="fa-solid fa-circle-plus"></i>Add file
             <input
-              type="file"
-              name="souvenir"
-              type="image/png"
-              class="hidden"
-              onchange="previewImage(event, 'souvenirPreview', 'souvenirPreview2')"
-            />
+            type="file"
+            name="souvenir"
+            type="image/png"
+            id="input2"
+            class="hidden"
+            onchange="previewImage(event, 'souvenirPreview', 'souvenirPreview2')"
+          />
             <img
               id="souvenirPreview"
-              class="w-5 scale-150 hidden rounded-md shadow-md rotate-3"
+              class="w-5 scale-150 rounded-md hidden shadow-md rotate-3 {{if .ContestInfo.HasThumbnail}}!block{{end}}"
+              {{if .ContestInfo.HasSouvenir}}src="/assets/contest/{{ .ContestInfo.ContestId }}/souvenir.jpg"{{end}}
             />
           </label>
         </div>
         <input
           type="submit"
-          value="Submit"
+          value="Save Changes"
           class="font-bold submit_button col-end-13 place-self-end"
         />
       </form>
@@ -239,6 +279,76 @@
   </body>
 
   <script>
+    document.getElementById('editContestForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent the default form submission
+
+      var formData = new FormData(this);
+      var contestIdElement = document.getElementById('contestId');
+      var contestId = contestIdElement.textContent;
+
+      var defaultImageElement = document.getElementById('defaultImage');
+      var defaultImageLink = defaultImageElement.value;
+
+      var souvenirImageElement = document.getElementById('defaultImage2');
+      var souvenirImageLink = souvenirImageElement.value;
+
+      var input1 = document.getElementById('input1');
+      var input2 = document.getElementById('input2');
+
+      var processImage = function(imageLink, inputElement, formDataKey) {
+        return new Promise((resolve, reject) => {
+          if (!inputElement.value) {
+            fetch(imageLink)
+              .then(response => response.blob())
+              .then(blob => {
+                var filename = imageLink.split('/').pop(); // Extract filename from URL
+                var newFile = new File([blob], filename, {type: blob.type});
+                formData.append(formDataKey, newFile);
+                resolve();
+              })
+              .catch(error => {
+                console.error('Error fetching the image:', error);
+                reject(error);
+              });
+          } else {
+            resolve();
+          }
+        });
+      };
+
+      Promise.all([
+        processImage(defaultImageLink, input1, 'thumbnail'),
+        processImage(souvenirImageLink, input2, 'souvenir')
+      ]).then(() => {
+        for (var pair of formData.entries()) {
+          console.log(pair[0]+ ': ' + pair[1]);
+        }
+        submitForm(formData, contestId);
+      }).catch(error => {
+        console.error('Error processing images:', error);
+      });
+    });
+
+    function submitForm(formData, contestId) {
+      const actionUrl = `/panel/contests/edit/${contestId}`;
+
+      fetch(actionUrl, {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Form submitted successfully');
+          window.location.href = '/panel/contests#edit_success';
+        } else {
+          console.error('Submission failed');
+        }
+      })
+      .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
+    }
+
     function previewImage(event, id, id2) {
       const reader = new FileReader();
       reader.onload = function () {
@@ -257,6 +367,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+
       const ids = ["toggleOpen"];
       ids.forEach((id) => {
         const element = document.getElementById(id);
@@ -267,6 +378,8 @@
           element.style.display = "none";
         }
       });
+
+      document.getElementById("contestName").innerHTML = document.getElementById("contestInputName").value;
 
       document.getElementById("randomInt").innerHTML = Math.floor(
         Math.random() * (10 - 2 + 1) + 2
