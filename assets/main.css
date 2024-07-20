@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+      h1 {
+        @apply text-4xl font-serif font-bold;
+      }
+    }
+    
+@layer utilities {
+        .container {
+            @apply max-w-screen-xl mx-auto lg:px-32 md:px-20 sm:px-10;
+        }
+
+        .main_grid {
+            @apply lg:grid lg:grid-cols-12 lg:gap-8 lg:justify-center px-6
+        }
+        
+        .magic_grid {
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        }
+
+        .w-care {
+          width:92%;
+        }
+
+        .submit_button {
+          @apply cursor-pointer bg-blue-500 px-6 py-2 text-white rounded-full transition-all
+        }
+
+        .submit_button:hover {
+          @apply bg-blue-600
+        }
+
+        .delete_button {
+          @apply ml-5 mr-5 cursor-pointer bg-red-500 px-6 py-2 text-white rounded-full transition-all
+        }
+
+        .delete_button:hover {
+          @apply bg-red-600
+        }
+
+        .scale-102 {
+          transform:scale(1.02);
+        }
+
+        .input {
+          @apply flex flex-col gap-3
+        }
+    }

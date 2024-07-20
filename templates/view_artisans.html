@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plaza | CMOC Control Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link href="/assets/output.css" rel="stylesheet" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="https://www.wiilink24.com/img/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="https://www.wiilink24.com/img/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="https://www.wiilink24.com/img/favicon-16x16.png"
+    />
+    <link
+      rel="manifest"
+      href="https://www.wiilink24.com/img/site.webmanifest"
+    />
+    <link
+      rel="mask-icon"
+      href="https://www.wiilink24.com/img/safari-pinned-tab.svg"
+      color="#5bbad5"
+    />
+    <link
+      rel="shortcut icon"
+      href="https://www.wiilink24.com/img/favicon.ico"
+    />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta
+      name="msapplication-config"
+      content="https://www.wiilink24.com/img/browserconfig.xml"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <script
+      src="https://kit.fontawesome.com/e47ece3e74.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="dark:text-white dark:bg-slate-800">
+    <main class="container py-20 space-y-4">
+      <div class="pb-2 flex items-center justify-between">
+        <div class="flex flex-row gap-3 items-center">
+          <img
+            src="https://www.wiilink24.com/img/IS-logo.png"
+            class="!h-[60px] dark:invert"
+          />
+          <i
+            class="fa-solid fa-chevron-right text-2xl cursor-pointer"
+            onclick="toggleOpen('toggleOpen');"
+          ></i>
+          <div
+            id="toggleOpen"
+            class="p-2 flex-row items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-500 hidden"
+          >
+            <a href="/panel/contests"
+              ><button
+                class="p-2 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"
+              >
+                <i class="fa-solid fa-flag-checkered"></i> Contests
+              </button></a
+            >
+            |
+            <a href="/panel/contests/add"
+              ><button
+                class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
+              >
+                <i class="fa-solid fa-circle-plus"></i> Add Contest
+              </button></a
+            >
+            |
+            <a href="/panel/plaza"
+              ><button
+                class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
+              >
+                <i class="fa-solid fa-users"></i> Plaza
+              </button></a
+            >
+            |
+            <a href="/panel/artisans"
+              ><button
+                class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
+              >
+                <i class="fa-solid fa-brush"></i> Mii Artisans
+              </button></a
+            >
+          </div>
+        </div>
+        <h2 class="text-right text-lg">
+          <b>CMOC</b><br />
+          Control Panel
+        </h2>
+      </div>
+      <hr class="pt-2" />
+      <div class="flex items-center justify-end">
+        <p class="opacity-50">
+          CMOC <i class="fa-solid fa-caret-right"></i> Mii Artisans
+        </p>
+      </div>
+      {{if .Error}}
+      <p style="color: red">{{.Error}}</p>
+      {{end}}
+
+      <div class="flex items-center justify-between">
+        <h1>Artisans</h1>
+        <div class="flex flex-row gap-1">
+          <form
+            action="/panel/artisans/search"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <input
+              type="text"
+              name="search"
+              placeholder="There are {{ .numberOfArtisans }} Mii Artisans..."
+              class="p-3 bg-gray-200 dark:bg-slate-500 hover:bg-gray-300 dark:hover:bg-slate-600 focus:bg-gray-300 dark:focus:bg-slate-700 transition-all relative rounded-l-[18px] rounded-r-[4px]"
+    
+              required
+            />
+            <button
+              type="submit"
+              class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all rounded-r-[18px] rounded-l-[4px]"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+          <div
+          id="sizeIcon"
+          class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all cursor-pointer rounded-[18px]"
+          onclick="toggleSize();"
+        >
+        <i class="fa-solid fa-square-plus"></i>
+        </div>
+        </div>
+      </div>
+
+      <div id="small" class="grid magic_grid gap-3">
+        {{ range .Artisans }}
+        <div
+          class="p-3 flex flex-col gap-3 rounded-xl border-2 border-gray-100 bg-gray-50 dark:border-slate-600 dark:bg-slate-700 hover:scale-102 hover:shadow-lg transition-all"
+        >
+        <p class="top-2 left-2 master absolute">{{ .IsMaster }}</p>
+          <div class="innerJustify flex flex-row items-center justify-between">
+            <div class="miiMain flex flex-row items-center">
+              <p class="miiData hidden">{{ .MiiDataEncoded }}</p>
+              <img src="" class="miiImage h-28" />
+              <a href="/panel/artisans/details/{{.ArtisanId}}">
+                <div class="flex flex-col">
+                  <p class="flag text-9xl"></p>
+                  <h1 class="nickname flex flex-col flex-wrap text-center items-center justify-center">
+                    {{ .Name }}
+                    <p class="mt-1 opacity-30 font-normal font-serif text-sm">
+                      {{ .ArtisanId }}
+                    </p>
+                  </h1>
+                  <div class="items-center justify-center pt-2 flex flex-row gap-3">
+                    <p class="flex flex-row gap-1 items-center"><span class="countryFlag">{{.CountryId}}</span><span class="country">{{.CountryId}}</span></p>
+                    <p class="flex flex-row flex-nowrap items-center gap-1">| <i class="fa-solid fa-angle-up"></i> {{ .TotalLikes }}| <i class="fa-solid fa-users"></i> {{ .NumberOfPosts }}</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="minData mr-6 flex flex-col gap-3">
+              <p class="text-xl text-right">
+                <i class="fa-solid fa-angle-up"></i> {{ .TotalLikes }}
+              </p>
+              <p class="text-xl text-right">
+                <i class="fa-solid fa-users"></i>
+                {{ .NumberOfPosts }}
+              </p>
+            </div>
+          </div>
+          <div class="minData pb-3 flex gap-3 flex-row items-center justify-between">
+            <p class="flex flex-col text-xl">
+              <span class="opacity-30 text-sm">Wii Number</span>{{ .WiiNumber }}
+            </p>
+            <div class="flex flex-col justify-end">
+              <span class="opacity-30 text-sm text-right">Last Post</span>
+              <p class="lastPost opacity-30 text-right">{{ .LastPost }}</p>
+            </div>
+          </div>
+        </div>
+        {{ end }}
+      </div>
+      <div id="pagination" class="pt-3 pb-6 flex flex-row items-center justify-between">
+        <p class="opacity-60">
+          Showing page <b id="pageNumber"></b> of <b>{{ .Pages }}</b>.
+        </p>
+        <div>
+          <a
+            id="prevPage"
+            class="p-3 pl-4 pr-4 rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
+            ><i class="fa-solid fa-chevron-left"></i
+          ></a>
+          <a
+            id="nextPage"
+            class="p-3 pl-4 pr-4 rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
+            ><i class="fa-solid fa-chevron-right"></i
+          ></a>
+        </div>
+      </div>
+      <p id="pages" class="hidden">{{ .Pages }}</p>
+      <hr />
+      <p class="pt-2">©2020 - 2024 WiiLink Team</p>
+    </main>
+  </body>
+
+  <script>
+    function deleteEntry(entryId) {
+      // Ask for confirmation
+      const isConfirmed = confirm(
+        "Are you sure you want to delete this Mii Artisan? This action cannot be undone."
+      );
+
+      // Proceed only if the user confirmed
+      if (isConfirmed) {
+        fetch(`/panel/artisans/delete/${entryId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((response) => {
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            alert("Failed to delete entry.");
+          }
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async function () {
+      applySavedSizeSetting();
+
+      const miiElements = document.querySelectorAll(".miiData"); // Select all elements with the class 'miiData'
+      miiElements.forEach(async (miiElement) => {
+        const base64String = miiElement.innerHTML; // Assuming the base64 string is directly within the element
+        if (base64String) {
+          try {
+            const miiImageUrl = await renderMii(base64String);
+            console.log(miiImageUrl);
+            // Assuming there's a way to associate the miiImage with the miiElement, like a data attribute or adjacent element
+            const imgElement = miiElement.nextElementSibling; // Example: the <img> is right next to the miiElement
+            imgElement.src = miiImageUrl;
+          } catch (error) {
+            console.error("Failed to render Mii:", error);
+          }
+        }
+
+
+        const urlParts = window.location.pathname.split("/");
+        console.log(urlParts);
+        const pageNumber = urlParts[urlParts.length - 1];
+        document.getElementById("pageNumber").textContent = pageNumber;
+        console.log(pageNumber);
+
+        if (isNaN(parseInt(pageNumber))) {
+          document.getElementById("pagination").style.display = "none";
+        }
+
+        if (pageNumber > 1) {
+          const urlParts = window.location.pathname.split('/');
+          const currentPageNumber = parseInt(urlParts.pop(), 10); // Remove and get the last part as the current page number
+          const newPageNumber = currentPageNumber - 1; // For previous page, decrement the current page number
+
+          // Join the parts back together and append the new page number
+          const newUrl = `${urlParts.join('/')}/${newPageNumber}`;
+
+          document.getElementById("prevPage").href = newUrl;
+        } else {
+          document.getElementById("prevPage").style.opacity = "0.3";
+          document.getElementById("prevPage").style.pointerEvents = "none";
+        }
+
+        if (pageNumber < document.getElementById("pages").textContent) {
+          const urlParts = window.location.pathname.split('/');
+          const currentPageNumber = parseInt(urlParts.pop(), 10); // Remove and get the last part as the current page number
+          const newPageNumber = currentPageNumber + 1; // For next page, increase the current page number
+
+          // Join the parts back together and append the new page number
+          const newUrl = `${urlParts.join('/')}/${newPageNumber}`;
+
+          document.getElementById("prevPage").href = newUrl;
+        } else {
+          document.getElementById("nextPage").style.opacity = "0.3";
+          document.getElementById("nextPage").style.pointerEvents = "none";
+        }
+
+        document.querySelectorAll(".lastPost").forEach((element) => {
+          // Parse the date string
+          const dateString = element.textContent.trim(); // Assuming the format "2024-06-17 12:51:36 +0000 UTC"
+          const dateParts = dateString.split(" ");
+          const date = new Date(dateParts[0] + "T" + dateParts[1] + "Z"); // Convert to ISO format
+
+          // Format the date and time
+          const formattedDate = date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZoneName: "short",
+          });
+
+          // Update the element's text
+          element.textContent = formattedDate;
+        });
+
+        const ids = ["toggleOpen"];
+        ids.forEach((id) => {
+          const element = document.getElementById(id);
+          const state = localStorage.getItem(id);
+          if (state === "open") {
+            element.style.display = "flex";
+          } else if (state === "closed") {
+            element.style.display = "none";
+          }
+        });
+      });
+
+      
+      const countryElements = document.querySelectorAll(".country"); // Select all elements with the class 'country'
+      const flagElements = document.querySelectorAll(".countryFlag"); // Select all elements with the class 'flag'
+
+      countryElements.forEach((countryElement) => {
+        const countryCode = parseInt(countryElement.textContent, 10); // Use textContent and specify radix 10
+        if (!isNaN(countryCode)) {
+          const countryData = getCountryName(countryCode); // Assuming this function returns an object with 'name' and possibly 'flag'
+          countryElement.textContent = countryData.name; // Use textContent for safer text updates
+        }
+      });
+
+      flagElements.forEach((flagElement) => {
+        const countryCode = parseInt(flagElement.textContent, 10); // Use textContent and specify radix 10
+        if (!isNaN(countryCode)) {
+          const countryData = getCountryName(countryCode); // Reuse getCountryName or a similar function to get flag data
+          // Assuming countryData includes a 'flag' property that is the URL or emoji of the flag
+          flagElement.innerHTML = countryData.flag; // Use innerHTML if flag data includes HTML (e.g., an <img> tag for the flag)
+        }
+      });
+
+      const masterElements = document.querySelectorAll(".master");
+      masterElements.forEach((masterElement) => {
+        const isMaster = masterElement.innerHTML;
+        const masterName = checkIsMaster(isMaster);
+        masterElement.innerHTML = masterName;
+        console.log(masterName);
+      });
+
+      const genderElements = document.querySelectorAll(".gender");
+      genderElements.forEach((genderElement) => {
+        const gender = parseInt(genderElement.innerHTML);
+        const genderName = getGender(gender);
+        genderElement.innerHTML = genderName;
+      });
+    });
+
+    function renderMii(base64String) {
+      // Decode base64 string
+      let binaryString = atob(base64String);
+      let binaryLen = binaryString.length;
+      // Create binary array from base64 decoded string
+      let bytes = new Uint8Array(binaryLen);
+      // Fill the binary array
+      for (let i = 0; i < binaryLen; i++) {
+        let ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
+      }
+
+      // Create a blob object
+      let blob = new Blob([bytes], { type: "application/octet-stream" });
+
+      // Create a file object from the blob
+      let file = new File([blob], "file.miigx");
+
+      // Send the file to the server
+      let formData = new FormData();
+      formData.append("platform", "wii");
+      formData.append("data", file);
+
+      // Use larsen's funky studio.cgi to get the data needed to render the mii
+      return fetch("https://miicontestp.wii.rc24.xyz/cgi-bin/studio.cgi", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          let mii = data.mii;
+
+          // Render the mii using Nintendo's servers
+          var src =
+            "https://studio.mii.nintendo.com/miis/image.png?data=" +
+            mii +
+            "&type=face_only&expression=normal&width=270&bgColor=FFFFFF00";
+
+          // Return the mii image
+          return src;
+        });
+    }
+
+    function getGender(gender) {
+      switch (gender) {
+        case 1:
+          return "<i class='fa-solid fa-person'></i>";
+        case 2:
+          return "<i class='fa-solid fa-person-dress'></i>";
+        case 3:
+          return "<i class='fa-solid fa-circle-question'></i>";
+      }
+    }
+
+    function checkIsMaster(isMaster) {
+      console.log(isMaster);
+      if (isMaster == "true") {
+        return "<span class='mr-3 p-1 pl-2 pr-2 rounded-full text-white' style='background-color:orange;'><i class='fa-solid fa-crown'></i></span>";
+      } else {
+        return "";
+      }
+    }
+
+    function getCountryName(countryCode) {
+      switch (countryCode) {
+        case 1:
+          return { flag: "🇯🇵", name: "Japan" };
+
+        case 8:
+          return { flag: "🇦🇮", name: "Anguilla" };
+        case 9:
+          return { flag: "🇦🇬", name: "Antigua and Barbuda" };
+        case 10:
+          return { flag: "🇦🇷", name: "Argentina" };
+        case 11:
+          return { flag: "🇦🇼", name: "Aruba" };
+        case 12:
+          return { flag: "🇧🇸", name: "Bahamas" };
+        case 13:
+          return { flag: "🇧🇧", name: "Barbados" };
+        case 14:
+          return { flag: "🇧🇿", name: "Belize" };
+        case 15:
+          return { flag: "🇧🇴", name: "Bolivia" };
+        case 16:
+          return { flag: "🇧🇷", name: "Brazil" };
+        case 17:
+          return { flag: "🇻🇬", name: "British Virgin Islands" };
+        case 18:
+          return { flag: "🇨🇦", name: "Canada" };
+        case 19:
+          return { flag: "🇰🇾", name: "Cayman Islands" };
+        case 20:
+          return { flag: "🇨🇱", name: "Chile" };
+        case 21:
+          return { flag: "🇨🇴", name: "Colombia" };
+        case 22:
+          return { flag: "🇨🇷", name: "Costa Rica" };
+        case 23:
+          return { flag: "🇩🇲", name: "Dominica" };
+        case 24:
+          return { flag: "🇩🇴", name: "Dominican Republic" };
+        case 25:
+          return { flag: "🇪🇨", name: "Ecuador" };
+        case 26:
+          return { flag: "🇸🇻", name: "El Salvador" };
+        case 27:
+          return { flag: "🇫🇷", name: "French Guiana" };
+        case 28:
+          return { flag: "🇬🇩", name: "Grenada" };
+        case 29:
+          return { flag: "🇬🇵", name: "Guadeloupe" };
+        case 30:
+          return { flag: "🇬🇹", name: "Guatemala" };
+        case 31:
+          return { flag: "🇬🇾", name: "Guyana" };
+        case 32:
+          return { flag: "🇭🇹", name: "Haiti" };
+        case 33:
+          return { flag: "🇭🇳", name: "Honduras" };
+        case 34:
+          return { flag: "🇯🇲", name: "Jamaica" };
+        case 35:
+          return { flag: "🇲🇶", name: "Martinique" };
+        case 36:
+          return { flag: "🇲🇽", name: "Mexico" };
+        case 37:
+          return { flag: "🇲🇸", name: "Montserrat" };
+        case 38:
+          return { flag: "🇳🇱", name: "Netherlands Antilles" };
+        case 39:
+          return { flag: "🇳🇮", name: "Nicaragua" };
+        case 40:
+          return { flag: "🇵🇦", name: "Panama" };
+        case 41:
+          return { flag: "🇵🇾", name: "Paraguay" };
+        case 42:
+          return { flag: "🇵🇪", name: "Peru" };
+        case 43:
+          return { flag: "🇰🇳", name: "St. Kitts and Nevis" };
+        case 44:
+          return { flag: "🇱🇨", name: "St. Lucia" };
+        case 45:
+          return { flag: "🇻🇨", name: "St. Vincent and the Grenadines" };
+        case 46:
+          return { flag: "🇸🇷", name: "Suriname" };
+        case 47:
+          return { flag: "🇹🇹", name: "Trinidad and Tobago" };
+        case 48:
+          return { flag: "🇹🇨", name: "Turks and Caicos Islands" };
+        case 49:
+          return { flag: "🇺🇸", name: "United States" };
+        case 50:
+          return { flag: "🇺🇾", name: "Uruguay" };
+        case 51:
+          return { flag: "🇻🇮", name: "US Virgin Islands" };
+        case 52:
+          return { flag: "🇻🇪", name: "Venezuela" };
+
+        case 64:
+          return { flag: "🇦🇱", name: "Albania" };
+        case 65:
+          return { flag: "🇦🇺", name: "Australia" };
+        case 66:
+          return { flag: "🇦🇹", name: "Austria" };
+        case 67:
+          return { flag: "🇧🇪", name: "Belgium" };
+        case 68:
+          return { flag: "🇧🇦", name: "Bosnia and Herzegovina" };
+        case 69:
+          return { flag: "🇧🇼", name: "Botswana" };
+        case 70:
+          return { flag: "🇧🇬", name: "Bulgaria" };
+        case 71:
+          return { flag: "🇭🇷", name: "Croatia" };
+        case 72:
+          return { flag: "🇨🇾", name: "Cyprus" };
+        case 73:
+          return { flag: "🇨🇿", name: "Czech Republic" };
+        case 74:
+          return { flag: "🇩🇰", name: "Denmark" };
+        case 75:
+          return { flag: "🇪🇪", name: "Estonia" };
+        case 76:
+          return { flag: "🇫🇮", name: "Finland" };
+        case 77:
+          return { flag: "🇫🇷", name: "France" };
+        case 78:
+          return { flag: "🇩🇪", name: "Germany" };
+        case 79:
+          return { flag: "🇬🇷", name: "Greece" };
+        case 80:
+          return { flag: "🇭🇺", name: "Hungary" };
+        case 81:
+          return { flag: "🇮🇸", name: "Iceland" };
+        case 82:
+          return { flag: "🇮🇪", name: "Ireland" };
+        case 83:
+          return { flag: "🇮🇹", name: "Italy" };
+        case 84:
+          return { flag: "🇱🇻", name: "Latvia" };
+        case 85:
+          return { flag: "🇱🇸", name: "Lesotho" };
+        case 86:
+          return { flag: "🇱🇮", name: "Lichtenstein" };
+        case 87:
+          return { flag: "🇱🇹", name: "Lithuania" };
+        case 88:
+          return { flag: "🇱🇺", name: "Luxembourg" };
+        case 89:
+          return { flag: "🇲🇰", name: "F.Y.R of Macedonia" };
+        case 90:
+          return { flag: "🇲🇹", name: "Malta" };
+        case 91:
+          return { flag: "🇲🇪", name: "Montenegro" };
+        case 92:
+          return { flag: "🇲🇿", name: "Mozambique" };
+        case 93:
+          return { flag: "🇳🇦", name: "Namibia" };
+        case 94:
+          return { flag: "🇳🇱", name: "Netherlands" };
+        case 95:
+          return { flag: "🇳🇿", name: "New Zealand" };
+        case 96:
+          return { flag: "🇳🇴", name: "Norway" };
+        case 97:
+          return { flag: "🇵🇱", name: "Poland" };
+        case 98:
+          return { flag: "🇵🇹", name: "Portugal" };
+        case 99:
+          return { flag: "🇷🇴", name: "Romania" };
+        case 100:
+          return { flag: "🇷🇺", name: "Russia" };
+        case 101:
+          return { flag: "🇷🇸", name: "Serbia" };
+        case 102:
+          return { flag: "🇸🇰", name: "Slovakia" };
+        case 103:
+          return { flag: "🇸🇮", name: "Slovenia" };
+        case 104:
+          return { flag: "🇿🇦", name: "South Africa" };
+        case 105:
+          return { flag: "🇪🇸", name: "Spain" };
+        case 106:
+          return { flag: "🇸🇿", name: "Swaziland" };
+        case 107:
+          return { flag: "🇸🇪", name: "Sweden" };
+        case 108:
+          return { flag: "🇨🇭", name: "Switzerland" };
+        case 109:
+          return { flag: "🇹🇷", name: "Turkey" };
+        case 110:
+          return { flag: "🇬🇧", name: "United Kingdom" };
+        case 111:
+          return { flag: "🇿🇲", name: "Zambia" };
+        case 112:
+          return { flag: "🇿🇼", name: "Zimbabwe" };
+        case 113:
+          return { flag: "🇦🇿", name: "Azerbaijan" };
+        case 114:
+          return {
+            flag: "🇲🇷",
+            name: "Mauritania (Islamic Republic of Mauritania)",
+          };
+        case 115:
+          return { flag: "🇲🇱", name: "Mali (Republic of Mali)" };
+        case 116:
+          return { flag: "🇳🇪", name: "Niger (Republic of Niger)" };
+        case 117:
+          return { flag: "🇹🇩", name: "Chad (Republic of Chad)" };
+        case 118:
+          return { flag: "🇸🇩", name: "Sudan (Republic of the Sudan)" };
+        case 119:
+          return { flag: "🇪🇷", name: "Eritrea (State of Eritrea)" };
+        case 120:
+          return { flag: "🇩🇯", name: "Djibouti (Republic of Djibouti)" };
+        case 121:
+          return { flag: "🇸🇴", name: "Somalia (Somali Republic)" };
+
+        case 128:
+          return { flag: "🇹🇼", name: "Taiwan" };
+        case 136:
+          return { flag: "🇰🇷", name: "South Korea" };
+        case 144:
+          return { flag: "🇭🇰", name: "Hong Kong" };
+        case 145:
+          return { flag: "🇲🇴", name: "Macao" };
+        case 152:
+          return { flag: "🇮🇩", name: "Indonesia" };
+        case 153:
+          return { flag: "🇸🇬", name: "Singapore" };
+        case 154:
+          return { flag: "🇹🇭", name: "Thailand" };
+        case 155:
+          return { flag: "🇵🇭", name: "Philippines" };
+        case 156:
+          return { flag: "🇲🇾", name: "Malaysia" };
+        case 160:
+          return { flag: "🇨🇳", name: "China" };
+
+        case 168:
+          return { flag: "🇦🇪", name: "U.A.E." };
+        case 169:
+          return { flag: "🇮🇳", name: "India" };
+        case 170:
+          return { flag: "🇪🇬", name: "Egypt" };
+        case 171:
+          return { flag: "🇴🇲", name: "Oman" };
+        case 172:
+          return { flag: "🇶🇦", name: "Qatar" };
+        case 173:
+          return { flag: "🇰🇼", name: "Kuwait" };
+        case 174:
+          return { flag: "🇸🇦", name: "Saudi Arabia" };
+        case 175:
+          return { flag: "🇸🇾", name: "Syria" };
+        case 176:
+          return { flag: "🇧🇭", name: "Bahrain" };
+        case 177:
+          return { flag: "🇯🇴", name: "Jordan" };
+
+        default:
+          return { flag: "🏳️", name: "Unknown country" };
+      }
+    }
+
+    function toggleSize() {
+      const grid = document.getElementById("small");
+      if (grid.classList.contains("big")) {
+        grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(400px, 1fr))";
+        document.getElementById("sizeIcon").innerHTML = '<i class="fa-solid fa-square-plus"></i>';
+        document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "row");
+        document.querySelectorAll(".miiMain").forEach(element => element.style.alignItems = "space-between");
+        document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "28px");
+        document.querySelectorAll(".display").forEach(element => element.style.display = "none");     
+        document.querySelectorAll(".country").forEach(element => element.style.display = "flex");   
+        document.querySelectorAll(".minData").forEach(element => element.style.display = "flex");
+        document.querySelectorAll(".innerJustify").forEach(element => element.style.justifyContent = "space-between");
+        document.querySelectorAll(".centerJustify").forEach(element => element.style.justifyContent = "start");
+        grid.classList.remove("big");
+        localStorage.setItem("gridSize", "small");
+      } else {
+        grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
+        document.getElementById("sizeIcon").innerHTML = '<i class="fa-solid fa-square-minus"></i>';
+        document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "column");
+        document.querySelectorAll(".miiMain").forEach(element => element.style.alignItems = "center");
+        document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "24px");
+        document.querySelectorAll(".display").forEach(element => element.style.display = "block");
+        document.querySelectorAll(".country").forEach(element => element.style.display = "none");
+        document.querySelectorAll(".minData").forEach(element => element.style.display = "none");
+        document.querySelectorAll(".innerJustify").forEach(element => element.style.justifyContent = "center");
+        document.querySelectorAll(".centerJustify").forEach(element => element.style.justifyContent = "center");
+        grid.classList.add("big");
+        localStorage.setItem("gridSize", "big");
+      }
+    }
+
+    function toggleOpen(id) {
+      const element = document.getElementById(id);
+      if (element.style.display === "none") {
+        element.style.display = "flex";
+        localStorage.setItem(id, "open");
+      } else {
+        element.style.display = "none";
+        localStorage.setItem(id, "closed");
+      }
+    }
+
+    function applySavedSizeSetting() {
+      const savedSize = localStorage.getItem("gridSize");
+      const grid = document.getElementById("small");
+      if (savedSize === "big" && !grid.classList.contains("big")) {
+        toggleSize(); // This will switch to big if it's not already set
+      } else if (savedSize === "small" && grid.classList.contains("big")) {
+        toggleSize(); // This will switch to small if it's not already set
+      }
+    }
+  </script>
+</html>
