@@ -5,14 +5,12 @@ import (
 	"MiiContestChannelServer/webpanel"
 	"context"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
-
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"golang.org/x/oauth2"
+	"log"
+	"net/http"
 )
 
 var (
@@ -53,10 +51,6 @@ func main() {
 	pool, err = pgxpool.ConnectConfig(ctx, dbConf)
 	checkError(err)
 
-	// Load salt
-	salt, err := os.ReadFile("salt.bin")
-	checkError(err)
-
 	// Set up HTTP
 	r := gin.Default()
 	if gin.Mode() == gin.DebugMode {
@@ -65,10 +59,9 @@ func main() {
 	r.LoadHTMLGlob("templates/*")
 
 	panel := webpanel.WebPanel{
-		Pool:   pool,
-		Ctx:    ctx,
-		Salt:   salt,
-		Config: config,
+		Pool:       pool,
+		Ctx:        ctx,
+		Config:     config,
 		AuthConfig: authConfig,
 	}
 
@@ -84,7 +77,7 @@ func main() {
 		auth.GET("/admin", panel.AdminPage)
 		auth.GET("/contests", panel.ViewContests)
 		auth.POST("/contests", func(c *gin.Context) {
-    		c.Redirect(http.StatusMovedPermanently, "/panel/contests")
+			c.Redirect(http.StatusMovedPermanently, "/panel/contests")
 		})
 		auth.GET("/contests/add", panel.AddContest)
 		auth.POST("/contests/add", panel.AddContestPOST)
