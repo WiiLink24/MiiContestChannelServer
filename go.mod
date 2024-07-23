@@ -7,7 +7,7 @@ toolchain go1.21.4
 require (
 	github.com/WiiLink24/MiiContestChannel v0.0.0-20240718230034-24654496dc79
 	github.com/WiiLink24/nwc24 v0.0.0-20230608020206-b86d9e90fb1d
-	github.com/coreos/go-oidc/v3 v3.10.0
+	github.com/coreos/go-oidc/v3 v3.11.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/jackc/pgx/v4 v4.18.3
@@ -22,7 +22,7 @@ require (
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/go-jose/go-jose/v4 v4.0.1 // indirect
+	github.com/go-jose/go-jose/v4 v4.0.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.22.0 // indirect
