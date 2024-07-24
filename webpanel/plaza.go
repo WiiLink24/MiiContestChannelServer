@@ -9,28 +9,28 @@ import (
 )
 
 const (
-	GetPlaza = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m LEFT JOIN artisans a ON m.artisan_id = a.artisan_id ORDER BY entry_id`
-	GetPages = `SELECT COUNT(*) FROM miis`
-	DeleteMii = `DELETE FROM miis WHERE entry_id = $1`
-	GetMiiDetails = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m LEFT JOIN artisans a ON m.artisan_id = a.artisan_id WHERE entry_id = $1`
-	SearchMiis = `SELECT entry_id, artisan_id, initials, nickname, gender, country_id, wii_number, mii_id, likes, perm_likes, mii_data FROM miis WHERE nickname ILIKE '%' || $1 || '%' ORDER BY entry_id`
-	GetPlazaTop50 = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m LEFT JOIN artisans a ON m.artisan_id = a.artisan_id ORDER BY perm_likes DESC LIMIT 50`
-	GetPlazaNew = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m LEFT JOIN artisans a ON m.artisan_id = a.artisan_id ORDER BY likes DESC`
+	GetPlaza      = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m, artisans AS a WHERE m.artisan_id = a.artisan_id ORDER BY entry_id`
+	GetPages      = `SELECT COUNT(*) FROM miis`
+	DeleteMii     = `DELETE FROM miis WHERE entry_id = $1`
+	GetMiiDetails = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m,  artisans a WHERE m.artisan_id = a.artisan_id AND entry_id = $1`
+	SearchMiis    = `SELECT entry_id, artisan_id, initials, nickname, gender, country_id, wii_number, mii_id, likes, perm_likes, mii_data FROM miis WHERE nickname ILIKE '%' || $1 || '%' ORDER BY entry_id`
+	GetPlazaTop50 = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m, artisans a WHERE m.artisan_id = a.artisan_id ORDER BY perm_likes DESC LIMIT 50`
+	GetPlazaNew   = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m, artisans a WHERE m.artisan_id = a.artisan_id ORDER BY likes DESC`
 )
 
 type Plaza struct {
-	EntryId int
-	ArtisanId int
-	Initials string
-	Nickname string
-	Gender int
-	CountryId int
-	WiiNumber int
-	MiiId []byte
-	Likes int
-	PermLikes int
-	MiiData []byte
-	ArtisanName string
+	EntryId        int
+	ArtisanId      int
+	Initials       string
+	Nickname       string
+	Gender         int
+	CountryId      int
+	WiiNumber      int
+	MiiId          []byte
+	Likes          int
+	PermLikes      int
+	MiiData        []byte
+	ArtisanName    string
 	MiiDataEncoded string
 }
 
@@ -83,11 +83,9 @@ func (w *WebPanel) ViewPlaza(c *gin.Context) {
 	c.HTML(http.StatusOK, "view_plaza.html", gin.H{
 		"numberOfMiis": len(plaza),
 		"Plaza":        plaza,
-		"Pages": 		pages,
-
+		"Pages":        pages,
 	})
 }
-
 
 func (w *WebPanel) ViewPlazaTop50(c *gin.Context) {
 	rows, err := w.Pool.Query(w.Ctx, GetPlazaTop50)
@@ -115,7 +113,7 @@ func (w *WebPanel) ViewPlazaTop50(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "view_plaza.html", gin.H{
 		"numberOfMiis": len(plaza),
-		"Plaza":         plaza,
+		"Plaza":        plaza,
 	})
 }
 
@@ -168,7 +166,7 @@ func (w *WebPanel) ViewPlazaNew(c *gin.Context) {
 	c.HTML(http.StatusOK, "view_plaza.html", gin.H{
 		"numberOfMiis": len(plaza),
 		"Plaza":        plaza,
-		"Pages": 		pages,
+		"Pages":        pages,
 	})
 }
 
@@ -233,7 +231,7 @@ func (w *WebPanel) SearchPlaza(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "search_results.html", gin.H{
 		"SearchResults": SearchResults,
-		"SearchTerm":	 search,
+		"SearchTerm":    search,
 		"SearchType":    "Plaza",
 	})
 }

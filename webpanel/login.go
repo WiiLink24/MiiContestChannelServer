@@ -12,8 +12,6 @@ import (
 	"golang.org/x/oauth2"
 )
 
-
-
 func randString(nByte int) (string, error) {
 	b := make([]byte, nByte)
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
@@ -32,7 +30,7 @@ func setCallbackCookie(w http.ResponseWriter, r *http.Request, name, value strin
 	}
 	http.SetCookie(w, c)
 }
-	
+
 func (w *WebPanel) StartPanelHandler(c *gin.Context) {
 	state, err := randString(16)
 	if err != nil {
@@ -41,9 +39,9 @@ func (w *WebPanel) StartPanelHandler(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	setCallbackCookie(c.Writer, c.Request, "state", state)
-	
+
 	http.Redirect(c.Writer, c.Request, w.AuthConfig.OAuth2Config.AuthCodeURL(state), http.StatusFound)
 }
 
@@ -72,10 +70,10 @@ func (w *WebPanel) FinishPanelHandler(c *gin.Context) {
 	}
 
 	userInfo, err := w.AuthConfig.Provider.UserInfo(c, oauth2.StaticTokenSource(oauth2Token))
-		if err != nil {
-			http.Error(c.Writer, "Failed to get userinfo: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
+	if err != nil {
+		http.Error(c.Writer, "Failed to get userinfo: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	//Now that we verified the token, create a JWT token to use with the middleware
 	claims := &JWTClaims{
@@ -100,13 +98,9 @@ func (w *WebPanel) FinishPanelHandler(c *gin.Context) {
 
 }
 
-
-
 func (w *WebPanel) LoginPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", nil)
 }
-
-
 
 func (w *WebPanel) AdminPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin.html", nil)
