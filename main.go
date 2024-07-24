@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/coreos/go-oidc/v3/oidc"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"golang.org/x/oauth2"
@@ -54,6 +55,7 @@ func main() {
 
 	// Set up HTTP
 	r := gin.Default()
+	r.Use(cors.Default())
 	if gin.Mode() == gin.DebugMode {
 		r.Static("/assets", "./assets") // Serve static files
 	}
