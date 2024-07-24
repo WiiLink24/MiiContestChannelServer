@@ -11,8 +11,10 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/jackc/pgx/v4 v4.18.3
+	github.com/kaitai-io/kaitai_struct_go_runtime v0.10.0
 	golang.org/x/image v0.18.0
 	golang.org/x/oauth2 v0.21.0
+	golang.org/x/text v0.16.0
 )
 
 require (
@@ -49,7 +51,6 @@ require (
 	golang.org/x/crypto v0.25.0 // indirect
 	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

@@ -2,6 +2,7 @@ package main
 
 import (
 	"MiiContestChannelServer/middleware"
+	"MiiContestChannelServer/mii"
 	"MiiContestChannelServer/webpanel"
 	"context"
 	"fmt"
@@ -57,7 +58,7 @@ func main() {
 		r.Static("/assets", "./assets") // Serve static files
 	}
 	r.LoadHTMLGlob("templates/*")
-
+	gin.SetMode(gin.ReleaseMode)
 	panel := webpanel.WebPanel{
 		Pool:       pool,
 		Ctx:        ctx,
@@ -114,6 +115,10 @@ func main() {
 	r.GET("/cgi-bin/info.cgi", info)
 	r.GET("/cgi-bin/ownsearch.cgi", ownSearch)
 	r.GET("/cgi-bin/search.cgi", search)
+
+	// Mii Renderer stuff
+	r.POST("/cgi-bin/studio.cgi", mii.Studio)
+	r.GET("/cgi-bin/render.cgi", mii.Render)
 
 	fmt.Printf("Starting HTTP connection (%s)...\nNot using the usual port for HTTP?\nBe sure to use a proxy, otherwise the Wii can't connect!\n", config.Address)
 	log.Fatalln(r.Run(config.Address))
