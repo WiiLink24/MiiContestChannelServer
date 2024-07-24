@@ -33,7 +33,7 @@ This is kept for compatibility reasons.
 */
 
 func Studio(c *gin.Context) {
-	inputType := c.PostForm("type")
+	inputType := c.PostForm("platform")
 	inputData, _ := c.FormFile("data")
 
 	f, err := inputData.Open()
@@ -55,7 +55,9 @@ func Studio(c *gin.Context) {
 		mii = m
 	}
 
-	c.String(http.StatusOK, CreateStudioMii(mii, inputType))
+	c.JSON(http.StatusOK, gin.H{
+		"mii": CreateStudioMii(mii, inputType),
+	})
 }
 
 type ctx struct {
