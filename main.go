@@ -117,6 +117,7 @@ func main() {
 	r.GET("/cgi-bin/info.cgi", info)
 	r.GET("/cgi-bin/ownsearch.cgi", ownSearch)
 	r.GET("/cgi-bin/search.cgi", search)
+	r.GET("/cgi-bin/namesearch.cgi", nameSearch)
 
 	// Mii Renderer stuff
 	r.POST("/cgi-bin/studio.cgi", mii.Studio)
