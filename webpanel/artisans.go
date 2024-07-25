@@ -10,24 +10,24 @@ import (
 )
 
 const (
-	GetArtisans = `SELECT artisan_id, name, country_id, wii_number, mac_address, number_of_posts, total_likes, is_master, last_post, mii_data FROM artisans ORDER BY artisan_id`
+	GetArtisans       = `SELECT artisan_id, name, country_id, wii_number, mac_address, number_of_posts, total_likes, is_master, last_post, mii_data FROM artisans ORDER BY artisan_id`
 	GetArtisanDetails = `SELECT artisan_id, name, country_id, wii_number, mac_address, number_of_posts, total_likes, is_master, last_post, mii_data FROM artisans WHERE artisan_id = $1`
-	GetArtisansMiis = `SELECT entry_id, artisan_id, initials, nickname, gender, country_id, wii_number, mii_id, likes, perm_likes, mii_data FROM miis WHERE artisan_id = $1` 
-	SearchArtisans = `SELECT artisan_id, name, country_id, wii_number, mac_address, number_of_posts, total_likes, is_master, last_post, mii_data FROM artisans WHERE name ILIKE '%' || $1 || '%' ORDER BY artisan_id`
-GetPagesArtisans = `SELECT COUNT(*) FROM artisans`
+	GetArtisansMiis   = `SELECT entry_id, artisan_id, initials, nickname, gender, country_id, wii_number, mii_id, likes, perm_likes, mii_data FROM miis WHERE artisan_id = $1`
+	SearchArtisans    = `SELECT artisan_id, name, country_id, wii_number, mac_address, number_of_posts, total_likes, is_master, last_post, mii_data FROM artisans WHERE name ILIKE '%' || $1 || '%' ORDER BY artisan_id`
+	GetPagesArtisans  = `SELECT COUNT(*) FROM artisans`
 )
 
 type Artisans struct {
-	ArtisanId int
-	Name string
-	CountryId int
-	WiiNumber int
-	MacAddress string
-	NumberOfPosts int
-	TotalLikes int
-	IsMaster bool
-	LastPost time.Time
-	MiiData []byte
+	ArtisanId      int
+	Name           string
+	CountryId      int
+	WiiNumber      int
+	MacAddress     string
+	NumberOfPosts  int
+	TotalLikes     int
+	IsMaster       bool
+	LastPost       time.Time
+	MiiData        []byte
 	MiiDataEncoded string
 }
 
@@ -81,8 +81,7 @@ func (w *WebPanel) ViewArtisans(c *gin.Context) {
 	c.HTML(http.StatusOK, "view_artisans.html", gin.H{
 		"numberOfArtisans": len(artisans),
 		"Artisans":         artisans,
-		"Pages": 			pages,
-
+		"Pages":            pages,
 	})
 }
 
@@ -124,12 +123,12 @@ func (w *WebPanel) ViewArtisanDetails(c *gin.Context) {
 		miidata.MiiDataEncoded = base64.StdEncoding.EncodeToString(miidata.MiiData)
 
 		Miis = append(Miis, miidata)
-}
+	}
 
 	c.HTML(http.StatusOK, "artisan_details.html", gin.H{
 		"ArtisanDetails": artisanDetails,
-		"numberOfMiis": len(Miis),
-		"Miis":         Miis,
+		"numberOfMiis":   len(Miis),
+		"Miis":           Miis,
 	})
 }
 
@@ -161,7 +160,7 @@ func (w *WebPanel) SearchArtisans(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "search_results.html", gin.H{
 		"SearchResults": SearchResults,
-		"SearchTerm":	 search,
+		"SearchTerm":    search,
 		"SearchType":    "Artisans",
 	})
 }

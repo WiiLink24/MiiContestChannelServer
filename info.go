@@ -1,11 +1,11 @@
 package main
 
 import (
-	"database/sql"
 	"errors"
 	"github.com/WiiLink24/MiiContestChannel/common"
 	"github.com/WiiLink24/MiiContestChannel/plaza"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v4"
 	"net/http"
 )
 
@@ -31,8 +31,8 @@ func info(c *gin.Context) {
 	var popularity uint8
 	var intArtisanId uint32
 	err := pool.QueryRow(ctx, GetArtisanInfo, artisanId).Scan(&intArtisanId, &isMaster, &popularity)
-	if errors.Is(err, sql.ErrNoRows) {
-		// TODO: Corrupted error
+	if errors.Is(err, pgx.ErrNoRows) {
+		c.Data(http.StatusOK, "application/octet-stream", plaza.MakeArtisanInfo(intArtisanId, nil, nil))
 	} else if err != nil {
 		c.Status(http.StatusBadRequest)
 		writeResult(c, 400)
@@ -41,8 +41,8 @@ func info(c *gin.Context) {
 
 	var ranking int
 	err = pool.QueryRow(ctx, GetArtisanRanking, artisanId).Scan(&ranking)
-	if errors.Is(err, sql.ErrNoRows) {
-		// TODO: Corrupted error
+	if errors.Is(err, pgx.ErrNoRows) {
+		c.Data(http.StatusOK, "application/octet-stream", plaza.MakeArtisanInfo(intArtisanId, nil, nil))
 	} else if err != nil {
 		// TODO: If nil it is a different error
 		c.Status(http.StatusBadRequest)
@@ -54,7 +54,7 @@ func info(c *gin.Context) {
 	var miiData []byte
 	var initials string
 	err = pool.QueryRow(ctx, GetMostPopularPost, artisanId).Scan(&entryNumber, &miiData, &initials)
-	if errors.Is(err, sql.ErrNoRows) {
+	if errors.Is(err, pgx.ErrNoRows) {
 		// Artisan didn't post, send default Mii.
 		miiData = []byte{128, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 64, 134, 57, 123, 203, 194, 38, 92, 40, 0, 4, 66, 64, 49, 189, 40, 162, 8, 140, 8, 64, 20, 73, 184, 141, 0, 138, 0, 138, 37, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 234, 41}
 		entryNumber = 1

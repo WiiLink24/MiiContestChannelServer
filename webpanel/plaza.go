@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	GetPlaza      = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m, artisans AS a WHERE m.artisan_id = a.artisan_id ORDER BY entry_id`
+	GetPlaza      = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m, artisans a WHERE m.artisan_id = a.artisan_id ORDER BY entry_id`
 	GetPages      = `SELECT COUNT(*) FROM miis`
 	DeleteMii     = `DELETE FROM miis WHERE entry_id = $1`
 	GetMiiDetails = `SELECT m.entry_id, m.artisan_id, m.initials, m.nickname, m.gender, m.country_id, m.wii_number, m.mii_id, m.likes, m.perm_likes, m.mii_data, a.name FROM miis m,  artisans a WHERE m.artisan_id = a.artisan_id AND entry_id = $1`
