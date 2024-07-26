@@ -295,7 +295,7 @@
           // Join the parts back together and append the new page number
           const newUrl = `${urlParts.join('/')}/${newPageNumber}`;
 
-          document.getElementById("prevPage").href = newUrl;
+          document.getElementById("nextPage").href = newUrl;
         } else {
           document.getElementById("nextPage").style.opacity = "0.3";
           document.getElementById("nextPage").style.pointerEvents = "none";

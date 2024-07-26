@@ -44,8 +44,11 @@ func (w *WebPanel) ViewContests(c *gin.Context) {
 	}
 
 	var contests []Contests
-	var activeContests []Contests
 	var waitingContests []Contests
+	var openContests []Contests
+	var judgingContests []Contests
+	var resultsContests []Contests
+	var closedContests []Contests
 	for rows.Next() {
 		contest := Contests{}
 		err = rows.Scan(&contest.ContestId, &contest.Name, &contest.Status, &contest.HasSouvenir, &contest.HasThumbnail, &contest.HasSpecialAward, &contest.OpenTime, &contest.CloseTime)
@@ -58,19 +61,31 @@ func (w *WebPanel) ViewContests(c *gin.Context) {
 
 		contests = append(contests, contest)
 		if contest.Status == "waiting" {
-			activeContests = append(activeContests, contest)
-		} else if contest.Status == "results" {
 			waitingContests = append(waitingContests, contest)
+		} else if contest.Status == "open" {
+			openContests = append(openContests, contest)
+		} else if contest.Status == "judging" {
+			judgingContests = append(judgingContests, contest)
+		} else if contest.Status == "results" {
+			resultsContests = append(resultsContests, contest)
+		} else if contest.Status == "closed" {
+			closedContests = append(closedContests, contest)
 		}
 	}
 
 	c.HTML(http.StatusOK, "view_contests.html", gin.H{
 		"numberOfContests":        len(contests),
 		"Contests":                contests,
-		"numberOfActiveContests":  len(activeContests),
-		"ActiveContests":          activeContests,
-		"numberOfWaitingContests": len(waitingContests),
-		"WaitingContests":         waitingContests,
+		"numberOfWaitingContests":  len(waitingContests),
+		"waitingContests":          waitingContests,
+		"numberOfOpenContests": len(openContests),
+		"openContests":         openContests,
+		"numberOfJudgingContests": len(judgingContests),
+		"judgingContests":      judgingContests,
+		"numberOfResultsContests": len(resultsContests),		
+		"resultsContests":      resultsContests,
+		"numberOfClosedContests": len(closedContests),
+		"closedContests":      closedContests,
 	})
 }
 

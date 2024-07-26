@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.4.4 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.7 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -623,8 +623,16 @@ h1 {
   right: 0px !important;
 }
 
+.left-2 {
+  left: 0.5rem;
+}
+
 .right-0 {
   right: 0px;
+}
+
+.top-2 {
+  top: 0.5rem;
 }
 
 .z-0 {
@@ -733,6 +741,10 @@ h1 {
 
 .mr-6 {
   margin-right: 1.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
 }
 
 .mt-2 {
@@ -888,6 +900,10 @@ h1 {
   flex-wrap: wrap;
 }
 
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
 .items-center {
   align-items: center;
 }
@@ -914,6 +930,10 @@ h1 {
 
 .gap-3 {
   gap: 0.75rem;
+}
+
+.gap-5 {
+  gap: 1.25rem;
 }
 
 .gap-8 {
@@ -1027,6 +1047,11 @@ h1 {
   border-color: rgb(74 222 128 / var(--tw-border-opacity));
 }
 
+.border-orange-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(251 146 60 / var(--tw-border-opacity));
+}
+
 .border-red-400 {
   --tw-border-opacity: 1;
   border-color: rgb(248 113 113 / var(--tw-border-opacity));
@@ -1040,6 +1065,11 @@ h1 {
 .border-white {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
+}
+
+.border-yellow-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(250 204 21 / var(--tw-border-opacity));
 }
 
 .bg-\[rgb\(76\2c 130\2c 163\)\] {
@@ -1087,6 +1117,11 @@ h1 {
   background-color: rgb(245 245 245 / var(--tw-bg-opacity));
 }
 
+.bg-orange-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 146 60 / var(--tw-bg-opacity));
+}
+
 .bg-red-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(248 113 113 / var(--tw-bg-opacity));
@@ -1095,6 +1130,11 @@ h1 {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
 }
 
 .bg-\[url\(\'https\:\/\/rc24\.xyz\/goodies\/wallpapers\/CMO_Channel_BG_orange_1600x900\.png\'\)\] {
@@ -1504,9 +1544,19 @@ h1 {
   background-color: rgb(74 222 128 / var(--tw-bg-opacity));
 }
 
+.odd\:bg-orange-400:nth-child(odd) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 146 60 / var(--tw-bg-opacity));
+}
+
 .odd\:bg-red-400:nth-child(odd) {
   --tw-bg-opacity: 1;
   background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+}
+
+.odd\:bg-yellow-400:nth-child(odd) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
 }
 
 .odd\:bg-opacity-10:nth-child(odd) {
@@ -1523,9 +1573,24 @@ h1 {
   background-color: rgb(220 252 231 / var(--tw-bg-opacity));
 }
 
+.even\:bg-orange-200:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 215 170 / var(--tw-bg-opacity));
+}
+
 .even\:bg-red-100:nth-child(even) {
   --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+}
+
+.even\:bg-orange-100:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 237 213 / var(--tw-bg-opacity));
+}
+
+.even\:bg-yellow-200:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 240 138 / var(--tw-bg-opacity));
 }
 
 .hover\:-rotate-1:hover {

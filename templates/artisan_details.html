@@ -217,7 +217,6 @@
         if (base64String) {
           try {
             const miiImageUrl = await renderMii(base64String);
-            console.log(miiImageUrl);
             // Assuming there's a way to associate the miiImage with the miiElement, like a data attribute or adjacent element
             const imgElement = miiElement.nextElementSibling; // Example: the <img> is right next to the miiElement
             imgElement.src = miiImageUrl;
@@ -273,7 +272,6 @@
         const isMaster = masterElement.innerHTML;
         const masterName = checkIsMaster(isMaster);
         masterElement.innerHTML = masterName;
-        console.log(masterName);
       });
 
       const genderElements = document.querySelectorAll(".gender");
@@ -339,7 +337,6 @@
     }
 
     function checkIsMaster(isMaster) {
-      console.log(isMaster);
       if (isMaster == "true") {
         return "<span class='mr-3 p-1 pl-2 pr-2 rounded-full text-white' style='background-color:orange;'>◆ Master ◆</span>";
       } else {
