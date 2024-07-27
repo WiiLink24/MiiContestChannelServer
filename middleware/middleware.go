@@ -10,14 +10,14 @@ func AuthenticationMiddleware() gin.HandlerFunc {
 		tokenString, err := c.Cookie("token")
 		if err != nil {
 			// We can't redirect off an Unauthorized status code.
-			c.Redirect(http.StatusPermanentRedirect, "/panel/login")
+			c.Redirect(http.StatusTemporaryRedirect, "/panel/login")
 			c.Abort()
 			return
 		}
 
 		claims, err := VerifyToken(tokenString)
 		if err != nil {
-			c.Redirect(http.StatusPermanentRedirect, "/panel/login")
+			c.Redirect(http.StatusTemporaryRedirect, "/panel/login")
 			c.Abort()
 			return
 		}
@@ -25,7 +25,7 @@ func AuthenticationMiddleware() gin.HandlerFunc {
 		if username, ok := claims["username"].(string); ok {
 			c.Set("username", username)
 		} else {
-			c.Redirect(http.StatusPermanentRedirect, "/panel/login")
+			c.Redirect(http.StatusTemporaryRedirect, "/panel/login")
 			c.Abort()
 			return
 		}
