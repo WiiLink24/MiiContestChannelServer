@@ -271,7 +271,7 @@ func (w *WebPanel) AddContestPOST(c *gin.Context) {
 		}
 	}
 
-	c.Redirect(http.StatusPermanentRedirect, "/panel/contests#add_success")
+	c.Redirect(http.StatusTemporaryRedirect, "/panel/contests#add_success")
 }
 
 func (w *WebPanel) EditContest(c *gin.Context) {
@@ -439,7 +439,7 @@ func (w *WebPanel) EditContestPOST(c *gin.Context) {
 		}
 	}
 
-	c.Redirect(http.StatusPermanentRedirect, "/panel/contests/#edit_success")
+	c.Redirect(http.StatusTemporaryRedirect, "/panel/contests/#edit_success")
 }
 
 func (w *WebPanel) DeleteContest(c *gin.Context) {
