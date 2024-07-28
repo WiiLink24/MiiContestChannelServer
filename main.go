@@ -22,7 +22,7 @@ var (
 
 func checkError(err error) {
 	if err != nil {
-		log.Fatalf("Everybody Votes Channel server has encountered a fatal error! Reason: %v\n", err)
+		log.Fatalf("Mii Contest Channel server has encountered a fatal error! Reason: %v\n", err)
 	}
 }
 
