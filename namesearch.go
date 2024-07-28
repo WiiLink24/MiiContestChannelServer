@@ -19,7 +19,7 @@ func nameSearch(c *gin.Context) {
 	entryId, err := strconv.Atoi(strEntryNumber)
 	if err != nil {
 		// TODO: Figure out invalid entry ID
-		// It should never happen if this was sent by CMOC, but people will be people.
+		// It should never happen if this was sent by MCC, but people will be people.
 		writeResult(c, 108)
 		return
 	}
