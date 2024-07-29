@@ -932,10 +932,6 @@ h1 {
   gap: 0.75rem;
 }
 
-.gap-5 {
-  gap: 1.25rem;
-}
-
 .gap-8 {
   gap: 2rem;
 }
@@ -1573,19 +1569,14 @@ h1 {
   background-color: rgb(220 252 231 / var(--tw-bg-opacity));
 }
 
-.even\:bg-orange-200:nth-child(even) {
+.even\:bg-orange-100:nth-child(even) {
   --tw-bg-opacity: 1;
-  background-color: rgb(254 215 170 / var(--tw-bg-opacity));
+  background-color: rgb(255 237 213 / var(--tw-bg-opacity));
 }
 
 .even\:bg-red-100:nth-child(even) {
   --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
-}
-
-.even\:bg-orange-100:nth-child(even) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 237 213 / var(--tw-bg-opacity));
 }
 
 .even\:bg-yellow-200:nth-child(even) {
