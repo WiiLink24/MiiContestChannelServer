@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>AAA</h1>
+    {{range .ContestEntries}}
+    <div>
+        <p>{{.ArtisanId}}</p>
+        <p>{{.CountryId}}</p>
+        <p>{{.MiiDataEncoded}}</p>
+        <p>{{.Likes}}</p>
+        <p>{{.Rank}}</p>
+        <p>{{.EntryId}}</p>
+    </div>
+    {{end}}
+</body>
+</html>

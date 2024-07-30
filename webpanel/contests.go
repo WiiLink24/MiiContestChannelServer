@@ -2,15 +2,17 @@ package webpanel
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
-	"github.com/WiiLink24/MiiContestChannel/common"
-	"github.com/WiiLink24/MiiContestChannel/contest"
-	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/WiiLink24/MiiContestChannel/common"
+	"github.com/WiiLink24/MiiContestChannel/contest"
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -21,6 +23,8 @@ const (
 	DeleteContest        = `DELETE FROM contests WHERE contest_id = $1`
 	DeleteContestEntries = `DELETE FROM contest_miis WHERE contest_id = $1`
 	UpdateContest        = `UPDATE contests SET english_name = $1, open_time = $2, close_time = $3, has_special_award = $4, has_thumbnail = $5, has_souvenir = $6 WHERE contest_id = $7`
+	ViewContestEntries = `SELECT artisan_id, country_id, mii_data, likes, rank, entry_id FROM contest_miis WHERE contest_id = $1` 
+	DeleteSelectedEntries = `DELETE FROM contest_miis WHERE contest_id = $1 AND entry_id = ($2)`
 )
 
 type Contests struct {
@@ -32,6 +36,16 @@ type Contests struct {
 	HasSpecialAward bool
 	OpenTime        time.Time
 	CloseTime       time.Time
+}
+
+type ContestEntries struct {
+	ArtisanId int
+	CountryId int
+	MiiData   []byte
+	Likes     int
+	Rank      int
+	EntryId   int
+	MiiDataEncoded string
 }
 
 func (w *WebPanel) ViewContests(c *gin.Context) {
@@ -440,6 +454,61 @@ func (w *WebPanel) EditContestPOST(c *gin.Context) {
 	}
 
 	c.Redirect(http.StatusTemporaryRedirect, "/panel/contests/#edit_success")
+}
+
+func (w *WebPanel) ContestEntries(c *gin.Context) {
+	contest_id := c.Param("contest_id")
+	contestIdInt, err := strconv.Atoi(contest_id)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
+			"Error": err.Error(),
+		})
+		return
+	}
+
+	//fetch the contest entries
+	rows, err := w.Pool.Query(w.Ctx, ViewContestEntries, contestIdInt)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
+			"Error": err.Error(),
+		})
+		return
+	}
+
+	var contestEntries []ContestEntries
+	for rows.Next() {
+		contestentries_data := ContestEntries{}
+		err = rows.Scan(&contestentries_data.ArtisanId, &contestentries_data.CountryId, &contestentries_data.MiiData, &contestentries_data.Likes, &contestentries_data.Rank, &contestentries_data.EntryId)
+		if err != nil {
+			c.HTML(http.StatusInternalServerError, "error.html", gin.H{
+				"Error": err.Error(),
+			})
+			return
+		}
+		contestentries_data.MiiDataEncoded = base64.StdEncoding.EncodeToString(contestentries_data.MiiData)
+
+		contestEntries = append(contestEntries, contestentries_data)
+	}
+
+	c.HTML(http.StatusOK, "view_contest_entries.html", gin.H{
+		"ContestEntries": contestEntries,
+		"numberOfEntries": len(contestEntries),
+		"ContestId": contestIdInt,
+})
+}
+
+func (w *WebPanel) DeleteEntries(c *gin.Context) {
+	contest_id := c.Param("contest_id")
+	entries := c.PostForm("entries")
+	_, err := w.Pool.Exec(w.Ctx, DeleteSelectedEntries, contest_id, entries)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
+			"Error": err.Error(),
+		})
+		return
+	}
+
+	c.Redirect(http.StatusFound, "/panel/contests/view/"+contest_id+"#delete_success")
 }
 
 func (w *WebPanel) DeleteContest(c *gin.Context) {
