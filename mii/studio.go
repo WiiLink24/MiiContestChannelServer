@@ -34,19 +34,20 @@ var (
 This is kept for compatibility reasons.
 */
 
+// StudioResponse represents a response from studio.cgi.
 type StudioResponse struct {
+	// Certain fields are not used on Mii Studio and not included
 	Mii           string `json:"mii"`
 	MiiStudio     string `json:"miistudio"`
-	/*Name          string `json:"name"`
+	Name          string `json:"name"`
 	CreatorName   string `json:"creator_name"`
-	Birthday      string `json:"birthday"`
+	//Birthday      string `json:"birthday"`
 	FavoriteColor string `json:"favorite_color"`
-	Height        int    `json:"height"`
-	Build         int    `json:"build"`
+	Height        uint8  `json:"height"`
+	Build         uint8  `json:"build"`
 	Gender        string `json:"gender"`
-	Mingle        string `json:"mingle"`
-	Copying       string `json:"copying"`
-	*/
+	//Mingle        string `json:"mingle"`
+	//Copying       string `json:"copying"`
 }
 
 func Studio(c *gin.Context) {
@@ -129,6 +130,26 @@ type ctx struct {
 	BufferRaw *bytes.Buffer
 }
 
+// used in response
+// https://github.com/RiiConnect24/CMOC-Server/blob/master/miicontestp/cgi-bin/studio.cgi
+var genderStringMap = []string{ "Male", "Female", }
+var favoriteColorMap = []string{
+    "Red",
+    "Orange",
+    "Yellow",
+    "Lime Green",
+    "Forest Green",
+    "Royal Blue",
+    "Sky Blue",
+    "Pink",
+    "Purple",
+    "Brown",
+    "White",
+    "Black",
+}
+// for mingle and copying
+//var yesNoNAMap = []string{ "Yes", "No", "N/A" }
+
 // CreateStudioMii converts any Mii into the format the Nintendo Mii Studio expects.
 func CreateStudioMii(mii any, miiType string) StudioResponse {
 	c := &ctx{
@@ -152,7 +173,8 @@ func CreateStudioMii(mii any, miiType string) StudioResponse {
 	}
 
 	c.writeValue(c.getField("FacialHairBeard"))
-	c.writeValue(c.getField("BodyWeight"))
+	bodyWeight := c.getField("BodyWeight")
+	c.writeValue(bodyWeight)
 
 	if miiType == Wii {
 		c.writeValue(3)
@@ -219,8 +241,10 @@ func CreateStudioMii(mii any, miiType string) StudioResponse {
 		c.writeValue(c.getField("FaceWrinkles"))
 	}
 
-	c.writeValue(c.getField("FavoriteColor"))
-	c.writeValue(c.getField("Gender"))
+	favoriteColor := c.getField("FavoriteColor")
+	c.writeValue(favoriteColor)
+	gender := c.getField("Gender")
+	c.writeValue(gender)
 
 	if miiType != Switch {
 		if c.getField("GlassesColor") == 0 {
@@ -250,7 +274,8 @@ func CreateStudioMii(mii any, miiType string) StudioResponse {
 
 	c.writeValue(c.getField("HairFlip"))
 	c.writeValue(c.getField("HairType"))
-	c.writeValue(c.getField("BodyHeight"))
+	bodyHeight := c.getField("BodyHeight")
+	c.writeValue(bodyHeight)
 	c.writeValue(c.getField("MoleSize"))
 	c.writeValue(c.getField("MoleEnable"))
 	c.writeValue(c.getField("MoleHorizontal"))
@@ -282,10 +307,28 @@ func CreateStudioMii(mii any, miiType string) StudioResponse {
 	c.writeValue(c.getField("NoseType"))
 	c.writeValue(c.getField("NoseVertical"))
 
-	return StudioResponse{
-		Mii:       hex.EncodeToString(c.Buffer.Bytes()),
-		MiiStudio: hex.EncodeToString(c.BufferRaw.Bytes()),
+	response := StudioResponse{
+		Mii:           hex.EncodeToString(c.Buffer.Bytes()),
+		MiiStudio:     hex.EncodeToString(c.BufferRaw.Bytes()),
+		Height:        bodyHeight,
+		Build:         bodyWeight,
+		Gender:        genderStringMap[gender],
+		FavoriteColor: favoriteColorMap[favoriteColor],
 	}
+
+	// set extra response parameters
+	r := reflect.ValueOf(c.mii)
+	i := reflect.Indirect(r)
+	nameField := i.FieldByName("MiiName")
+	if nameField.IsValid() {
+		response.Name = nameField.Interface().(string)
+	}
+	creatorNameField := i.FieldByName("CreatorName")
+	if creatorNameField.IsValid() {
+		response.CreatorName = creatorNameField.Interface().(string)
+	}
+
+	return response
 }
 
 // getField is an unsafe way to dynamically get a field value from all Mii types.
