@@ -7,14 +7,16 @@ import (
 	"github.com/kaitai-io/kaitai_struct_go_runtime/kaitai"
 	"net/http"
 	"reflect"
+	"log"
 )
 
 const (
-	Wii     = "wii"
-	Gen2    = "gen2"
-	WiiU    = "wiiu"
-	Miitomo = "miitomo"
-	Switch  = "switch"
+	Wii        = "wii"
+	Gen2       = "gen2"       // gen2_wiiu_3ds_miitomo, CFLStoreData/FFLStoreData/AFLStoreData
+	SwitchDB   = "switch"     // gen3_sdb, nn::mii::detail::StoreDataRaw
+	SwitchGame = "switchgame" // gen3_swi, nn::mii::CharInfo
+	Switch     = "switch"     // generic used for comparisons
+	//Studio     = "studio"
 )
 
 var (
@@ -44,15 +46,49 @@ func Studio(c *gin.Context) {
 	}
 
 	var mii any
-	if inputType == Wii {
+
+	switch inputType {
+	case Wii:
 		m := NewGen1Wii()
 		err = m.Read(kaitai.NewStream(f), nil, m)
 		if err != nil {
 			c.JSON(400, MiiError)
 			return
 		}
-
 		mii = m
+	case Gen2:
+		m := NewGen2Wiiu3dsMiitomo()
+		err = m.Read(kaitai.NewStream(f), nil, m)
+		if err != nil {
+			c.JSON(400, MiiError)
+			return
+		}
+		mii = m
+	case SwitchDB:
+		m := NewMiidataSdb()
+		err = m.Read(kaitai.NewStream(f), nil, m)
+		if err != nil {
+			c.JSON(400, MiiError)
+			return
+		}
+		mii = m
+	case SwitchGame:
+		m := NewMiidataSwi()
+		err = m.Read(kaitai.NewStream(f), nil, m)
+		if err != nil {
+			c.JSON(400, MiiError)
+			return
+		}
+		mii = m
+	default:
+		// that input type does not exist
+		c.JSON(400, MiiError)
+		return
+	}
+
+	// for comparison purposes
+	if inputType == SwitchDB || inputType == SwitchGame {
+		inputType = Switch
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -230,7 +266,34 @@ func CreateStudioMii(mii any, miiType string) string {
 // It also converts the value into the one Nintendo expects for the field.
 func (c *ctx) getField(field string) uint8 {
 	r := reflect.ValueOf(c.mii)
-	f := reflect.Indirect(r).FieldByName(field)
+	i := reflect.Indirect(r)
+
+	f := i.FieldByName(field)
+
+	if !f.IsValid() {
+		// this may be a method?
+		m := r.MethodByName(field)
+		if m.IsValid() {
+			results := m.Call(nil)
+			if len(results) > 0 {
+				switch results[0].Kind() {
+				case reflect.Bool:
+					if results[0].Bool() {
+						return 1
+					} else {
+						return 0
+					}
+				default:
+					uint8Type := reflect.TypeOf((uint8)(0))
+					convToUint8 := results[0].Convert(uint8Type)
+					return convToUint8.Interface().(uint8)
+				}
+			}
+		} else {
+			log.Println("WARNING: Cannot fetch", field, "as field OR method from type", i.Type().Name())
+			return 0
+		}
+	}
 
 	if f.Kind() == reflect.Bool {
 		if f.Bool() {
