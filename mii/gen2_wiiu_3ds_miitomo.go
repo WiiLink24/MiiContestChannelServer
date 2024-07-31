@@ -470,7 +470,7 @@ func (this *Gen2Wiiu3dsMiitomo) GlassesType() (v int, err error) {
 	if this._f_glassesType {
 		return this.glassesType, nil
 	}
-	this.glassesType = int((this.Glasses & 4))
+	this.glassesType = int((this.Glasses & 15))
 	this._f_glassesType = true
 	return this.glassesType, nil
 }
@@ -590,7 +590,7 @@ func (this *Gen2Wiiu3dsMiitomo) GlassesSize() (v int, err error) {
 	if this._f_glassesSize {
 		return this.glassesSize, nil
 	}
-	this.glassesSize = int(((this.Glasses >> 7) & 11))
+	this.glassesSize = int(((this.Glasses >> 7) & 15))
 	this._f_glassesSize = true
 	return this.glassesSize, nil
 }
@@ -630,7 +630,7 @@ func (this *Gen2Wiiu3dsMiitomo) MoleEnable() (v int, err error) {
 	if this._f_moleEnable {
 		return this.moleEnable, nil
 	}
-	this.moleEnable = int((this.Mole >> 15))
+	this.moleEnable = int(((this.Mole >> 0) & 1))
 	this._f_moleEnable = true
 	return this.moleEnable, nil
 }
