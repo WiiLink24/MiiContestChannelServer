@@ -34,6 +34,21 @@ var (
 This is kept for compatibility reasons.
 */
 
+type StudioResponse struct {
+	Mii           string `json:"mii"`
+	MiiStudio     string `json:"miistudio"`
+	/*Name          string `json:"name"`
+	CreatorName   string `json:"creator_name"`
+	Birthday      string `json:"birthday"`
+	FavoriteColor string `json:"favorite_color"`
+	Height        int    `json:"height"`
+	Build         int    `json:"build"`
+	Gender        string `json:"gender"`
+	Mingle        string `json:"mingle"`
+	Copying       string `json:"copying"`
+	*/
+}
+
 func Studio(c *gin.Context) {
 	inputType := c.PostForm("platform")
 	inputData, _ := c.FormFile("data")
@@ -71,6 +86,8 @@ func Studio(c *gin.Context) {
 			c.JSON(400, MiiError)
 			return
 		}
+		// SwitchDB specific hack
+		m.EyebrowVertical += 3
 		mii = m
 	case SwitchGame:
 		m := NewMiidataSwi()
@@ -100,27 +117,29 @@ func Studio(c *gin.Context) {
 		inputType = Switch
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"mii": CreateStudioMii(mii, inputType),
-	})
+	response := CreateStudioMii(mii, inputType)
+
+	c.JSON(http.StatusOK, response)
 }
 
 type ctx struct {
-	n   int
-	mii any
-	*bytes.Buffer
+	n         int
+	mii       any
+	Buffer    *bytes.Buffer
+	BufferRaw *bytes.Buffer
 }
 
 // CreateStudioMii converts any Mii into the format the Nintendo Mii Studio expects.
-func CreateStudioMii(mii any, miiType string) string {
+func CreateStudioMii(mii any, miiType string) StudioResponse {
 	c := &ctx{
-		n:      256,
-		Buffer: new(bytes.Buffer),
-		mii:    mii,
+		n:         256,
+		Buffer:    new(bytes.Buffer),
+		BufferRaw: new(bytes.Buffer), // for mii studio data
+		mii:       mii,
 	}
 
 	// Init ctx
-	c.WriteByte(0)
+	c.Buffer.WriteByte(0)
 
 	if miiType != Switch {
 		if c.getField("FacialHairColor") == 0 {
@@ -174,11 +193,7 @@ func CreateStudioMii(mii any, miiType string) string {
 	c.writeValue(c.getField("EyebrowType"))
 	c.writeValue(c.getField("EyebrowHorizontal"))
 
-	if miiType != Switch {
-		c.writeValue(c.getField("EyebrowVertical"))
-	} else {
-		c.writeValue(c.getField("EyebrowVertical") + 3)
-	}
+	c.writeValue(c.getField("EyebrowVertical"))
 
 	c.writeValue(c.getField("FaceColor"))
 
@@ -267,7 +282,10 @@ func CreateStudioMii(mii any, miiType string) string {
 	c.writeValue(c.getField("NoseType"))
 	c.writeValue(c.getField("NoseVertical"))
 
-	return hex.EncodeToString(c.Bytes())
+	return StudioResponse{
+		Mii:       hex.EncodeToString(c.Buffer.Bytes()),
+		MiiStudio: hex.EncodeToString(c.BufferRaw.Bytes()),
+	}
 }
 
 // getField is an unsafe way to dynamically get a field value from all Mii types.
@@ -316,6 +334,7 @@ func (c *ctx) getField(field string) uint8 {
 }
 
 func (c *ctx) writeValue(v uint8) {
+	c.BufferRaw.WriteByte(byte(v))
 	eo := (7 + (int(v) ^ c.n)) % 256
 	c.n = eo
 	c.Buffer.WriteByte(byte(eo))
