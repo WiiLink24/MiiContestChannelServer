@@ -5,9 +5,9 @@ import (
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
 	"github.com/kaitai-io/kaitai_struct_go_runtime/kaitai"
+	"log"
 	"net/http"
 	"reflect"
-	"log"
 )
 
 const (
@@ -16,7 +16,7 @@ const (
 	SwitchDB   = "switch"     // gen3_sdb, nn::mii::detail::StoreDataRaw
 	SwitchGame = "switchgame" // gen3_swi, nn::mii::CharInfo
 	Switch     = "switch"     // generic used for comparisons
-	//Studio     = "studio"
+	MiiStudio  = "studio"
 )
 
 var (
@@ -80,6 +80,15 @@ func Studio(c *gin.Context) {
 			return
 		}
 		mii = m
+	case MiiStudio:
+		m := NewGen3Studio()
+		err = m.Read(kaitai.NewStream(f), nil, m)
+		if err != nil {
+			c.JSON(400, MiiError)
+			return
+		}
+		mii = m
+
 	default:
 		// that input type does not exist
 		c.JSON(400, MiiError)
@@ -87,7 +96,7 @@ func Studio(c *gin.Context) {
 	}
 
 	// for comparison purposes
-	if inputType == SwitchDB || inputType == SwitchGame {
+	if inputType == SwitchDB || inputType == SwitchGame || inputType == MiiStudio {
 		inputType = Switch
 	}
 
