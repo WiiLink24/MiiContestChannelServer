@@ -185,12 +185,13 @@ function toggleForDeletion(id) {
 }
 
 function deleteArray() {
+    const contest_id = window.location.pathname.split("/")[4];
     if (deletionArray.length > 0) {
         if (confirm("Are you sure you want to delete these entries:\n\nId: " + deletionArray + "\n\nThis action is PERMANENT!")) {
             const formData = new FormData();
             formData.append("entries_id", JSON.stringify(deletionArray));
 
-            fetch(`/panel/contests/delete`, {
+            fetch(`/panel/contests/view/${contest_id}`, {
                 method: "POST",
                 body: formData,
             }).then((response) => {

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/WiiLink24/MiiContestChannel/common"
@@ -24,7 +25,7 @@ const (
 	DeleteContestEntries = `DELETE FROM contest_miis WHERE contest_id = $1`
 	UpdateContest        = `UPDATE contests SET english_name = $1, open_time = $2, close_time = $3, has_special_award = $4, has_thumbnail = $5, has_souvenir = $6 WHERE contest_id = $7`
 	ViewContestEntries = `SELECT artisan_id, country_id, mii_data, likes, rank, entry_id FROM contest_miis WHERE contest_id = $1` 
-	DeleteSelectedEntries = `DELETE FROM contest_miis WHERE contest_id = $1 AND entry_id = ($2)`
+	DeleteSelectedEntries = `DELETE FROM contest_miis WHERE contest_id = $1 AND entry_id IN ($2)`
 )
 
 type Contests struct {
@@ -499,8 +500,24 @@ func (w *WebPanel) ContestEntries(c *gin.Context) {
 
 func (w *WebPanel) DeleteEntries(c *gin.Context) {
 	contest_id := c.Param("contest_id")
-	entries := c.PostForm("entries")
-	_, err := w.Pool.Exec(w.Ctx, DeleteSelectedEntries, contest_id, entries)
+	entries := c.PostForm("entries_id")
+
+	entries = entries[1 : len(entries)-1]
+
+	entryIDs := strings.Split(entries, ",")
+	placeholders := make([]string, len(entryIDs))
+	args := make([]interface{}, len(entryIDs)+1)
+	args[0] = contest_id
+
+	for i, entry := range entryIDs {
+	    placeholders[i] = fmt.Sprintf("$%d", i+2) // +2 because $1 is for contest_id
+	    args[i+1] = entry
+	}
+
+	query := fmt.Sprintf(`DELETE FROM contest_miis WHERE contest_id = $1 AND entry_id IN (%s)`, strings.Join(placeholders, ", "))
+	fmt.Println(query)
+
+	_, err := w.Pool.Exec(w.Ctx, query, args...)
 	if err != nil {
 		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
 			"Error": err.Error(),
