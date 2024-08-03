@@ -1,21 +1,360 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Contest Details | CMOC Control Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet" />
+    <link href="/assets/output.css" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.wiilink24.com/img/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.wiilink24.com/img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.wiilink24.com/img/favicon-16x16.png" />
+    <link rel="manifest" href="https://www.wiilink24.com/img/site.webmanifest" />
+    <link rel="mask-icon" href="https://www.wiilink24.com/img/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="shortcut icon" href="https://www.wiilink24.com/img/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-config" content="https://www.wiilink24.com/img/browserconfig.xml" />
+    <meta name="theme-color" content="#ffffff" />
+    <script src="https://kit.fontawesome.com/e47ece3e74.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <h1>AAA</h1>
-    {{range .ContestEntries}}
-    <div>
-        <p>{{.ArtisanId}}</p>
-        <p>{{.CountryId}}</p>
-        <p>{{.MiiDataEncoded}}</p>
-        <p>{{.Likes}}</p>
-        <p>{{.Rank}}</p>
-        <p>{{.EntryId}}</p>
-    </div>
-    {{end}}
+
+<body class="dark:text-white dark:bg-slate-800">
+    <main class="container py-20 space-y-4">
+        <div class=" pb-2 flex items-center justify-between">
+            <div class="flex flex-row gap-3 items-center">
+                <img src="https://www.wiilink24.com/img/IS-logo.png" class="!h-[60px] dark:invert">
+                <i class="fa-solid fa-chevron-right text-2xl cursor-pointer" onclick="toggleOpen('toggleOpen');"></i>
+                <div id="toggleOpen"
+                    class="p-2 flex-row items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-500 hidden">
+                    <a href="/panel/contests"><button
+                            class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"><i
+                                class="fa-solid fa-flag-checkered"></i> Contests</button></a> |
+                    <a href="/panel/contests/add"><button
+                            class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i
+                                class="fa-solid fa-circle-plus"></i> Add Contest</button></a> |
+                    <a href="/panel/plaza"><button
+                            class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i
+                                class="fa-solid fa-users"></i> Plaza</button></a> |
+                    <a href="/panel/artisans"><button
+                            class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i
+                                class="fa-solid fa-brush"></i> Mii Artisans</button></a>
+                </div>
+            </div>
+            <h2 class="text-right text-lg"><b>CMOC</b><br> Control Panel</h2>
+        </div>
+        <hr class="pt-2">
+        <div class="pb-3 flex items-center justify-between">
+            <a
+            class="col-span-2 inline-flex gap-3 items-center hover:underline"
+            href="/panel/contests"
+            ><i class="fa-solid fa-chevron-left"></i> Return to Contests</a
+          >
+            <p class="opacity-50">
+                CMOC <i class="fa-solid fa-caret-right"></i> Contests
+            </p>
+        </div>
+        <div class="pb-3 flex items-center justify-between">
+            <h1>Contest data</h1>
+            <a onclick="deleteArray()" class="submit_button bg-red-500 hover:bg-red-600">
+                <button><i class="fa-solid fa-trash"></i> Delete Selection</button>
+            </a>
+        </div>
+        <div id="small" class="grid magic_grid gap-3">
+            {{ range .ContestEntries }}
+            <div onclick="toggleForDeletion({{.EntryId}})" id="{{.EntryId}}"
+                class="flex flex-col items-center gap-3 rounded-xl border-2 border-gray-100 bg-gray-50 dark:border-slate-600 dark:bg-slate-700 hover:scale-102 hover:shadow-lg transition-all">
+                <div class="miiMain flex flex-row items-center">
+                    <p class="miiData hidden">{{.MiiDataEncoded}}</p>
+                    <img src="" class="miiImage h-28" />
+                </div>
+                <p><i class="fa-solid fa-ranking-star"></i> <b>{{.Rank}}</b> | <i class="fa-solid fa-thumbs-up"></i>
+                    {{.Likes}}</p>
+                <p class="mb-5 opacity-30 text-center">
+                    {{.EntryId}} <a href="/panel/artisans/details/{{.ArtisanId}}" class="underline">({{.ArtisanId}})</a>
+                </p>
+            </div>
+            {{end}}
+        </div>
+        <a onclick="deleteAll()" class="mt-3 mb-10 submit_button bg-red-500 hover:bg-red-600">
+            <button><i class="fa-solid fa-bomb"></i> Delete ALL Entries from this Contest</button>
+        </a>
+        <br />
+        <hr />
+        <p>©2020 - 2024 WiiLink Team</p>
+        </div>
+    </main>
+
+    <style>
+        .to-delete {
+            background-color: rgb(146, 45, 45) !important;
+            border: 3px solid rgb(164, 72, 72) !important;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const hash = window.location.hash;
+            const msgElement = document.getElementById('msg');
+
+            if (msgElement) {
+                let message = '';
+                let showMessage = false;
+
+                switch (hash) {
+                    case '#edit_success':
+                        msgElement.classList.add("bg-green-400");
+                        message = '<b><i class="fa-solid fa-circle-check"></i> Saved!</b><br>The Contest has been modified successfully!';
+                        showMessage = true;
+                        break;
+                    case '#add_success':
+                        msgElement.classList.add("bg-green-400");
+                        message = '<b><i class="fa-solid fa-circle-check"></i> Added!</b><br>The Contest has been added successfully!';
+                        showMessage = true;
+                        break;
+                    case '#delete_success':
+                        msgElement.classList.add("bg-red-400");
+                        message = '<b><i class="fa-solid fa-circle-check"></i> Deleted!</b><br>The Contest has been deleted successfully!';
+                        showMessage = true;
+                        break;
+                }
+
+                if (showMessage) {
+                    console.log("Shown");
+                    msgElement.style.display = 'block';
+                    msgElement.innerHTML = message;
+                    setTimeout(() => {
+                        msgElement.style.opacity = '0';
+                        msgElement.style.pointerEvents = 'none';
+                    }, 5000);
+                }
+            }
+
+            const tabs = document.querySelectorAll('button[data-tabs-target]');
+            const tabPanels = document.querySelectorAll('[role="tabpanel"]');
+
+            const ids = ['toggleOpen'];
+            ids.forEach(id => {
+                const element = document.getElementById(id);
+                const state = localStorage.getItem(id);
+                if (state === 'open') {
+                    element.style.display = 'flex';
+                } else if (state === 'closed') {
+                    element.style.display = 'none';
+                }
+            });
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetPanel = document.querySelector(tab.getAttribute('data-tabs-target'));
+
+                    // Hide all tab panels
+                    tabPanels.forEach(panel => {
+                        panel.classList.add('hidden');
+                    });
+
+                    // Show the selected tab panel
+                    targetPanel.classList.remove('hidden');
+
+                    // Remove bg-gray-200 and shadow-sm from all tabs
+                    tabs.forEach(t => {
+                        t.setAttribute('aria-selected', 'false');
+                        t.classList.remove('bg-gray-200', 'shadow-sm', 'dark:bg-slate-700', 'dark:bg-slate-800');
+                    });
+
+                    // Set aria-selected="true" and add bg-gray-200 and shadow-sm to the clicked tab
+                    tab.setAttribute('aria-selected', 'true');
+                    tab.classList.add('bg-gray-200', 'shadow-sm', 'dark:bg-slate-700');
+                });
+            });
+        });
+    </script>
+
+    <script>
+    let deletionArray = [];
+function toggleForDeletion(id) {
+    if (deletionArray.includes(id)) {
+        deletionArray = deletionArray.filter(item => item !== id);
+        document.getElementById(id).classList.remove("to-delete");
+    } else {
+        deletionArray.push(id);
+        document.getElementById(id).classList.add("to-delete");
+    }
+}
+
+function deleteArray() {
+    if (deletionArray.length > 0) {
+        if (confirm("Are you sure you want to delete these entries:\n\nId: " + deletionArray + "\n\nThis action is PERMANENT!")) {
+            const formData = new FormData();
+            formData.append("entries_id", JSON.stringify(deletionArray));
+
+            fetch(`/panel/contests/delete`, {
+                method: "POST",
+                body: formData,
+            }).then((response) => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert("Failed to delete entries.");
+                }
+            });
+        }
+    } else {
+        alert("No entries selected for deletion.");
+    }
+}
+
+function deleteAll() {
+    if (confirm("Are you sure you want to delete ALL entries?\n\nThis action is very risky and should only be used before deleting a contest!\nPlease consult with the team before proceeding.")) {
+        if (confirm("Are you REALLY sure you want to delete ALL entries?")) {
+            const items = document.querySelectorAll('.grid > div');
+            const ids = Array.from(items).map(item => item.id);
+            console.log(ids);
+
+            const formData = new FormData();
+            formData.append("entryIds", JSON.stringify(ids));
+
+            fetch(`/panel/contests/delete`, {
+                method: "POST",
+                body: formData,
+            }).then((response) => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert("Failed to delete all entries.");
+                }
+            });
+        }
+    }
+}
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const miiElements = document.querySelectorAll(".miiData"); // Select all elements with the class 'miiData'
+            miiElements.forEach(async (miiElement) => {
+                const base64String = miiElement.innerHTML; // Assuming the base64 string is directly within the element
+                if (base64String) {
+                    try {
+                        const miiImageUrl = await renderMii(base64String);
+                        // Assuming there's a way to associate the miiImage with the miiElement, like a data attribute or adjacent element
+                        const imgElement = miiElement.nextElementSibling; // Example: the <img> is right next to the miiElement
+                        imgElement.src = miiImageUrl;
+                    } catch (error) {
+                        console.error("Failed to render Mii:", error);
+                    }
+                }
+
+                const ids = ["toggleOpen"];
+                ids.forEach((id) => {
+                    const element = document.getElementById(id);
+                    const state = localStorage.getItem(id);
+                    if (state === "open") {
+                        element.style.display = "flex";
+                    } else if (state === "closed") {
+                        element.style.display = "none";
+                    }
+                });
+            });
+
+            const countryElements = document.querySelectorAll(".country"); // Select all elements with the class 'country'
+            const flagElements = document.querySelectorAll(".countryFlag"); // Select all elements with the class 'flag'
+
+            countryElements.forEach((countryElement) => {
+                const countryCode = parseInt(countryElement.textContent, 10); // Use textContent and specify radix 10
+                if (!isNaN(countryCode)) {
+                    const countryData = getCountryName(countryCode); // Assuming this function returns an object with 'name' and possibly 'flag'
+                    countryElement.textContent = countryData.name; // Use textContent for safer text updates
+                }
+            });
+
+            flagElements.forEach((flagElement) => {
+                const countryCode = parseInt(flagElement.textContent, 10); // Use textContent and specify radix 10
+                if (!isNaN(countryCode)) {
+                    const countryData = getCountryName(countryCode); // Reuse getCountryName or a similar function to get flag data
+                    // Assuming countryData includes a 'flag' property that is the URL or emoji of the flag
+                    flagElement.innerHTML = countryData.flag; // Use innerHTML if flag data includes HTML (e.g., an <img> tag for the flag)
+                }
+            });
+
+            const genderElements = document.querySelectorAll(".gender");
+            genderElements.forEach((genderElement) => {
+                const gender = parseInt(genderElement.innerHTML);
+                const genderName = getGender(gender);
+                genderElement.innerHTML = genderName;
+            });
+        });
+
+        function renderMii(base64String) {
+            // Decode base64 string
+            let binaryString = atob(base64String);
+            let binaryLen = binaryString.length;
+            // Create binary array from base64 decoded string
+            let bytes = new Uint8Array(binaryLen);
+            // Fill the binary array
+            for (let i = 0; i < binaryLen; i++) {
+                let ascii = binaryString.charCodeAt(i);
+                bytes[i] = ascii;
+            }
+
+            // Create a blob object
+            let blob = new Blob([bytes], { type: "application/octet-stream" });
+
+            // Create a file object from the blob
+            let file = new File([blob], "file.miigx");
+
+            // Send the file to the server
+            let formData = new FormData();
+            formData.append("platform", "wii");
+            formData.append("data", file);
+
+            // Use larsen's funky studio.cgi to get the data needed to render the mii
+            return fetch("https://miicontestp.wii.rc24.xyz/cgi-bin/studio.cgi", {
+                method: "POST",
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    let mii = data.mii;
+
+                    // Render the mii using Nintendo's servers
+                    var src =
+                        "https://studio.mii.nintendo.com/miis/image.png?data=" +
+                        mii +
+                        "&type=face_only&expression=normal&width=270&bgColor=FFFFFF00";
+
+                    // Return the mii image
+                    return src;
+                });
+        }
+
+        function toggleOpen(id) {
+            const element = document.getElementById(id);
+            if (element.classList.contains("hidden")) {
+                element.classList.remove("hidden");
+                localStorage.setItem(id, "open");
+            } else {
+                element.classList.add("hidden");
+                localStorage.setItem(id, "closed");
+            }
+        }
+
+        const grid = document.getElementById("small");
+        grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
+        document.getElementById("sizeIcon").innerHTML = '<i class="fa-solid fa-square-minus"></i>';
+        document.querySelectorAll(".wiiNum").forEach(element => element.style.display = "none");
+        document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "column");
+        document.querySelectorAll(".miiMain").forEach(element => element.style.alignItems = "center");
+        document.querySelectorAll(".miiId").forEach(element => element.style.display = "none");
+        document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "24px");
+        document.querySelectorAll(".country").forEach(element => element.style.display = "none");
+        document.querySelectorAll(".display").forEach(element => element.style.display = "block");
+        document.querySelectorAll(".innerJustify").forEach(element => element.style.justifyContent = "center");
+        document.querySelectorAll(".deleteBtn").forEach(element => element.style.display = "none");
+        document.querySelectorAll(".delete_button").forEach(element => element.style.marginBottom = "16px");
+        document.querySelectorAll(".minData").forEach(element => element.style.display = "none");
+        grid.classList.add("big");
+    </script>
 </body>
+
 </html>
