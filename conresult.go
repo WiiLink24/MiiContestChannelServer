@@ -97,7 +97,7 @@ func conResult(c *gin.Context) {
 			TagSize:   96,
 			MiiIndex:  uint32(i + 1),
 			ArtisanId: uint32(intArtisan),
-			Ranking:   uint8(rank),
+			Ranking:   uint8(rank) * 10,
 		}
 	}
 
