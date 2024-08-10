@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -14,6 +15,7 @@ const (
 	InsertContestVote              = `INSERT INTO contest_votes (contest_id, vote_1, vote_2, vote_3, mac_address) 
 							VALUES ($1, $2, $3, $4, $5)`
 	UpdateContestVote = `UPDATE contest_votes SET vote_1 = $1, vote_2 = $2, vote_3 = $3 WHERE contest_id = $4 AND mac_address = $5`
+	GetContestVotes   = `SELECT vote_1, vote_2, vote_3 FROM contest_votes WHERE contest_id = $1 AND mac_address = $2`
 )
 
 func conVote(c *gin.Context) {
@@ -68,7 +70,21 @@ func conVote(c *gin.Context) {
 			return
 		}
 	} else {
-		// TODO: Fix out of bounds
+		previous := make([]int, 3)
+		err = pool.QueryRow(ctx, GetContestVotes, contestId, macAddress).Scan(&previous[0], &previous[1], &previous[2])
+		if err != nil {
+			c.Status(http.StatusInternalServerError)
+			writeResult(c, 500)
+			return
+		}
+
+		for i := 0; i < 3; i++ {
+			// Pad the votes
+			if len(votes) < i+1 {
+				votes = append(votes, strconv.Itoa(previous[i]))
+			}
+		}
+
 		_, err = pool.Exec(ctx, UpdateContestVote, votes[0], votes[1], votes[2], contestId, macAddress)
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
