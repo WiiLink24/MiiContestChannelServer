@@ -32,7 +32,7 @@ func info(c *gin.Context) {
 	var intArtisanId uint32
 	err := pool.QueryRow(ctx, GetArtisanInfo, artisanId).Scan(&intArtisanId, &isMaster, &popularity)
 	if errors.Is(err, pgx.ErrNoRows) {
-		c.Data(http.StatusOK, "application/octet-stream", plaza.MakeArtisanInfo(intArtisanId, nil, nil))
+		c.Data(http.StatusOK, "application/octet-stream", plaza.MakeArtisanInfo(intArtisanId, &plaza.MiiInfo{}, &plaza.ArtisanInfo{}))
 	} else if err != nil {
 		c.Status(http.StatusBadRequest)
 		writeResult(c, 400)
@@ -42,7 +42,7 @@ func info(c *gin.Context) {
 	var ranking int
 	err = pool.QueryRow(ctx, GetArtisanRanking, artisanId).Scan(&ranking)
 	if errors.Is(err, pgx.ErrNoRows) {
-		c.Data(http.StatusOK, "application/octet-stream", plaza.MakeArtisanInfo(intArtisanId, nil, nil))
+		c.Data(http.StatusOK, "application/octet-stream", plaza.MakeArtisanInfo(intArtisanId, &plaza.MiiInfo{}, &plaza.ArtisanInfo{}))
 	} else if err != nil {
 		// TODO: If nil it is a different error
 		c.Status(http.StatusBadRequest)
