@@ -63,6 +63,12 @@ func conVote(c *gin.Context) {
 	}
 
 	if isFirstVote {
+		// I have 0 idea how people manage this to happen on the first vote, but we need bounds safety here
+		for len(votes) < 3 {
+			// Just append the same vote
+			votes = append(votes, votes[0])
+		}
+
 		_, err = pool.Exec(ctx, InsertContestVote, contestId, votes[0], votes[1], votes[2], macAddress)
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
