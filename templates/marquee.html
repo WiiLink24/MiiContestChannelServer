@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Marquee | CMOC Control Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet" />
+    <link href="/assets/output.css" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.wiilink24.com/img/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.wiilink24.com/img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.wiilink24.com/img/favicon-16x16.png" />
+    <link rel="manifest" href="https://www.wiilink24.com/img/site.webmanifest" />
+    <link rel="mask-icon" href="https://www.wiilink24.com/img/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="shortcut icon" href="https://www.wiilink24.com/img/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-config" content="https://www.wiilink24.com/img/browserconfig.xml" />
+    <meta name="theme-color" content="#ffffff" />
+    <script src="https://kit.fontawesome.com/e47ece3e74.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="dark:text-white dark:bg-slate-800">
+    <main class="container py-20 space-y-4">
+        <div class=" pb-2 flex items-center justify-between">
+            <div class="flex flex-row gap-3 items-center">
+                <img src="https://www.wiilink24.com/img/IS-logo.png" class="!h-[60px] dark:invert">
+                <i class="fa-solid fa-chevron-right text-2xl cursor-pointer" onclick="toggleOpen('toggleOpen');"></i>
+                <div id="toggleOpen"
+                    class="p-2 flex-row items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-500 hidden">
+                    <a href="/panel/contests"><button
+                            class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"><i
+                                class="fa-solid fa-flag-checkered"></i> Contests</button></a> |
+                    <a href="/panel/contests/add"><button
+                            class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i
+                                class="fa-solid fa-circle-plus"></i> Add Contest</button></a> |
+                    <a href="/panel/plaza"><button
+                            class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i
+                                class="fa-solid fa-users"></i> Plaza</button></a> |
+                    <a href="/panel/artisans"><button
+                            class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i
+                                class="fa-solid fa-brush"></i> Mii Artisans</button></a>
+                </div>
+            </div>
+            <h2 class="text-right text-lg"><b>CMOC</b><br> Control Panel</h2>
+        </div>
+        <hr class="pt-2">
+        <div class="pb-3 flex items-center justify-end">
+            <p class="opacity-50">
+                CMOC <i class="fa-solid fa-caret-right"></i> Edit Marquee
+            </p>
+        </div>
+        <p class="opacity-30">Write down below the text you want to display on the Check Mii Out Channel Marquee.
+        </p>
+        <form class="flex flex-row items-center gap-1" action="/panel/editmarquee" enctype="multipart/form-data"
+            method="post">
+            <input
+                class="w-full p-4 rounded-l-xl rounded-r-sm bg-gray-300 dark:bg-slate-600 hover:bg-gray-400 dark:hover:bg-slate-700 transition-all"
+                type="text" name="marquee_text" id="">
+            <input
+                class="p-4 rounded-l-sm rounded-r-xl bg-gray-600 dark:bg-slate-500 hover:bg-gray-700 dark:hover:bg-slate-600 transition-all"
+                type="submit" value="Update">
+        </form>
+        <br />
+        <hr />
+        <p>©2020 - 2024 WiiLink Team</p>
+    </main>
+</body>
+
+<script>
+    function toggleOpen(id) {
+        const element = document.getElementById(id);
+        if (element.style.display === 'none') {
+            element.style.display = 'flex';
+            localStorage.setItem(id, 'open');
+        } else {
+            element.style.display = 'none';
+            localStorage.setItem(id, 'closed');
+        }
+    }
+</script>
+</html>
