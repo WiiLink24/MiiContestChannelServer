@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"unicode/utf8"
 )
 
 const InsertArtisan = `INSERT INTO artisans 
@@ -41,7 +42,9 @@ func mister(c *gin.Context) {
 	}
 
 	// Validate nickname
-	if len(name) < 1 || len(name) > 10 {
+	// We are required to use this function as non UTF-8 characters will go over the cap.
+	strSize := utf8.RuneCountInString(name)
+	if strSize < 1 || strSize > 10 {
 		writeResult(c, 304)
 		return
 	}
