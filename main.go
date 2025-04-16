@@ -78,6 +78,11 @@ func main() {
 	}
 	{
 		auth.GET("/admin", panel.AdminPage)
+		auth.GET("/marquee", panel.MarqueePage)
+		auth.POST("/editmarquee", panel.EditMarquee)
+		auth.POST("/marquee", func(c *gin.Context) {
+			c.Redirect(http.StatusMovedPermanently, "/panel/marquee")
+		})
 		auth.GET("/contests", panel.ViewContests)
 		auth.POST("/contests", func(c *gin.Context) {
 			c.Redirect(http.StatusMovedPermanently, "/panel/contests")
