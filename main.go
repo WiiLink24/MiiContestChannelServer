@@ -46,6 +46,8 @@ func main() {
 		Provider: provider,
 	}
 
+	verifier := provider.Verifier(&oidc.Config{ClientID: config.OIDCConfig.ClientID})
+
 	// Start SQL
 	dbString := fmt.Sprintf("postgres://%s:%s@%s/%s", config.Username, config.Password, config.DatabaseAddress, config.DatabaseName)
 	dbConf, err := pgxpool.ParseConfig(dbString)
@@ -66,6 +68,7 @@ func main() {
 		Ctx:        ctx,
 		Config:     config,
 		AuthConfig: authConfig,
+		Verifier:   verifier,
 	}
 
 	r.GET("/panel/login", panel.LoginPage)
@@ -74,7 +77,7 @@ func main() {
 
 	auth := r.Group("/panel")
 	if config.AuthMode {
-		auth.Use(middleware.AuthenticationMiddleware())
+		auth.Use(middleware.AuthenticationMiddleware(verifier))
 	}
 	{
 		auth.GET("/admin", panel.AdminPage)

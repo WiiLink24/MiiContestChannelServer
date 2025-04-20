@@ -8,8 +8,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/oauth2"
 )
 
 func randString(nByte int) (string, error) {
@@ -69,29 +67,23 @@ func (w *WebPanel) FinishPanelHandler(c *gin.Context) {
 		return
 	}
 
-	userInfo, err := w.AuthConfig.Provider.UserInfo(c, oauth2.StaticTokenSource(oauth2Token))
-	if err != nil {
-		http.Error(c.Writer, "Failed to get userinfo: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	//Now that we verified the token, create a JWT token to use with the middleware
-	claims := &JWTClaims{
-		Username: userInfo.Profile,
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
-		},
-	}
-
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte("help me"))
-	if err != nil {
-		c.HTML(http.StatusInternalServerError, "login.html", gin.H{
-			"Error": "Failed to create JWT",
+	rawIdtoken := oauth2Token.Extra("id_token").(string)
+	if rawIdtoken == "" {
+		c.HTML(http.StatusBadRequest, "error.html", gin.H{
+			"Error": "No id_token in response",
 		})
 		return
 	}
 
-	c.SetCookie("token", token, 3600, "", "", false, true)
+	idToken, err := w.Verifier.Verify(c, rawIdtoken)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "error.html", gin.H{
+			"Error": "Failed to verify id_token: " + err.Error(),
+		})
+		return
+	}
+
+	c.SetCookie("token", rawIdtoken, idToken.Expiry.Second(), "", "", false, true)
 
 	//redirect to admin page
 	c.Redirect(http.StatusMovedPermanently, "/panel/contests")

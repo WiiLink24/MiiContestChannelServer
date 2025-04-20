@@ -15,6 +15,7 @@ type WebPanel struct {
 	Ctx  context.Context
 	Config
 	AuthConfig *AppAuthConfig
+	Verifier *oidc.IDTokenVerifier
 }
 
 type JWTClaims struct {

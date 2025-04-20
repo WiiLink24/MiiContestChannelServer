@@ -1,36 +1,46 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
+	"context"
+	"log"
 	"net/http"
+
+	"github.com/coreos/go-oidc/v3/oidc"
+	"github.com/gin-gonic/gin"
 )
 
-func AuthenticationMiddleware() gin.HandlerFunc {
+func AuthenticationMiddleware(verifier *oidc.IDTokenVerifier) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString, err := c.Cookie("token")
 		if err != nil {
-			// We can't redirect off an Unauthorized status code.
 			c.Redirect(http.StatusTemporaryRedirect, "/panel/login")
 			c.Abort()
 			return
 		}
 
-		claims, err := VerifyToken(tokenString)
+		// Verify the OpenID Connect idToken.
+		ctx := context.Background()
+		idToken, err := verifier.Verify(ctx, tokenString)
 		if err != nil {
 			c.Redirect(http.StatusTemporaryRedirect, "/panel/login")
 			c.Abort()
 			return
 		}
 
-		if username, ok := claims["username"].(string); ok {
-			c.Set("username", username)
-		} else {
+		// Parse custom claims if needed.
+		var claims struct {
+			Username string `json:"username"`
+			UserId   string `json:"user_id"`
+		}
+		if err = idToken.Claims(&claims); err != nil {
 			c.Redirect(http.StatusTemporaryRedirect, "/panel/login")
 			c.Abort()
 			return
 		}
+		log.Println(claims.Username, claims.UserId)
 
-		c.Set("user_id", claims["user_id"])
+		c.Set("username", claims.Username)
+		c.Set("user_id", claims.UserId)
 		c.Next()
 	}
 }
