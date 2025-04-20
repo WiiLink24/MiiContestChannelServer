@@ -1,3 +1,5 @@
+const { addIconSelectors } = require('@iconify/tailwind');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./templates/*.html"],
@@ -8,6 +10,8 @@ module.exports = {
     },
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    addIconSelectors(["fa6-solid"])
+  ],
 };
 
