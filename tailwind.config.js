@@ -1,4 +1,4 @@
-const { addIconSelectors } = require('@iconify/tailwind');
+const { addDynamicIconSelectors } = require('@iconify/tailwind');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    addIconSelectors(["fa6-solid"])
+    addDynamicIconSelectors()
   ],
 };
 

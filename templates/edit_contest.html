@@ -55,10 +55,10 @@
             src="https://www.wiilink24.com/img/IS-logo.png"
             class="!h-[60px] dark:invert"
           />
-          <i
-            class="fa-solid fa-chevron-right text-2xl cursor-pointer"
+          <span
+            class="icon-[fa6-solid--chevron-right] text-2xl cursor-pointer"
             onclick="toggleOpen('toggleOpen');"
-          ></i>
+          ></span>
           <div
             id="toggleOpen"
             class="p-2 flex-row items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-500 hidden"
@@ -186,10 +186,10 @@
         >
           <label class="flex items-center justify-between"
             >Open Time
-            <i
-              class="fa-regular fa-circle-question opacity-60 cursor-pointer"
+            <span
+              class="icon-[fa6-solid--circle-question] opacity-60 cursor-pointer"
               title="Polls will automatically close after a week of being created. They will be judged after a month."
-            ></i
+            ></span
           ></label>
           <input
             type="date"
@@ -245,7 +245,7 @@
           <input type="hidden" id="defaultImage2" name="defaultImage" {{if .ContestInfo.HasSouvenir}}value="/assets/contest/{{ .ContestInfo.ContestId }}/souvenir.jpg"{{end}}}>
           <label
             class="bg-white cursor-pointer p-4 rounded-lg transition-all hover:bg-gray-200 dark:text-black flex items-center justify-between gap-3"
-            ><span class="icon-[fa6-solid--cirlce-plus]"></span>Add file
+            ><span class="icon-[fa6-solid--circle-plus]"></span>Add file
             <input
             type="file"
             name="souvenir"
