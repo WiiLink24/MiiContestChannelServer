@@ -18,7 +18,6 @@
 <meta name="msapplication-TileColor" content="#ffffff" />
 <meta name="msapplication-config" content="https://www.wiilink24.com/img/browserconfig.xml" />
 <meta name="theme-color" content="#ffffff" />
-    <script src="https://kit.fontawesome.com/e47ece3e74.js" crossorigin="anonymous"></script>
   </head>
   <body class="dark:text-white dark:bg-slate-800">
     <div id="msg" class="m-2 p-8 right-0 opacity-100 rounded-lg fixed z-10 hidden transition-all">
@@ -28,12 +27,12 @@
         <div class=" pb-2 flex items-center justify-between">
             <div class="flex flex-row gap-3 items-center">
         <img src="https://www.wiilink24.com/img/IS-logo.png" class="!h-[60px] dark:invert">
-        <i class="fa-solid fa-chevron-right text-2xl cursor-pointer" onclick="toggleOpen('toggleOpen');"></i>
+        <span class="icon-[fa6-solid--chevron-right] text-2xl cursor-pointer" onclick="toggleOpen('toggleOpen');"></span>
         <div id="toggleOpen" class="p-2 flex-row items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-500 hidden">
-            <a href="/panel/contests"><button class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"><i class="fa-solid fa-flag-checkered"></i> Contests</button></a> |
-            <a href="/panel/contests/add"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i class="fa-solid fa-circle-plus"></i> Add Contest</button></a> |
-            <a href="/panel/plaza"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i class="fa-solid fa-users"></i> Plaza</button></a> |
-            <a href="/panel/artisans"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><i class="fa-solid fa-brush"></i> Mii Artisans</button></a>
+            <a href="/panel/contests"><button class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"><span class="icon-[fa6-solid--flag-checkered]"></span> Contests</button></a> |
+            <a href="/panel/contests/add"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><span class="icon-[fa6-solid--circle-plus]"></span> Add Contest</button></a> |
+            <a href="/panel/plaza"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><span class="icon-[fa6-solid--users]"></span> Plaza</button></a> |
+            <a href="/panel/artisans"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><span class="icon-[fa6-solid--brush]"></span> Mii Artisans</button></a>
         </div>
     </div>
         <h2 class="text-right text-lg"><b>CMOC</b><br> Control Panel</h2>
@@ -41,13 +40,13 @@
     <hr class="pt-2">
     <div class="pb-3 flex items-center justify-end">
         <p class="opacity-50">
-          CMOC <i class="fa-solid fa-caret-right"></i> Contests
+          CMOC <span class="icon-[fa6-solid--caret-right]"></span> Contests
         </p>
       </div>
     <div class="flex justify-between">
         <h1>Contests</h1>
         <a href="/panel/contests/add" class="submit_button hover:bg-sky-70">
-            <button><i class="fa-solid fa-circle-plus"></i> Add Contest</button>
+            <button><span class="icon-[fa6-solid--circle-plus]"></span> Add Contest</button>
         </a>
     </div>
       <ul class="flex gap-2">
@@ -125,10 +124,10 @@
                     <h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium"><p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p></span></h1>
                     <div class="flex items-center flex-row gap-3">
                         {{ if .HasSpecialAward}}
-                        <i class="fa-solid fa-wand-sparkles text-2xl"></i>
+                        <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
                         {{end}}
                         {{ if .HasSouvenir }}
-                        <i class="fa-solid fa-gift text-2xl"></i>
+                        <span class="icon-[fa6-solid--gift] text-2xl"></span>
                     {{ end }}
                     {{ if .HasSpecialAward}}
                     |
@@ -136,21 +135,21 @@
                     |
                     {{end}}
                     <a href="/panel/contests/edit/{{ .ContestId }}" class="p-2 pl-4 pr-4 rounded-full text-white bg-blue-400 hover:bg-blue-500 transition-all hover:bg-sky-70">
-                        <button><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
                     </a>
-                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><i class="fa-solid fa-trash"></i></button>
+                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
                 </div>
                     </div>
                 </div class="flex flex-row flex-wrap">
                     <div>
                     <div class="p-2 text-right">{{ .Status }}
                     </div>
-                    <div class="p-2 text-right opacity-45"><i class="fa-solid fa-fingerprint"></i> {{ .ContestId }}</div>
+                    <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}</div>
                 </div>
                 </div>
                 {{ else }}
                 <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-blue-400 rounded-xl">
-                    <p class="mt-3 text-xl opacity-60 text-center"><i class="fa-solid fa-triangle-exclamation text-6xl"></i><br><br>No contests have been made yet.</p>
+                    <p class="mt-3 text-xl opacity-60 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>No contests have been made yet.</p>
                 </div>
                 {{end}}
             </div>
@@ -177,10 +176,10 @@
                                 </span></h1>
                             <div class="flex items-center flex-row gap-3">
                                 {{ if .HasSpecialAward}}
-                                <i class="fa-solid fa-wand-sparkles text-2xl"></i>
+                                <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span></i>
                                 {{end}}
                                 {{ if .HasSouvenir }}
-                                <i class="fa-solid fa-gift text-2xl"></i>
+                                <span class="icon-[fa6-solid--gift] text-2xl"></span>
                                 {{ end }}
                                 {{ if .HasSpecialAward}}
                                 |
@@ -189,18 +188,18 @@
                                 {{end}}
                                 <a href="/panel/contests/edit/{{ .ContestId }}"
                                     class="p-2 pl-4 pr-4 rounded-full text-white bg-blue-400 hover:bg-blue-500 transition-all hover:bg-sky-70">
-                                    <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
                                 </a>
                                 <button
                                     class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all"
-                                    onclick='deleteEntry("{{.ContestId}}")'><i class="fa-solid fa-trash"></i></button>
+                                    onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
                             </div>
                         </div>
                     </div class="flex flex-row flex-wrap">
                     <div>
                         <div class="p-2 text-right">{{ .Status }}
                         </div>
-                        <div class="p-2 text-right opacity-45"><i class="fa-solid fa-fingerprint"></i> {{ .ContestId }}
+                        <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}
                         </div>
                     </div>
                 </div>
@@ -231,30 +230,30 @@
                     <a href="/panel/contests/view/{{ .ContestId }}"><h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium"><p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p></span></h1></a>
                     <div class="flex items-center flex-row gap-3">
                         {{ if .HasSpecialAward}}
-                        <i class="fa-solid fa-wand-sparkles text-2xl"></i>
+                        <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
                         {{end}}
                         {{ if .HasSouvenir }}
-                        <i class="fa-solid fa-gift text-2xl"></i>
+                        <span class="icon-[fa6-solid--gift] text-2xl"></span>
                     {{ end }}
                     {{ if .HasSpecialAward}}
                     |
                     {{end}}
                     <a href="/panel/contests/edit/{{ .ContestId }}" class="p-2 pl-4 pr-4 rounded-full text-white bg-green-400 hover:bg-green-500 transition-all">
-                        <button><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
                     </a>
-                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><i class="fa-solid fa-trash"></i></button>
+                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
                 </div>
                     </div>
                 </div class="flex flex-row flex-wrap">
                     <div>
                     <div class="p-2 text-right">{{ .Status }}
                     </div>
-                    <div class="p-2 text-right opacity-45"><i class="fa-solid fa-fingerprint"></i> {{ .ContestId }}</div>
+                    <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}</div>
                 </div>
                 </div>
                 {{ else }}
                 <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-green-400 rounded-xl">
-                    <p class="mt-3 text-xl text-green-500 text-center"><i class="fa-solid fa-triangle-exclamation text-6xl"></i><br><br>There are no open contests at the moment.</p>
+                    <p class="mt-3 text-xl text-green-500 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>There are no open contests at the moment.</p>
                 </div>
                 {{end}}
             </div>
@@ -284,10 +283,10 @@
                                 </span></h1></a>
                             <div class="flex items-center flex-row gap-3">
                                 {{ if .HasSpecialAward}}
-                                <i class="fa-solid fa-wand-sparkles text-2xl"></i>
+                                <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
                                 {{end}}
                                 {{ if .HasSouvenir }}
-                                <i class="fa-solid fa-gift text-2xl"></i>
+                                <span class="icon-[fa6-solid--gift] text-2xl"></span>
                                 {{ end }}
                                 {{ if .HasSpecialAward}}
                                 |
@@ -296,18 +295,18 @@
                                 {{end}}
                                 <a href="/panel/contests/edit/{{ .ContestId }}"
                                     class="p-2 pl-4 pr-4 rounded-full text-white bg-blue-400 hover:bg-blue-500 transition-all hover:bg-sky-70">
-                                    <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
                                 </a>
                                 <button
                                     class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all"
-                                    onclick='deleteEntry("{{.ContestId}}")'><i class="fa-solid fa-trash"></i></button>
+                                    onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
                             </div>
                         </div>
                     </div class="flex flex-row flex-wrap">
                     <div>
                         <div class="p-2 text-right">{{ .Status }}
                         </div>
-                        <div class="p-2 text-right opacity-45"><i class="fa-solid fa-fingerprint"></i> {{ .ContestId }}
+                        <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}
                         </div>
                     </div>
                 </div>
@@ -336,30 +335,30 @@
                     <h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium"><p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p></span></h1>
                     <div class="flex items-center flex-row gap-3">
                         {{ if .HasSpecialAward}}
-                        <i class="fa-solid fa-wand-sparkles text-2xl"></i>
+                        <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
                         {{end}}
                         {{ if .HasSouvenir }}
-                        <i class="fa-solid fa-gift text-2xl"></i>
+                        <span class="icon-[fa6-solid--gift] text-2xl"></span>
                     {{ end }}
                     {{ if .HasSpecialAward}}
                     |
                     {{end}}
                     <a href="/panel/contests/edit/{{ .ContestId }}" class="p-2 pl-4 pr-4 rounded-full text-white bg-red-400 hover:bg-red-500 transition-all">
-                        <button><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
                     </a>
-                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><i class="fa-solid fa-trash"></i></button>
+                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
                 </div>
                     </div>
                 </div class="flex flex-row flex-wrap">
                     <div>
                     <div class="p-2 text-right">{{ .Status }}
                     </div>
-                    <div class="p-2 text-right opacity-45"><i class="fa-solid fa-fingerprint"></i> {{ .ContestId }}</div>
+                    <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}</div>
                 </div>
                 </div>
                 {{ else }}
                 <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-red-400 rounded-xl">
-                    <p class="mt-3 text-xl opacity-60 text-center"><i class="fa-solid fa-triangle-exclamation text-6xl"></i><br><br>No contests have ended just yet.</p>
+                    <p class="mt-3 text-xl opacity-60 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>No contests have ended just yet.</p>
                 </div>
                 {{end}}
             </div>
@@ -386,28 +385,28 @@
                                 </span></h1>
                             <div class="flex items-center flex-row gap-3">
                                 {{ if .HasSpecialAward}}
-                                <i class="fa-solid fa-wand-sparkles text-2xl"></i>
+                                <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
                                 {{end}}
                                 {{ if .HasSouvenir }}
-                                <i class="fa-solid fa-gift text-2xl"></i>
+                                <span class="icon-[fa6-solid--gift] text-2xl"></span>
                                 {{ end }}
                                 {{ if .HasSpecialAward}}
                                 |
                                 {{end}}
                                 <a href="/panel/contests/edit/{{ .ContestId }}"
                                     class="p-2 pl-4 pr-4 rounded-full text-white bg-red-400 hover:bg-red-500 transition-all">
-                                    <button><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
                                 </a>
                                 <button
                                     class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all"
-                                    onclick='deleteEntry("{{.ContestId}}")'><i class="fa-solid fa-trash"></i></button>
+                                    onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
                             </div>
                         </div>
                     </div class="flex flex-row flex-wrap">
                     <div>
                         <div class="p-2 text-right">{{ .Status }}
                         </div>
-                        <div class="p-2 text-right opacity-45"><i class="fa-solid fa-fingerprint"></i> {{ .ContestId }}
+                        <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}
                         </div>
                     </div>
                 </div>
@@ -422,7 +421,7 @@
         </div>
     </div>
     <p class="pt-3 pb-6 opacity-30 text-right">
-    The <i class="fa-solid fa-wand-sparkles"></i> and <i class="fa-solid fa-gift"></i> icon mean the contest has a Special Award and Souvenir, respectively.
+    The <span class="icon-[fa6-solid--wand-sparkles]"></span> and <span class="icon-[fa6-solid--gift]"></span> icon mean the contest has a Special Award and Souvenir, respectively.
 </p>
 <br />
 <hr />
@@ -444,17 +443,17 @@
                 switch (hash) {
                     case '#edit_success':
                     msgElement.classList.add("bg-green-400");
-                        message = '<b><i class="fa-solid fa-circle-check"></i> Saved!</b><br>The Contest has been modified successfully!';
+                        message = '<b><span class="icon-[fa6-solid--circle-check]"></span> Saved!</b><br>The Contest has been modified successfully!';
                         showMessage = true;
                         break;
                     case '#add_success':
                     msgElement.classList.add("bg-green-400");
-                        message = '<b><i class="fa-solid fa-circle-check"></i> Added!</b><br>The Contest has been added successfully!';
+                        message = '<b><span class="icon-[fa6-solid--circle-check]"></span> Added!</b><br>The Contest has been added successfully!';
                         showMessage = true;
                         break;
                     case '#delete_success':
                     msgElement.classList.add("bg-red-400");
-                        message = '<b><i class="fa-solid fa-circle-check"></i> Deleted!</b><br>The Contest has been deleted successfully!';
+                        message = '<b><span class="icon-[fa6-solid--circle-check]"></span> Deleted!</b><br>The Contest has been deleted successfully!';
                         showMessage = true;
                         break;
                 }

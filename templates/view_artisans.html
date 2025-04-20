@@ -47,10 +47,6 @@
       content="https://www.wiilink24.com/img/browserconfig.xml"
     />
     <meta name="theme-color" content="#ffffff" />
-    <script
-      src="https://kit.fontawesome.com/e47ece3e74.js"
-      crossorigin="anonymous"
-    ></script>
   </head>
   <body class="dark:text-white dark:bg-slate-800">
     <main class="container py-20 space-y-4">
@@ -72,7 +68,7 @@
               ><button
                 class="p-2 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"
               >
-                <i class="fa-solid fa-flag-checkered"></i> Contests
+              <span class="icon-[fa6-solid--flag-checkered]"></span> Contests
               </button></a
             >
             |
@@ -80,7 +76,7 @@
               ><button
                 class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
               >
-                <i class="fa-solid fa-circle-plus"></i> Add Contest
+              <span class="icon-[fa6-solid--circle-plus]"></span> Add Contest
               </button></a
             >
             |
@@ -88,7 +84,7 @@
               ><button
                 class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
               >
-                <i class="fa-solid fa-users"></i> Plaza
+              <span class="icon-[fa6-solid--users]"></span> Plaza
               </button></a
             >
             |
@@ -96,7 +92,7 @@
               ><button
                 class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
               >
-                <i class="fa-solid fa-brush"></i> Mii Artisans
+              <span class="icon-[fa6-solid--brush]"></span> Mii Artisans
               </button></a
             >
           </div>
@@ -109,7 +105,7 @@
       <hr class="pt-2" />
       <div class="flex items-center justify-end">
         <p class="opacity-50">
-          CMOC <i class="fa-solid fa-caret-right"></i> Mii Artisans
+          CMOC <span class="icon-[fa6-solid--caret-right]"></span> Mii Artisans
         </p>
       </div>
       {{if .Error}}
@@ -136,7 +132,7 @@
               type="submit"
               class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all rounded-r-[18px] rounded-l-[4px]"
             >
-              <i class="fas fa-search"></i>
+            <span class="icon-[fa6-solid--search]"></span>
             </button>
           </form>
           <div
@@ -144,7 +140,7 @@
           class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all cursor-pointer rounded-[18px]"
           onclick="toggleSize();"
         >
-        <i class="fa-solid fa-square-plus"></i>
+        <span class="icon-[fa6-solid--square-plus]"></span>
         </div>
         </div>
       </div>
@@ -170,17 +166,17 @@
                   </h1>
                   <div class="items-center justify-center pt-2 flex flex-row gap-3">
                     <p class="flex flex-row gap-1 items-center"><span class="countryFlag">{{.CountryId}}</span><span class="country">{{.CountryId}}</span></p>
-                    <p class="flex flex-row flex-nowrap items-center gap-1">| <i class="fa-solid fa-angle-up"></i> {{ .TotalLikes }}| <i class="fa-solid fa-users"></i> {{ .NumberOfPosts }}</p>
+                    <p class="flex flex-row flex-nowrap items-center gap-1">| <span class="icon-[fa6-solid--angle-up]"></span> {{ .TotalLikes }}| <span class="icon-[fa6-solid--users]"></span> {{ .NumberOfPosts }}</p>
                   </div>
                 </div>
               </a>
             </div>
             <div class="minData mr-6 flex flex-col gap-3">
               <p class="text-xl text-right">
-                <i class="fa-solid fa-angle-up"></i> {{ .TotalLikes }}
+                <span class="icon-[fa6-solid--angle-up]"></span> {{ .TotalLikes }}
               </p>
               <p class="text-xl text-right">
-                <i class="fa-solid fa-users"></i>
+                <span class="icon-[fa6-solid--users]"></span>
                 {{ .NumberOfPosts }}
               </p>
             </div>
@@ -205,13 +201,11 @@
           <a
             id="prevPage"
             class="p-3 pl-4 pr-4 rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
-            ><i class="fa-solid fa-chevron-left"></i
-          ></a>
+            ><span class="icon-[fa6-solid--chevron-left]"></span></a>
           <a
             id="nextPage"
             class="p-3 pl-4 pr-4 rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
-            ><i class="fa-solid fa-chevron-right"></i
-          ></a>
+            ><span class="icon-[fa6-solid--chevron-right]"></span></a>
         </div>
       </div>
       <p id="pages" class="hidden">{{ .Pages }}</p>
@@ -416,18 +410,18 @@
     function getGender(gender) {
       switch (gender) {
         case 1:
-          return "<i class='fa-solid fa-person'></i>";
+          return '<span class="icon-[fa6-solid--person]"></span>';
         case 2:
-          return "<i class='fa-solid fa-person-dress'></i>";
+          return '<span class="icon-[fa6-solid--person-dress]"></span>';
         case 3:
-          return "<i class='fa-solid fa-circle-question'></i>";
+          return '<span class="icon-[fa6-solid--circle-question]"></span>';
       }
     }
 
     function checkIsMaster(isMaster) {
       console.log(isMaster);
       if (isMaster == "true") {
-        return "<span class='mr-3 p-1 pl-2 pr-2 rounded-full text-white' style='background-color:orange;'><i class='fa-solid fa-crown'></i></span>";
+        return '<span class="mr-3 p-1 pl-2 pr-2 rounded-full text-white" style="background-color:orange;"><span class="icon-[fa6-solid--crown]"></span></span>';
       } else {
         return "";
       }
@@ -700,7 +694,7 @@
       const grid = document.getElementById("small");
       if (grid.classList.contains("big")) {
         grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(400px, 1fr))";
-        document.getElementById("sizeIcon").innerHTML = '<i class="fa-solid fa-square-plus"></i>';
+        document.getElementById("sizeIcon").innerHTML = '<span class="icon-[fa6-solid--square-plus]"></span>';
         document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "row");
         document.querySelectorAll(".miiMain").forEach(element => element.style.alignItems = "space-between");
         document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "28px");
@@ -713,7 +707,7 @@
         localStorage.setItem("gridSize", "small");
       } else {
         grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
-        document.getElementById("sizeIcon").innerHTML = '<i class="fa-solid fa-square-minus"></i>';
+        document.getElementById("sizeIcon").innerHTML = '<span class="icon-[fa6-solid--square-minus]"></span>';
         document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "column");
         document.querySelectorAll(".miiMain").forEach(element => element.style.alignItems = "center");
         document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "24px");

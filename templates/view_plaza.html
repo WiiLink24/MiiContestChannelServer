@@ -47,10 +47,6 @@
       content="https://www.wiilink24.com/img/browserconfig.xml"
     />
     <meta name="theme-color" content="#ffffff" />
-    <script
-      src="https://kit.fontawesome.com/e47ece3e74.js"
-      crossorigin="anonymous"
-    ></script>
   </head>
   <body class="dark:text-white dark:bg-slate-800">
     <main class="container py-20 space-y-4">
@@ -72,7 +68,7 @@
               ><button
                 class="p-2 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"
               >
-                <i class="fa-solid fa-flag-checkered"></i> Contests
+              <span class="icon-[fa6-solid--flag-checkered]"></span> Contests
               </button></a
             >
             |
@@ -80,7 +76,7 @@
               ><button
                 class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
               >
-                <i class="fa-solid fa-circle-plus"></i> Add Contest
+              <span class="icon-[fa6-solid--circle-plus]"></span> Add Contest
               </button></a
             >
             |
@@ -88,7 +84,7 @@
               ><button
                 class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
               >
-                <i class="fa-solid fa-users"></i> Plaza
+              <span class="icon-[fa6-solid--users]"></span> Plaza
               </button></a
             >
             |
@@ -96,7 +92,7 @@
               ><button
                 class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
               >
-                <i class="fa-solid fa-brush"></i> Mii Artisans
+              <span class="icon-[fa6-solid--brush]"></span> Mii Artisans
               </button></a
             >
           </div>
@@ -109,7 +105,7 @@
       <hr class="pt-2" />
       <div class="flex items-center justify-end">
         <p class="opacity-50">
-          CMOC <i class="fa-solid fa-caret-right"></i> Plaza
+          CMOC <span class="icon-[fa6-solid--caret-right]"></span> Plaza
         </p>
       </div>
       {{if .Error}}
@@ -134,7 +130,7 @@
               type="submit"
               class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all rounded-r-[18px] rounded-l-[4px]"
             >
-              <i class="fas fa-search"></i>
+            <span class="icon-[fa6-solid--search]"></span>
             </button>
           </form>
           <div
@@ -142,7 +138,7 @@
             class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all cursor-pointer rounded-[18px]"
             onclick="toggleOpen('filter');"
           >
-            <i class="fa-solid fa-spinner fa-spin"></i>
+          <span class="icon-[fa6-solid--spinner]"></span>
           </div>
           <div
             id="filter"
@@ -152,20 +148,20 @@
               href="/panel/plaza"
               class="p-2 pl-3 pr-3 rounded-xl hover:bg-gray-300 dark:hover:bg-slate-700"
             >
-              <i class="fa-solid fa-arrow-down-1-9" class="text-2xl"></i> Sort
+            <span class="icon-[fa6-solid--arrow-down-1-9] text-2xl"></span> Sort
               by ID
             </a>
             <a
               href="/panel/plaza/top"
               class="p-2 pl-3 pr-3 rounded-xl hover:bg-gray-300 dark:hover:bg-slate-700"
             >
-              <i class="fa-solid fa-medal" class="text-2xl"></i> Sort by Likes
+            <span class="icon-[fa6-solid--medal] text-2xl"></span> Sort by Likes
             </a>
             <a
               href="/panel/plaza/new"
               class="p-2 pl-3 pr-3 rounded-xl hover:bg-gray-300 dark:hover:bg-slate-700"
             >
-              <i class="fa-solid fa-box-open" class="text-2xl"></i> Sort by New
+            <span class="icon-[fa6-solid--box-open] text-2xl"></span> Sort by New
             </a>
           </div>
           <div
@@ -173,7 +169,7 @@
         class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all cursor-pointer rounded-[18px]"
         onclick="toggleSize();"
       >
-      <i class="fa-solid fa-square-plus"></i>
+      <span class="icon-[fa6-solid--square-plus]"></span>
       </div>
         </div>
       </div>
@@ -199,16 +195,16 @@
                   <p class="gender">{{.Gender}}</p>
                   |
                   <p class="flex flex-row gap-1 items-center"><span class="countryFlag">{{.CountryId}}</span><span class="country">{{.CountryId}}</span></p>
-                  <p class="flex flex-row flex-nowrap items-center gap-1"> | <i class="fa-solid fa-angle-up"></i> {{.Likes}} | <i class="fa-solid fa-angles-up"></i> {{.PermLikes}}</p>
+                  <p class="flex flex-row flex-nowrap items-center gap-1"> | <span class="icon-[fa6-solid--angle-up]"></span></i> {{.Likes}} | <span class="icon-[fa6-solid--angles-up]"></span> {{.PermLikes}}</p>
                 </div>
               </div>
             </div>
             <div class="miiId mr-6 flex flex-row gap-3">
               <p class="text-xl">
-                <i class="fa-solid fa-angle-up"></i> {{.Likes}}
+                <span class="icon-[fa6-solid--angle-up]"></span> {{.Likes}}
               </p>
               <p class="text-xl">
-                <i class="fa-solid fa-angles-up"></i> {{.PermLikes}}
+                <span class="icon-[fa6-solid--angles-up]"></span> {{.PermLikes}}
               </p>
             </div>
           </a>
@@ -224,7 +220,7 @@
             ></i>
           </div>
           <button class="delete_button flex flex-row gap-1 items-center justify-center" onclick='deleteEntry("{{.EntryId}}")'>
-            <i class="fa-solid fa-trash"></i> <span class="deleteBtn">Delete this Mii</span>
+            <span class="icon-[fa6-solid--trash]"></span> <span class="deleteBtn">Delete this Mii</span>
           </button>
           <p class="minData mr-5 mb-5 opacity-30 text-right flex flex-row items-center justify-end gap-1">
             Id: {{.EntryId}} |
@@ -232,7 +228,7 @@
               >{{.ArtisanName}} ({{.ArtisanId}})</a
             >
 
-            <i class="fa-solid fa-fingerprint"></i>
+            <span class="icon-[fa6-solid--fingerprint]"></span>
           </p>
         </div>
         {{end}}
@@ -245,13 +241,11 @@
           <a
             id="prevPage"
             class="p-3 pl-4 pr-4 rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
-            ><i class="fa-solid fa-chevron-left"></i
-          ></a>
+            ><span class="icon-[fa6-solid--chevron-left]"></span></a>
           <a
             id="nextPage"
             class="p-3 pl-4 pr-4 rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
-            ><i class="fa-solid fa-chevron-right"></i
-          ></a>
+            ><span class="icon-[fa6-solid--chevron-right]"></span></a>
         </div>
       </div>
       <p id="pages" class="hidden">{{ .Pages }}</p>
@@ -301,11 +295,11 @@
         if (!isNaN(parseInt(nextSegment))) {
           // If the next segment is a number, it's a page number, default to the ID icon
           iconHtml =
-            '<i class="fa-solid fa-arrow-down-1-9"></i>';
+            '<span class="icon-[fa6-solid--arrow-down-1-9]"></span>';
         } else if (nextSegment === "top") {
-          iconHtml = '<i class="fa-solid fa-medal"></i>';
+          iconHtml = '<span class="icon-[fa6-solid--medal]"></span>';
         } else if (nextSegment === "new") {
-          iconHtml = '<i class="fa-solid fa-box-open"></i>';
+          iconHtml = '<span class="icon-[fa6-solid--box-open]"></span>';
         }
 
         document.getElementById("currentFilter").innerHTML = iconHtml;
@@ -440,11 +434,11 @@
     function getGender(gender) {
       switch (gender) {
         case 1:
-          return "<i class='fa-solid fa-person'></i>";
+          return '<span class="icon-[fa6-solid--person]"></span>';
         case 2:
-          return "<i class='fa-solid fa-person-dress'></i>";
+          return '<span class="icon-[fa6-solid--person-dress]"></span>';
         case 3:
-          return "<i class='fa-solid fa-circle-question'></i>";
+          return '<span class="icon-[fa6-solid--circle-question]"></span>';
       }
     }
 
@@ -726,7 +720,7 @@
       const grid = document.getElementById("small");
       if (grid.classList.contains("big")) {
         grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(400px, 1fr))";
-        document.getElementById("sizeIcon").innerHTML = '<i class="fa-solid fa-square-plus"></i>';
+        document.getElementById("sizeIcon").innerHTML = '<span class="icon-[fa6-solid--square-plus]"></span>';
         document.querySelectorAll(".wiiNum").forEach(element => element.style.display = "flex");
         document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "row");
         document.querySelectorAll(".miiId").forEach(element => element.style.display = "block");
@@ -741,7 +735,7 @@
         localStorage.setItem("gridSize", "small");
       } else {
         grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
-        document.getElementById("sizeIcon").innerHTML = '<i class="fa-solid fa-square-minus"></i>';
+        document.getElementById("sizeIcon").innerHTML = '<span class="icon-[fa6-solid--square-minus]"></span>';
         document.querySelectorAll(".wiiNum").forEach(element => element.style.display = "none");
         document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "column");
         document.querySelectorAll(".miiMain").forEach(element => element.style.alignItems = "center");
