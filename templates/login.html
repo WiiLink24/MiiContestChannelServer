@@ -1,67 +1,62 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Login - CMOC Control Panel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
-      rel="stylesheet"
-    />
-    <link href="/assets/output.css" rel="stylesheet" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="https://www.wiilink24.com/img/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="https://www.wiilink24.com/img/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="https://www.wiilink24.com/img/favicon-16x16.png"
-    />
-    <link rel="manifest" href="https://www.wiilink24.com/img/site.webmanifest" />
-    <link rel="mask-icon" href="https://www.wiilink24.com/img/safari-pinned-tab.svg" color="#5bbad5" />
-    <link rel="shortcut icon" href="https://www.wiilink24.com/img/favicon.ico" />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-config" content="https://www.wiilink24.com/img/browserconfig.xml" />
-    <meta name="theme-color" content="#ffffff" />
-  </head>
-  <body
-    class="bg-white dark:bg-slate-800 dark:text-white flex items-center justify-center absolute w-full h-full"
-  >
-    <main
-      class="flex flex-col items-center justify-center gap-3 relative w-[95%] max-w-lg"
-    >
-      <div class="flex items-center justify-between w-full">
-        <img
-          src="https://www.wiilink24.com/img/IS-logo.png"
-          class="!h-[60px] dark:invert"
-        />
-        <h2 class="text-right text-lg">
-          <b>CMOC</b><br />
-          Control Panel
-        </h2>
-      </div>
-      <p class="opacity-90 text-left mt-3">
-        <span class="icon-[fa6-solid--chevron-right]"></span> With this tool you can create,
-        modify and delete contests in the Mii Contest Channel, as well as
-        moderate submitted Miis.
-      </p>
-      <!-- {{if .Error}}
-        <p style="color:red;">{{.Error}}</p>
-        {{end}} -->
-      <a href="/panel/start">
-        <button class="submit_button">
-          Login with WiiLink Internal
-        </button>
-      </a>
-    </main>
-  </body>
-</html>
+{{ template "base.html" . }}
+
+<div class="flex-1 grow min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-white mb-2">The Courtroom</h1>
+            <p class="text-xl text-gray-300">Mii Contest Channel Administration Panel</p>
+        </div>
+        
+        <div class="relative group mb-8">
+            <div class="relative bg-gray-800 rounded-xl shadow-xl overflow-hidden border border-gray-700 p-8">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="p-3 bg-blue-600/20 rounded-full text-blue-400">
+                        <img src="/assets/icon/log-in.svg" alt="Login Icon" class="h-10 w-10 invert" />
+                    </div>
+                </div>
+                
+                <div class="text-center mb-8">
+                    <h2 class="text-xl font-bold text-white mb-2">Welcome to The Courtroom</h2>
+                    <p class="text-gray-300">Click below to authenticate and access administrative features</p>
+                </div>
+                
+                {{ if .Error }}
+                <div class="p-4 mb-6 rounded-lg bg-red-500/20 border border-red-600/30">
+                    <p class="text-red-400 text-sm">{{ .Error }}</p>
+                </div>
+                {{ end }}
+                
+                <div class="flex justify-center">
+                    <a href="/panel/start" class="w-full">
+                        <button class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 flex items-center justify-center text-base font-medium">
+                            <img src="/assets/icon/log-in.svg" alt="Login Icon" class="h-5 w-5 invert mr-2" />
+                            Login with WiiLink Internal
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="relative group">
+            <div class="relative bg-gray-800/80 border border-gray-700 rounded-lg p-6">
+                <div class="flex">
+                    <div class="w-[60px] p-2 bg-blue-600/20 rounded-lg text-blue-400 mr-3 self-start">
+                        <img src="/assets/icon/info.svg" alt="Info Icon" class="h-5 w-5 invert" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-white mb-2">About Authentication</h3>
+                        <div class="text-sm text-gray-300">
+                            <p>With this tool you can create, modify and delete contests in the Mii Contest Channel, as well as moderate submitted Miis.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-10 text-center">
+            <p class="text-gray-400 text-sm">© 2025 WiiLink Team - CMOC</p>
+        </div>
+    </div>
+</div>
+
+{{ template "footer.html" . }}

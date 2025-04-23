@@ -1,484 +1,793 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Contests | CMOC Control Panel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
-      rel="stylesheet"
-    />
-    <link href="/assets/output.css" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="https://www.wiilink24.com/img/apple-touch-icon.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="https://www.wiilink24.com/img/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="https://www.wiilink24.com/img/favicon-16x16.png" />
-<link rel="manifest" href="https://www.wiilink24.com/img/site.webmanifest" />
-<link rel="mask-icon" href="https://www.wiilink24.com/img/safari-pinned-tab.svg" color="#5bbad5" />
-<link rel="shortcut icon" href="https://www.wiilink24.com/img/favicon.ico" />
-<meta name="msapplication-TileColor" content="#ffffff" />
-<meta name="msapplication-config" content="https://www.wiilink24.com/img/browserconfig.xml" />
-<meta name="theme-color" content="#ffffff" />
-  </head>
-  <body class="dark:text-white dark:bg-slate-800">
-    <div id="msg" class="m-2 p-8 right-0 opacity-100 rounded-lg fixed z-10 hidden transition-all">
+{{ template "base.html" . }}
 
-    </div>
-    <main class="container py-20 space-y-4">
-        <div class=" pb-2 flex items-center justify-between">
-            <div class="flex flex-row gap-3 items-center">
-        <img src="https://www.wiilink24.com/img/IS-logo.png" class="!h-[60px] dark:invert">
-        <span class="icon-[fa6-solid--chevron-right] text-2xl cursor-pointer" onclick="toggleOpen('toggleOpen');"></span>
-        <div id="toggleOpen" class="p-2 flex-row items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-500 hidden">
-            <a href="/panel/contests"><button class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"><span class="icon-[fa6-solid--flag-checkered]"></span> Contests</button></a> |
-            <a href="/panel/contests/add"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><span class="icon-[fa6-solid--circle-plus]"></span> Add Contest</button></a> |
-            <a href="/panel/plaza"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><span class="icon-[fa6-solid--users]"></span> Plaza</button></a> |
-            <a href="/panel/artisans"><button class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"><span class="icon-[fa6-solid--brush]"></span> Mii Artisans</button></a>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col sm:flex-row items-end justify-between gap-6 mb-10">
+        <div class="flex space-x-4">
+            <a href="/panel/admin"
+                class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition duration-200 flex items-center text-sm">
+                <img src="/assets/icon/house.svg" alt="Home Icon" class="h-4 w-4 mr-2 invert" />
+                Back to Dashboard
+            </a>
         </div>
-    </div>
-        <h2 class="text-right text-lg"><b>CMOC</b><br> Control Panel</h2>
-    </div>
-    <hr class="pt-2">
-    <div class="pb-3 flex items-center justify-end">
-        <p class="opacity-50">
-          CMOC <span class="icon-[fa6-solid--caret-right]"></span> Contests
-        </p>
-      </div>
-    <div class="flex justify-between">
-        <h1>Contests</h1>
-        <a href="/panel/contests/add" class="submit_button hover:bg-sky-70">
-            <button><span class="icon-[fa6-solid--circle-plus]"></span> Add Contest</button>
-        </a>
-    </div>
-      <ul class="flex gap-2">
-        <li class="text-white text-center p-3 bg-blue-300 grow rounded-r-lg rounded-l-[18px]">
-            <span class="font-serif font-bold text-6xl">{{.numberOfWaitingContests}}</span>
-            <h3>Waiting Contests</h3>
-        </li>
-        <li class="text-white text-center p-3 bg-green-400 grow rounded-lg">
-            <span class="font-serif font-bold text-6xl">{{.numberOfOpenContests}}</span>
-            <h3>Open Contests</h3>
-        </li>
-        <li class="text-white text-center p-3 bg-yellow-400 grow rounded-lg">
-          <span class="font-serif font-bold text-6xl"
-            >{{.numberOfJudgingContests}}</span
-          >
-          <h3>Judging Contests</h3>
-        </li>
-        <li class="text-white text-center p-3 bg-orange-400 grow rounded-lg">
-          <span class="font-serif font-bold text-6xl"
-            >{{.numberOfResultsContests}}</span
-          >
-          <h3>Results Contests</h3>
-        </li>
-        <li class="text-white text-center p-3 bg-red-400 grow rounded-l-lg rounded-r-[18px]">
-            <span class="font-serif font-bold text-6xl">{{.numberOfClosedContests}}</span>
-            <h3>Closed Contests</h3>
-        </li>
-      </ul>
-      <div class="flex items-center justify-between">
-      <h2 class="opacity-30">
-        Total Contests: {{.numberOfContests}}
-      </h2>
-<div class="">
-    <ul class="flex rounded-xl p-1 bg-gray-50 dark:bg-slate-500 border-2 border-gray-100 dark:border-slate-500 flex-wrap text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
-        <li class="me-2" role="presentation">
-            <button class="inline-block p-3 rounded-lg bg-gray-200 dark:bg-slate-800 shadow-sm transition-all hover:bg-gray-200 dark:hover:bg-slate-800 hover:shadow-sm" id="total-tab" data-tabs-target="#total" type="button" role="tab" aria-controls="profile" aria-selected="false">Total</button>
-        </li>
-        <li class="me-2" role="presentation">
-            <button class="inline-block p-3 rounded-lg transition-all hover:bg-gray-200 dark:hover:bg-slate-800 hover:shadow-sm"
-                id="active-tab" data-tabs-target="#waiting" type="button" role="tab" aria-controls="dashboard"
-                aria-selected="false">Waiting</button>
-        </li>
-        <li class="me-2" role="presentation">
-            <button class="inline-block p-3 rounded-lg transition-all hover:bg-gray-200 dark:hover:bg-slate-800 hover:shadow-sm" id="active-tab" data-tabs-target="#active" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Active</button>
-        </li>
-        <li class="me-2" role="presentation">
-            <button class="inline-block p-3 rounded-lg transition-all hover:bg-gray-200 dark:hover:bg-slate-800 hover:shadow-sm"
-                id="active-tab" data-tabs-target="#judging" type="button" role="tab" aria-controls="dashboard"
-                aria-selected="false">Judging</button>
-        </li>
-        <li class="" role="presentation">
-            <button class="inline-block p-3 rounded-lg transition-all hover:bg-gray-200 dark:hover:bg-slate-800 hover:shadow-sm"
-                id="ended-tab" data-tabs-target="#results" type="button" role="tab" aria-controls="ended"
-                aria-selected="false">Results</button>
-        </li>
-        <li class="" role="presentation">
-            <button class="inline-block p-3 rounded-lg transition-all hover:bg-gray-200 dark:hover:bg-slate-800 hover:shadow-sm" id="ended-tab" data-tabs-target="#closed" type="button" role="tab" aria-controls="ended" aria-selected="false">Closed</button>
-        </li>
-    </ul>
-</div>
-</div>
-<div id="default-tab-content">
-    <div class="p-2 rounded-lg dark:text-slate-900" id="total" role="tabpanel" aria-labelledby="total-tab">
-        <hr class="border-t-4 border-blue-400 rounded-full">
-        <div class="mt-4 flex flex-col rounded-sm">
-            <div class="flex flex-col">
-                {{range .Contests}}
-                <div class="flex flex-row mb-4 p-4 rounded-lg odd:bg-opacity-10 odd:dark:text-white odd:bg-blue-400 even:bg-blue-200 items-center justify-between gap-8 overflow-hidden">
-                    <div class="flex flex-row flex-wrap items-center gap-3">
-                        {{ if .HasThumbnail}}
-                    <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}' class="mr-4 w-20 h-20 rounded-lg z-10 relative">
-                    <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}' class="mr-4 w-20 h-20 rounded-lg opacity-55 blur-lg z-0 absolute">
-                    {{end}}
-                    <div class="flex flex-col">
-                    <h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium"><p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p></span></h1>
-                    <div class="flex items-center flex-row gap-3">
-                        {{ if .HasSpecialAward}}
-                        <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
-                        {{end}}
-                        {{ if .HasSouvenir }}
-                        <span class="icon-[fa6-solid--gift] text-2xl"></span>
-                    {{ end }}
-                    {{ if .HasSpecialAward}}
-                    |
-                    {{ else if .HasSouvenir}}
-                    |
-                    {{end}}
-                    <a href="/panel/contests/edit/{{ .ContestId }}" class="p-2 pl-4 pr-4 rounded-full text-white bg-blue-400 hover:bg-blue-500 transition-all hover:bg-sky-70">
-                        <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
-                    </a>
-                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
-                </div>
-                    </div>
-                </div class="flex flex-row flex-wrap">
-                    <div>
-                    <div class="p-2 text-right">{{ .Status }}
-                    </div>
-                    <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}</div>
-                </div>
-                </div>
-                {{ else }}
-                <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-blue-400 rounded-xl">
-                    <p class="mt-3 text-xl opacity-60 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>No contests have been made yet.</p>
-                </div>
-                {{end}}
-            </div>
-        </div>
-    </div>
-    <div class="p-2 rounded-lg dark:text-slate-900 hidden" id="waiting" role="tabpanel" aria-labelledby="total-tab">
-        <hr class="border-t-4 border-blue-400 rounded-full">
-        <div class="mt-4 flex flex-col rounded-sm">
-            <div class="flex flex-col">
-                {{range .waitingContests}}
-                <div
-                    class="flex flex-row mb-4 p-4 rounded-lg odd:bg-opacity-10 odd:dark:text-white odd:bg-blue-400 even:bg-blue-200 items-center justify-between gap-8 overflow-hidden">
-                    <div class="flex flex-row flex-wrap items-center gap-3">
-                        {{ if .HasThumbnail}}
-                        <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}'
-                            class="mr-4 w-20 h-20 rounded-lg z-10 relative">
-                        <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}'
-                            class="mr-4 w-20 h-20 rounded-lg opacity-55 blur-lg z-0 absolute">
-                        {{end}}
-                        <div class="flex flex-col">
-                            <h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span
-                                    class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium">
-                                    <p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p>
-                                </span></h1>
-                            <div class="flex items-center flex-row gap-3">
-                                {{ if .HasSpecialAward}}
-                                <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span></i>
-                                {{end}}
-                                {{ if .HasSouvenir }}
-                                <span class="icon-[fa6-solid--gift] text-2xl"></span>
-                                {{ end }}
-                                {{ if .HasSpecialAward}}
-                                |
-                                {{ else if .HasSouvenir}}
-                                |
-                                {{end}}
-                                <a href="/panel/contests/edit/{{ .ContestId }}"
-                                    class="p-2 pl-4 pr-4 rounded-full text-white bg-blue-400 hover:bg-blue-500 transition-all hover:bg-sky-70">
-                                    <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
-                                </a>
-                                <button
-                                    class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all"
-                                    onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
-                            </div>
-                        </div>
-                    </div class="flex flex-row flex-wrap">
-                    <div>
-                        <div class="p-2 text-right">{{ .Status }}
-                        </div>
-                        <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}
-                        </div>
-                    </div>
-                </div>
-                {{ else }}
-                <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-blue-400 rounded-xl">
-                    <p class="mt-3 text-xl opacity-60 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>No contests have been planned yet.
-                    </p>
-                </div>
-                {{end}}
-            </div>
-        </div>
-    </div>
-    <div class="hidden p-2 rounded-lg dark:text-slate-900" id="active" role="tabpanel" aria-labelledby="active-tab">
-        <hr class="border-t-4 border-green-400 rounded-full">
-        <div class="mt-4 flex flex-col rounded-sm">
-            <div class="flex flex-col">
-                {{range .openContests}}
-                <div class="flex flex-row mb-4 p-4 rounded-lg odd:bg-opacity-10 odd:dark:text-white odd:bg-green-400 even:bg-green-100 items-center justify-between gap-8 hover:scale-110">
-                    <div class="flex flex-row flex-wrap items-center gap-3">
-                        {{ if .HasThumbnail}}
-                        <a href="/panel/contests/view/{{ .ContestId }}">
-                    <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}' class="mr-4 w-20 h-20 rounded-lg z-10 relative">
-                    <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}' class="mr-4 w-20 h-20 rounded-lg opacity-55 blur-lg z-0 absolute">
-                    </a>
-                    {{end}}
-                    <div class="flex flex-col">
-                    <a href="/panel/contests/view/{{ .ContestId }}"><h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium"><p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p></span></h1></a>
-                    <div class="flex items-center flex-row gap-3">
-                        {{ if .HasSpecialAward}}
-                        <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
-                        {{end}}
-                        {{ if .HasSouvenir }}
-                        <span class="icon-[fa6-solid--gift] text-2xl"></span>
-                    {{ end }}
-                    {{ if .HasSpecialAward}}
-                    |
-                    {{end}}
-                    <a href="/panel/contests/edit/{{ .ContestId }}" class="p-2 pl-4 pr-4 rounded-full text-white bg-green-400 hover:bg-green-500 transition-all">
-                        <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
-                    </a>
-                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
-                </div>
-                    </div>
-                </div class="flex flex-row flex-wrap">
-                    <div>
-                    <div class="p-2 text-right">{{ .Status }}
-                    </div>
-                    <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}</div>
-                </div>
-                </div>
-                {{ else }}
-                <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-green-400 rounded-xl">
-                    <p class="mt-3 text-xl text-green-500 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>There are no open contests at the moment.</p>
-                </div>
-                {{end}}
-            </div>
-        </div>
-    </div>
-    <div class="p-2 rounded-lg dark:text-slate-900 hidden" id="judging" role="tabpanel" aria-labelledby="total-tab">
-        <hr class="border-t-4 border-yellow-400 rounded-full">
-        <div class="mt-4 flex flex-col rounded-sm">
-            <div class="flex flex-col">
-                {{range .judgingContests}}
-                <div
-                    class="flex flex-row mb-4 p-4 rounded-lg odd:bg-opacity-10 odd:dark:text-white odd:bg-yellow-400 even:bg-yellow-200 items-center justify-between gap-8 hover:scale-110 overflow-hidden">
-                    <div class="flex flex-row flex-wrap items-center gap-3">
-                        {{ if .HasThumbnail}}
-                        <a href="/panel/contests/view/{{ .ContestId }}">
-                        <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}'
-                            class="mr-4 w-20 h-20 rounded-lg z-10 relative">
-                        <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}'
-                            class="mr-4 w-20 h-20 rounded-lg opacity-55 blur-lg z-0 absolute">
-                        </a>
-                        {{end}}
-                        <div class="flex flex-col">
-                            <a href="/panel/contests/view/{{ .ContestId }}">
-                            <h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span
-                                    class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium">
-                                    <p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p>
-                                </span></h1></a>
-                            <div class="flex items-center flex-row gap-3">
-                                {{ if .HasSpecialAward}}
-                                <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
-                                {{end}}
-                                {{ if .HasSouvenir }}
-                                <span class="icon-[fa6-solid--gift] text-2xl"></span>
-                                {{ end }}
-                                {{ if .HasSpecialAward}}
-                                |
-                                {{ else if .HasSouvenir}}
-                                |
-                                {{end}}
-                                <a href="/panel/contests/edit/{{ .ContestId }}"
-                                    class="p-2 pl-4 pr-4 rounded-full text-white bg-blue-400 hover:bg-blue-500 transition-all hover:bg-sky-70">
-                                    <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
-                                </a>
-                                <button
-                                    class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all"
-                                    onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
-                            </div>
-                        </div>
-                    </div class="flex flex-row flex-wrap">
-                    <div>
-                        <div class="p-2 text-right">{{ .Status }}
-                        </div>
-                        <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}
-                        </div>
-                    </div>
-                </div>
-                {{ else }}
-                <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-blue-400 rounded-xl">
-                    <p class="mt-3 text-xl opacity-60 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>There are no contests in the Judging phase at the moment.
-                    </p>
-                </div>
-                {{end}}
-            </div>
-        </div>
-    </div>
-    <div class="hidden p-2 rounded-lg dark:text-slate-900" id="results" role="tabpanel" aria-labelledby="ended-tab">
-        <hr class="border-t-4 border-orange-400 rounded-full">
-        <div class="mt-4 flex flex-col rounded-sm">
-            <div class="flex flex-col">
-                {{range .resultsContests}}
-                <div class="flex flex-row mb-4 p-4 rounded-lg odd:bg-opacity-10 odd:dark:text-white odd:bg-orange-400 even:bg-orange-100 items-center justify-between gap-8">
-                    <div class="flex flex-row flex-wrap items-center gap-3">
-                        {{ if .HasThumbnail}}
-                    <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}' class="mr-4 w-20 h-20 rounded-lg z-10 relative">
-                    <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}' class="mr-4 w-20 h-20 rounded-lg opacity-55 blur-lg z-0 absolute">
-                    {{end}}
-                    <div class="flex flex-col">
-                    <h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium"><p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p></span></h1>
-                    <div class="flex items-center flex-row gap-3">
-                        {{ if .HasSpecialAward}}
-                        <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
-                        {{end}}
-                        {{ if .HasSouvenir }}
-                        <span class="icon-[fa6-solid--gift] text-2xl"></span>
-                    {{ end }}
-                    {{ if .HasSpecialAward}}
-                    |
-                    {{end}}
-                    <a href="/panel/contests/edit/{{ .ContestId }}" class="p-2 pl-4 pr-4 rounded-full text-white bg-red-400 hover:bg-red-500 transition-all">
-                        <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
-                    </a>
-                    <button class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all" onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
-                </div>
-                    </div>
-                </div class="flex flex-row flex-wrap">
-                    <div>
-                    <div class="p-2 text-right">{{ .Status }}
-                    </div>
-                    <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}</div>
-                </div>
-                </div>
-                {{ else }}
-                <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-red-400 rounded-xl">
-                    <p class="mt-3 text-xl opacity-60 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>No contests have ended just yet.</p>
-                </div>
-                {{end}}
-            </div>
-        </div>
-    </div>
-    <div class="hidden p-2 rounded-lg dark:text-slate-900" id="closed" role="tabpanel" aria-labelledby="ended-tab">
-        <hr class="border-t-4 border-red-400 rounded-full">
-        <div class="mt-4 flex flex-col rounded-sm">
-            <div class="flex flex-col">
-                {{range .closedContests}}
-                <div
-                    class="flex flex-row mb-4 p-4 rounded-lg odd:bg-opacity-10 odd:dark:text-white odd:bg-red-400 even:bg-red-100 items-center justify-between gap-8">
-                    <div class="flex flex-row flex-wrap items-center gap-3">
-                        {{ if .HasThumbnail}}
-                        <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}'
-                            class="mr-4 w-20 h-20 rounded-lg z-10 relative">
-                        <img src='{{printf "/assets/contest/%d/thumbnail.jpg" .ContestId}}'
-                            class="mr-4 w-20 h-20 rounded-lg opacity-55 blur-lg z-0 absolute">
-                        {{end}}
-                        <div class="flex flex-col">
-                            <h1 class="font-bold flex flex-row gap-2 text-[22px] pb-2">{{ .Name }} <span
-                                    class="flex flex-row items-center pl-2 pr-2 opacity-30 rounded-md text-sm font-medium">
-                                    <p class="openTime">{{ .OpenTime }}</p> - <p class="closeTime">{{ .CloseTime }}</p>
-                                </span></h1>
-                            <div class="flex items-center flex-row gap-3">
-                                {{ if .HasSpecialAward}}
-                                <span class="icon-[fa6-solid--wand-sparkles] text-2xl"></span>
-                                {{end}}
-                                {{ if .HasSouvenir }}
-                                <span class="icon-[fa6-solid--gift] text-2xl"></span>
-                                {{ end }}
-                                {{ if .HasSpecialAward}}
-                                |
-                                {{end}}
-                                <a href="/panel/contests/edit/{{ .ContestId }}"
-                                    class="p-2 pl-4 pr-4 rounded-full text-white bg-red-400 hover:bg-red-500 transition-all">
-                                    <button><span class="icon-[fa6-solid--pen-to-square]"></span></button>
-                                </a>
-                                <button
-                                    class="p-2 pl-4 pr-4 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all"
-                                    onclick='deleteEntry("{{.ContestId}}")'><span class="icon-[fa6-solid--trash]"></span></button>
-                            </div>
-                        </div>
-                    </div class="flex flex-row flex-wrap">
-                    <div>
-                        <div class="p-2 text-right">{{ .Status }}
-                        </div>
-                        <div class="p-2 text-right opacity-45"><span class="icon-[fa6-solid--fingerprint]"></span> {{ .ContestId }}
-                        </div>
-                    </div>
-                </div>
-                {{ else }}
-                <div class="pt-8 pb-8 flex justify-center items-center odd:bg-opacity-10 odd:bg-red-400 rounded-xl">
-                    <p class="mt-3 text-xl opacity-60 text-center"><span class="icon-[fa6-solid--triangle-exclamation] text-6xl"></span><br><br>No contests have ended just yet.
-                    </p>
-                </div>
-                {{end}}
-            </div>
-        </div>
-    </div>
-    <p class="pt-3 pb-6 opacity-30 text-right">
-    The <span class="icon-[fa6-solid--wand-sparkles]"></span> and <span class="icon-[fa6-solid--gift]"></span> icon mean the contest has a Special Award and Souvenir, respectively.
-</p>
-<br />
-<hr />
-<br />
-<p>©2020 - 2024 WiiLink Team</p>
-</div>
-    </main>
 
-    <script>
+        <div class="w-full sm:w-auto relative group rounded-xl overflow-hidden grid grid-cols-5 gap-3">
+            <div
+                class="relative p-6 rounded-xl bg-blue-600/20 border border-blue-700/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">
+                            Waiting
+                        </p>
+                        <p class="text-3xl text-white font-bold mt-1">
+                            {{ .numberOfWaitingContests }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="relative p-6 rounded-xl bg-green-600/20 border border-green-700/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">
+                            Open
+                        </p>
+                        <p class="text-3xl text-white font-bold mt-1">
+                            {{ .numberOfOpenContests }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="relative p-6 rounded-xl bg-yellow-600/20 border border-yellow-700/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">
+                            Judging
+                        </p>
+                        <p class="text-3xl text-white font-bold mt-1">
+                            {{ .numberOfJudgingContests }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="relative p-6 rounded-xl bg-orange-600/20 border border-orange-700/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">
+                            Results
+                        </p>
+                        <p class="text-3xl text-white font-bold mt-1">
+                            {{ .numberOfResultsContests }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="relative p-6 rounded-xl bg-red-600/20 border border-red-700/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <p class="text-gray-400 text-xs font-medium uppercase tracking-wider">
+                            Closed
+                        </p>
+                        <p class="text-3xl text-white font-bold mt-1">
+                            {{ .numberOfClosedContests }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contests" class="relative group mb-10">
+        <div class="absolute rounded-lg blur opacity-10 group-hover:opacity-20 transition duration-200"></div>
+        <div class="relative bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
+            <div class="flex items-center justify-between p-6 border-b border-gray-700">
+                <div class="flex items-center">
+                    <div class="p-2 bg-purple-600/20 rounded-lg text-purple-400 mr-3">
+                        <img src="/assets/icon/flag.svg" alt="Contests Icon" class="h-5 w-5 invert" />
+                    </div>
+                    <h2 class="text-xl font-bold text-white">Contest Management</h2>
+                </div>
+                <a href="/panel/contests/add"
+                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-200 inline-flex items-center text-sm">
+                    <img src="/assets/icon/circle-plus.svg" alt="Add" class="h-4 w-4 mr-2 invert" />
+                    <span>Create Contest</span>
+                </a>
+            </div>
+
+            <div class="p-6 border-b border-gray-700">
+                {{ if .Error }}
+                <div class="p-4 mb-6 bg-red-500/20 border border-red-600/30 rounded-lg">
+                    <p class="text-red-400">{{ .Error }}</p>
+                </div>
+                {{ end }}
+
+                <div class="flex items-center space-x-2 mb-6">
+                    <ul
+                        class="flex rounded-xl bg-gray-700/50 border border-gray-700 flex-wrap text-sm font-medium text-center overflow-hidden">
+                        <li>
+                            <button class="inline-block px-4 py-2 bg-gray-700 text-white transition-all" id="total-tab"
+                                data-tabs-target="#total" type="button" role="tab" aria-controls="profile"
+                                aria-selected="true">
+                                All Contests
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="inline-block px-4 py-2 text-gray-300 hover:bg-gray-700/80 hover:text-white transition-all"
+                                id="waiting-tab" data-tabs-target="#waiting" type="button" role="tab"
+                                aria-controls="dashboard" aria-selected="false">
+                                Waiting
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="inline-block px-4 py-2 text-gray-300 hover:bg-gray-700/80 hover:text-white transition-all"
+                                id="active-tab" data-tabs-target="#active" type="button" role="tab"
+                                aria-controls="dashboard" aria-selected="false">
+                                Active
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="inline-block px-4 py-2 text-gray-300 hover:bg-gray-700/80 hover:text-white transition-all"
+                                id="judging-tab" data-tabs-target="#judging" type="button" role="tab"
+                                aria-controls="dashboard" aria-selected="false">
+                                Judging
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="inline-block px-4 py-2 text-gray-300 hover:bg-gray-700/80 hover:text-white transition-all"
+                                id="results-tab" data-tabs-target="#results" type="button" role="tab"
+                                aria-controls="ended" aria-selected="false">
+                                Results
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="inline-block px-4 py-2 text-gray-300 hover:bg-gray-700/80 hover:text-white transition-all"
+                                id="closed-tab" data-tabs-target="#closed" type="button" role="tab"
+                                aria-controls="ended" aria-selected="false">
+                                Closed
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="default-tab-content">
+                    <div class="rounded-lg" id="total" role="tabpanel" aria-labelledby="total-tab">
+                        <div class="space-y-4">
+                            {{ if .Contests }}
+                            {{ range .Contests }}
+                            <div
+                                class="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg border border-gray-600 hover:bg-gray-700 transition-colors">
+                                <div class="flex items-center space-x-4">
+                                    {{ if .HasThumbnail }}
+                                    <div class="relative">
+                                        <img src="{{ printf " /assets/contest/%d/thumbnail.jpg" .ContestId }}"
+                                            alt="{{ .Name }}" class="h-16 w-auto rounded-lg border border-gray-600" />
+                                    </div>
+                                    {{ else }}
+                                    <div class="h-16 w-16 rounded-lg bg-gray-600 flex items-center justify-center">
+                                        <img src="/assets/icon/image-off.svg" alt="No Image"
+                                            class="h-8 w-8 invert opacity-30" />
+                                    </div>
+                                    {{ end }}
+
+                                    <div>
+                                        <h3 class="font-bold text-white">{{ .Name }}</h3>
+                                        <div class="flex items-center mt-1 text-sm text-gray-300">
+                                            <span class="openTime mr-1">{{ .OpenTime }}</span> -
+                                            <span class="closeTime ml-1">{{ .CloseTime }}</span>
+                                        </div>
+                                        <div class="flex items-center mt-2 space-x-2">
+                                            {{ if .HasSpecialAward }}
+                                            <span
+                                                class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-purple-600/20 text-purple-400">
+                                                <img src="/assets/icon/wand-sparkles.svg" alt="Special Award"
+                                                    class="h-3 w-3 mr-1 invert opacity-70" />
+                                                Special Award
+                                            </span>
+                                            {{ end }}
+                                            {{ if .HasSouvenir }}
+                                            <span
+                                                class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-blue-600/20 text-blue-400">
+                                                <img src="/assets/icon/gift.svg" alt="Souvenir"
+                                                    class="h-3 w-3 mr-1 invert opacity-70" />
+                                                Souvenir
+                                            </span>
+                                            {{ end }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-end space-y-2">
+                                    <div class="text-sm text-right">
+                                        <span class="status px-2 py-1 rounded-full text-xs 
+                                                {{ if eq .Status " WAITING" }}bg-blue-600/20 text-blue-400 {{ else if
+                                            eq .Status "OPEN" }}bg-green-600/20 text-green-400 {{ else if eq
+                                            .Status "JUDGING" }}bg-yellow-600/20 text-yellow-400 {{ else if eq
+                                            .Status "RESULTS" }}bg-orange-600/20 text-orange-400 {{ else }}bg-red-600/20
+                                            text-red-400{{ end }}">
+                                            {{ .Status }}
+                                        </span>
+                                    </div>
+
+                                    <div class="text-xs text-gray-500">
+                                        ID: {{ .ContestId }}
+                                    </div>
+
+                                    <div class="flex space-x-2">
+                                        {{ if or (eq .Status "OPEN") (eq .Status "JUDGING") }}
+                                        <a href="/panel/contests/view/{{ .ContestId }}"
+                                            class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 text-xs">
+                                            <img src="/assets/icon/eye.svg" alt="View"
+                                                class="h-3.5 w-3.5 mr-1.5 invert" />
+                                            <span>Entries</span>
+                                        </a>
+                                        {{ end }}
+
+                                        <a href="/panel/contests/edit/{{ .ContestId }}"
+                                            class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 text-xs">
+                                            <img src="/assets/icon/pencil.svg" alt="Edit"
+                                                class="h-3.5 w-3.5 mr-1.5 invert" />
+                                            <span>Edit</span>
+                                        </a>
+
+                                        <button onclick="deleteEntry('{{ .ContestId }}')"
+                                            class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 text-xs">
+                                            <img src="/assets/icon/trash.svg" alt="Delete"
+                                                class="h-3.5 w-3.5 mr-1.5 invert" />
+                                            <span>Delete</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ end }}
+                            {{ else }}
+                            <div class="p-12 text-center">
+                                <div
+                                    class="mx-auto rounded-full bg-gray-700/50 p-4 w-16 h-16 flex items-center justify-center mb-4">
+                                    <img src="/assets/icon/flag-off.svg" alt="No Contests"
+                                        class="h-8 w-8 invert opacity-50" />
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-400 mb-2">No Contests Available</h3>
+                                <p class="text-sm text-gray-500 max-w-sm mx-auto mb-6">
+                                    You haven't created any contests yet. Click the button below to create your first
+                                    contest.
+                                </p>
+                                <a href="/panel/contests/add"
+                                    class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-200 text-sm">
+                                    <img src="/assets/icon/circle-plus.svg" alt="Create" class="h-5 w-5 mr-2 invert" />
+                                    <span>Create Your First Contest</span>
+                                </a>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+
+                    <!-- Similar structure for other tabs - Waiting tab -->
+                    <div class="rounded-lg hidden" id="waiting" role="tabpanel" aria-labelledby="waiting-tab">
+                        <div class="space-y-4">
+                            {{ if .waitingContests }}
+                            {{ range .waitingContests }}
+                            <!-- Contest item (same structure as above with blue color theme) -->
+                            <div
+                                class="flex items-center justify-between p-4 bg-blue-700/10 rounded-lg border border-blue-600/30 hover:bg-blue-700/20 transition-colors">
+                                <!-- Same content as above -->
+                                <div class="flex items-center space-x-4">
+                                    {{ if .HasThumbnail }}
+                                    <div class="relative">
+                                        <img src="{{ printf " /assets/contest/%d/thumbnail.jpg" .ContestId }}"
+                                            alt="{{ .Name }}" class="h-16 w-auto rounded-lg border border-gray-600" />
+                                    </div>
+                                    {{ else }}
+                                    <div class="h-16 w-16 rounded-lg bg-gray-600 flex items-center justify-center">
+                                        <img src="/assets/icon/image-off.svg" alt="No Image"
+                                            class="h-8 w-8 invert opacity-30" />
+                                    </div>
+                                    {{ end }}
+
+                                    <div>
+                                        <h3 class="font-bold text-white">{{ .Name }}</h3>
+                                        <div class="flex items-center mt-1 text-sm text-gray-300">
+                                            <span class="openTime mr-1">{{ .OpenTime }}</span> -
+                                            <span class="closeTime ml-1">{{ .CloseTime }}</span>
+                                        </div>
+                                        <div class="flex items-center mt-2 space-x-2">
+                                            {{ if .HasSpecialAward }}
+                                            <span
+                                                class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-purple-600/20 text-purple-400">
+                                                <img src="/assets/icon/wand-sparkles.svg" alt="Special Award"
+                                                    class="h-3 w-3 mr-1 invert opacity-70" />
+                                                Special Award
+                                            </span>
+                                            {{ end }}
+                                            {{ if .HasSouvenir }}
+                                            <span
+                                                class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-blue-600/20 text-blue-400">
+                                                <img src="/assets/icon/gift.svg" alt="Souvenir"
+                                                    class="h-3 w-3 mr-1 invert opacity-70" />
+                                                Souvenir
+                                            </span>
+                                            {{ end }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-end space-y-2">
+                                    <div class="text-sm text-right">
+                                        <span
+                                            class="status px-2 py-1 rounded-full text-xs bg-blue-600/20 text-blue-400">
+                                            {{ .Status }}
+                                        </span>
+                                    </div>
+
+                                    <div class="text-xs text-gray-500">
+                                        ID: {{ .ContestId }}
+                                    </div>
+
+                                    <div class="flex space-x-2">
+                                        <a href="/panel/contests/edit/{{ .ContestId }}"
+                                            class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 text-xs">
+                                            <img src="/assets/icon/pen-to-square.svg" alt="Edit"
+                                                class="h-3.5 w-3.5 mr-1.5 invert" />
+                                            <span>Edit</span>
+                                        </a>
+
+                                        <button onclick="deleteEntry('{{ .ContestId }}')"
+                                            class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 text-xs">
+                                            <img src="/assets/icon/trash.svg" alt="Delete"
+                                                class="h-3.5 w-3.5 mr-1.5 invert" />
+                                            <span>Delete</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ end }}
+                            {{ else }}
+                            <div class="p-12 text-center">
+                                <div
+                                    class="mx-auto rounded-full bg-gray-700/50 p-4 w-16 h-16 flex items-center justify-center mb-4">
+                                    <img src="/assets/icon/flag-off.svg" alt="No Contests"
+                                        class="h-8 w-8 invert opacity-50" />
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-400 mb-2">No Waiting Contests</h3>
+                                <p class="text-sm text-gray-500 max-w-sm mx-auto mb-6">
+                                    There are no contests in the waiting phase.
+                                </p>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+
+                    <!-- Active tab -->
+                    <div class="rounded-lg hidden" id="active" role="tabpanel" aria-labelledby="active-tab">
+                        <!-- Content similar to waiting tab but with green color theme -->
+                        <div class="space-y-4">
+                            {{ if .openContests }}
+                            {{ range .openContests }}
+                            <div
+                                class="flex items-center justify-between p-4 bg-green-700/10 rounded-lg border border-green-600/30 hover:bg-green-700/20 transition-colors">
+                                <!-- Same structure as above but with green theme -->
+                                <div class="flex items-center space-x-4">
+                                    {{ if .HasThumbnail }}
+                                    <div class="relative">
+                                        <a href="/panel/contests/view/{{ .ContestId }}">
+                                            <img src="{{ printf " /assets/contest/%d/thumbnail.jpg" .ContestId }}"
+                                                alt="{{ .Name }}"
+                                                class="h-16 w-auto rounded-lg border border-gray-600" />
+                                        </a>
+                                    </div>
+                                    {{ else }}
+                                    <div class="h-16 w-16 rounded-lg bg-gray-600 flex items-center justify-center">
+                                        <img src="/assets/icon/image-off.svg" alt="No Image"
+                                            class="h-8 w-8 invert opacity-30" />
+                                    </div>
+                                    {{ end }}
+
+                                    <div>
+                                        <h3 class="font-bold text-white">
+                                            <a href="/panel/contests/view/{{ .ContestId }}">{{ .Name }}</a>
+                                        </h3>
+                                        <div class="flex items-center mt-1 text-sm text-gray-300">
+                                            <span class="openTime mr-1">{{ .OpenTime }}</span> -
+                                            <span class="closeTime ml-1">{{ .CloseTime }}</span>
+                                        </div>
+                                        <div class="flex items-center mt-2 space-x-2">
+                                            {{ if .HasSpecialAward }}
+                                            <span
+                                                class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-purple-600/20 text-purple-400">
+                                                <img src="/assets/icon/wand-sparkles.svg" alt="Special Award"
+                                                    class="h-3 w-3 mr-1 invert opacity-70" />
+                                                Special Award
+                                            </span>
+                                            {{ end }}
+                                            {{ if .HasSouvenir }}
+                                            <span
+                                                class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-blue-600/20 text-blue-400">
+                                                <img src="/assets/icon/gift.svg" alt="Souvenir"
+                                                    class="h-3 w-3 mr-1 invert opacity-70" />
+                                                Souvenir
+                                            </span>
+                                            {{ end }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-end space-y-2">
+                                    <div class="text-sm text-right">
+                                        <span
+                                            class="status px-2 py-1 rounded-full text-xs bg-green-600/20 text-green-400">
+                                            {{ .Status }}
+                                        </span>
+                                    </div>
+
+                                    <div class="text-xs text-gray-500">
+                                        ID: {{ .ContestId }}
+                                    </div>
+
+                                    <div class="flex space-x-2">
+                                        <a href="/panel/contests/view/{{ .ContestId }}"
+                                            class="inline-flex items-center px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-200 text-xs">
+                                            <img src="/assets/icon/eye.svg" alt="View"
+                                                class="h-3.5 w-3.5 mr-1.5 invert" />
+                                            <span>Entries</span>
+                                        </a>
+
+                                        <a href="/panel/contests/edit/{{ .ContestId }}"
+                                            class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 text-xs">
+                                            <img src="/assets/icon/pen-to-square.svg" alt="Edit"
+                                                class="h-3.5 w-3.5 mr-1.5 invert" />
+                                            <span>Edit</span>
+                                        </a>
+
+                                        <button onclick="deleteEntry('{{ .ContestId }}')"
+                                            class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 text-xs">
+                                            <img src="/assets/icon/trash.svg" alt="Delete"
+                                                class="h-3.5 w-3.5 mr-1.5 invert" />
+                                            <span>Delete</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ end }}
+                            {{ else }}
+                            <div class="p-12 text-center">
+                                <div
+                                    class="mx-auto rounded-full bg-gray-700/50 p-4 w-16 h-16 flex items-center justify-center mb-4">
+                                    <img src="/assets/icon/flag-off.svg" alt="No Contests"
+                                        class="h-8 w-8 invert opacity-50" />
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-400 mb-2">No Active Contests</h3>
+                                <p class="text-sm text-gray-500 max-w-sm mx-auto">
+                                    There are no contests currently open for submissions.
+                                </p>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+
+                    <!-- Judging tab -->
+                    <div class="rounded-lg hidden" id="judging" role="tabpanel" aria-labelledby="judging-tab">
+                        <div class="space-y-4">
+                            {{ if .judgingContests }}
+                                {{ range .judgingContests }}
+                                <div class="flex items-center justify-between p-4 bg-yellow-700/10 rounded-lg border border-yellow-600/30 hover:bg-yellow-700/20 transition-colors">
+                                    <div class="flex items-center space-x-4">
+                                        {{ if .HasThumbnail }}
+                                        <div class="relative">
+                                            <a href="/panel/contests/view/{{ .ContestId }}">
+                                                <img src="{{ printf "/assets/contest/%d/thumbnail.jpg" .ContestId }}" 
+                                                    alt="{{ .Name }}" 
+                                                    class="h-16 w-auto rounded-lg border border-gray-600" />
+                                            </a>
+                                        </div>
+                                        {{ else }}
+                                        <div class="h-16 w-16 rounded-lg bg-gray-600 flex items-center justify-center">
+                                            <img src="/assets/icon/image-off.svg" alt="No Image" class="h-8 w-8 invert opacity-30" />
+                                        </div>
+                                        {{ end }}
+                                        
+                                        <div>
+                                            <h3 class="font-bold text-white">
+                                                <a href="/panel/contests/view/{{ .ContestId }}">{{ .Name }}</a>
+                                            </h3>
+                                            <div class="flex items-center mt-1 text-sm text-gray-300">
+                                                <span class="openTime mr-1">{{ .OpenTime }}</span> - 
+                                                <span class="closeTime ml-1">{{ .CloseTime }}</span>
+                                            </div>
+                                            <div class="flex items-center mt-2 space-x-2">
+                                                {{ if .HasSpecialAward }}
+                                                <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-purple-600/20 text-purple-400">
+                                                    <img src="/assets/icon/wand-sparkles.svg" alt="Special Award" class="h-3 w-3 mr-1 invert opacity-70" />
+                                                    Special Award
+                                                </span>
+                                                {{ end }}
+                                                {{ if .HasSouvenir }}
+                                                <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-blue-600/20 text-blue-400">
+                                                    <img src="/assets/icon/gift.svg" alt="Souvenir" class="h-3 w-3 mr-1 invert opacity-70" />
+                                                    Souvenir
+                                                </span>
+                                                {{ end }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex flex-col items-end space-y-2">
+                                        <div class="text-sm text-right">
+                                            <span class="status px-2 py-1 rounded-full text-xs bg-yellow-600/20 text-yellow-400">
+                                                {{ .Status }}
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="text-xs text-gray-500">
+                                            ID: {{ .ContestId }}
+                                        </div>
+                                        
+                                        <div class="flex space-x-2">
+                                            <a href="/panel/contests/view/{{ .ContestId }}"
+                                                class="inline-flex items-center px-3 py-1.5 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition duration-200 text-xs">
+                                                <img src="/assets/icon/eye.svg" alt="View" class="h-3.5 w-3.5 mr-1.5 invert" />
+                                                <span>Entries</span>
+                                            </a>
+                                            
+                                            <a href="/panel/contests/edit/{{ .ContestId }}"
+                                                class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 text-xs">
+                                                <img src="/assets/icon/pencil.svg" alt="Edit" class="h-3.5 w-3.5 mr-1.5 invert" />
+                                                <span>Edit</span>
+                                            </a>
+                                            
+                                            <button onclick="deleteEntry('{{ .ContestId }}')"
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 text-xs">
+                                                <img src="/assets/icon/trash.svg" alt="Delete" class="h-3.5 w-3.5 mr-1.5 invert" />
+                                                <span>Delete</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ end }}
+                            {{ else }}
+                            <div class="p-12 text-center">
+                                <div class="mx-auto rounded-full bg-gray-700/50 p-4 w-16 h-16 flex items-center justify-center mb-4">
+                                    <img src="/assets/icon/flag-off.svg" alt="No Contests" class="h-8 w-8 invert opacity-50" />
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-400 mb-2">No Judging Contests</h3>
+                                <p class="text-sm text-gray-500 max-w-sm mx-auto">
+                                    There are no contests currently in the judging phase.
+                                </p>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+                    
+                    <!-- Results tab -->
+                    <div class="rounded-lg hidden" id="results" role="tabpanel" aria-labelledby="results-tab">
+                        <div class="space-y-4">
+                            {{ if .resultsContests }}
+                                {{ range .resultsContests }}
+                                <div class="flex items-center justify-between p-4 bg-orange-700/10 rounded-lg border border-orange-600/30 hover:bg-orange-700/20 transition-colors">
+                                    <div class="flex items-center space-x-4">
+                                        {{ if .HasThumbnail }}
+                                        <div class="relative">
+                                            <a href="/panel/contests/view/{{ .ContestId }}">
+                                                <img src="{{ printf "/assets/contest/%d/thumbnail.jpg" .ContestId }}" 
+                                                    alt="{{ .Name }}" 
+                                                    class="h-16 w-auto rounded-lg border border-gray-600" />
+                                            </a>
+                                        </div>
+                                        {{ else }}
+                                        <div class="h-16 w-16 rounded-lg bg-gray-600 flex items-center justify-center">
+                                            <img src="/assets/icon/image-off.svg" alt="No Image" class="h-8 w-8 invert opacity-30" />
+                                        </div>
+                                        {{ end }}
+                                        
+                                        <div>
+                                            <h3 class="font-bold text-white">
+                                                <a href="/panel/contests/view/{{ .ContestId }}">{{ .Name }}</a>
+                                            </h3>
+                                            <div class="flex items-center mt-1 text-sm text-gray-300">
+                                                <span class="openTime mr-1">{{ .OpenTime }}</span> - 
+                                                <span class="closeTime ml-1">{{ .CloseTime }}</span>
+                                            </div>
+                                            <div class="flex items-center mt-2 space-x-2">
+                                                {{ if .HasSpecialAward }}
+                                                <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-purple-600/20 text-purple-400">
+                                                    <img src="/assets/icon/wand-sparkles.svg" alt="Special Award" class="h-3 w-3 mr-1 invert opacity-70" />
+                                                    Special Award
+                                                </span>
+                                                {{ end }}
+                                                {{ if .HasSouvenir }}
+                                                <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-blue-600/20 text-blue-400">
+                                                    <img src="/assets/icon/gift.svg" alt="Souvenir" class="h-3 w-3 mr-1 invert opacity-70" />
+                                                    Souvenir
+                                                </span>
+                                                {{ end }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex flex-col items-end space-y-2">
+                                        <div class="text-sm text-right">
+                                            <span class="status px-2 py-1 rounded-full text-xs bg-orange-600/20 text-orange-400">
+                                                {{ .Status }}
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="text-xs text-gray-500">
+                                            ID: {{ .ContestId }}
+                                        </div>
+                                        
+                                        <div class="flex space-x-2">
+                                            <a href="/panel/contests/view/{{ .ContestId }}"
+                                                class="inline-flex items-center px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition duration-200 text-xs">
+                                                <img src="/assets/icon/trophy.svg" alt="Results" class="h-3.5 w-3.5 mr-1.5 invert" />
+                                                <span>Results</span>
+                                            </a>
+                                            
+                                            <a href="/panel/contests/edit/{{ .ContestId }}"
+                                                class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 text-xs">
+                                                <img src="/assets/icon/pencil.svg" alt="Edit" class="h-3.5 w-3.5 mr-1.5 invert" />
+                                                <span>Edit</span>
+                                            </a>
+                                            
+                                            <button onclick="deleteEntry('{{ .ContestId }}')"
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 text-xs">
+                                                <img src="/assets/icon/trash.svg" alt="Delete" class="h-3.5 w-3.5 mr-1.5 invert" />
+                                                <span>Delete</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ end }}
+                            {{ else }}
+                            <div class="p-12 text-center">
+                                <div class="mx-auto rounded-full bg-gray-700/50 p-4 w-16 h-16 flex items-center justify-center mb-4">
+                                    <img src="/assets/icon/flag-off.svg" alt="No Contests" class="h-8 w-8 invert opacity-50" />
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-400 mb-2">No Results Contests</h3>
+                                <p class="text-sm text-gray-500 max-w-sm mx-auto">
+                                    There are no contests currently showing results.
+                                </p>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+                    
+                    <!-- Closed tab -->
+                    <div class="rounded-lg hidden" id="closed" role="tabpanel" aria-labelledby="closed-tab">
+                        <div class="space-y-4">
+                            {{ if .closedContests }}
+                                {{ range .closedContests }}
+                                <div class="flex items-center justify-between p-4 bg-red-700/10 rounded-lg border border-red-600/30 hover:bg-red-700/20 transition-colors">
+                                    <div class="flex items-center space-x-4">
+                                        {{ if .HasThumbnail }}
+                                        <div class="relative">
+                                            <img src="{{ printf "/assets/contest/%d/thumbnail.jpg" .ContestId }}" 
+                                                alt="{{ .Name }}" 
+                                                class="h-16 w-auto rounded-lg border border-gray-600" />
+                                        </div>
+                                        {{ else }}
+                                        <div class="h-16 w-16 rounded-lg bg-gray-600 flex items-center justify-center">
+                                            <img src="/assets/icon/image-off.svg" alt="No Image" class="h-8 w-8 invert opacity-30" />
+                                        </div>
+                                        {{ end }}
+                                        
+                                        <div>
+                                            <h3 class="font-bold text-white">{{ .Name }}</h3>
+                                            <div class="flex items-center mt-1 text-sm text-gray-300">
+                                                <span class="openTime mr-1">{{ .OpenTime }}</span> - 
+                                                <span class="closeTime ml-1">{{ .CloseTime }}</span>
+                                            </div>
+                                            <div class="flex items-center mt-2 space-x-2">
+                                                {{ if .HasSpecialAward }}
+                                                <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-purple-600/20 text-purple-400">
+                                                    <img src="/assets/icon/wand-sparkles.svg" alt="Special Award" class="h-3 w-3 mr-1 invert opacity-70" />
+                                                    Special Award
+                                                </span>
+                                                {{ end }}
+                                                {{ if .HasSouvenir }}
+                                                <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-blue-600/20 text-blue-400">
+                                                    <img src="/assets/icon/gift.svg" alt="Souvenir" class="h-3 w-3 mr-1 invert opacity-70" />
+                                                    Souvenir
+                                                </span>
+                                                {{ end }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex flex-col items-end space-y-2">
+                                        <div class="text-sm text-right">
+                                            <span class="status px-2 py-1 rounded-full text-xs bg-red-600/20 text-red-400">
+                                                {{ .Status }}
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="text-xs text-gray-500">
+                                            ID: {{ .ContestId }}
+                                        </div>
+                                        
+                                        <div class="flex space-x-2">
+                                            <a href="/panel/contests/edit/{{ .ContestId }}"
+                                                class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 text-xs">
+                                                <img src="/assets/icon/pencil.svg" alt="Edit" class="h-3.5 w-3.5 mr-1.5 invert" />
+                                                <span>Edit</span>
+                                            </a>
+                                            
+                                            <button onclick="deleteEntry('{{ .ContestId }}')"
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 text-xs">
+                                                <img src="/assets/icon/trash.svg" alt="Delete" class="h-3.5 w-3.5 mr-1.5 invert" />
+                                                <span>Delete</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ end }}
+                            {{ else }}
+                            <div class="p-12 text-center">
+                                <div class="mx-auto rounded-full bg-gray-700/50 p-4 w-16 h-16 flex items-center justify-center mb-4">
+                                    <img src="/assets/icon/flag-off.svg" alt="No Contests" class="h-8 w-8 invert opacity-50" />
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-400 mb-2">No Closed Contests</h3>
+                                <p class="text-sm text-gray-500 max-w-sm mx-auto">
+                                    There are no closed contests in the system.
+                                </p>
+                            </div>
+                            {{ end }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 flex justify-between items-center">
+                <div class="text-sm text-gray-500">
+                    Showing {{ .numberOfContests }} total contest{{ if ne .numberOfContests 1 }}s{{ end }}
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <div class="text-sm text-gray-400 mr-2">
+                        <span class="inline-flex items-center mr-2">
+                            <img src="/assets/icon/wand-sparkles.svg" alt="Special Award"
+                                class="h-3 w-3 mr-1 invert opacity-70" />
+                            Special Award
+                        </span>
+                        <span class="inline-flex items-center">
+                            <img src="/assets/icon/gift.svg" alt="Souvenir" class="h-3 w-3 mr-1 invert opacity-70" />
+                            Souvenir
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Format dates
+        const openTimeElements = document.getElementsByClassName('openTime');
+        const closeTimeElements = document.getElementsByClassName('closeTime');
 
-            const hash = window.location.hash;
-            const msgElement = document.getElementById('msg');
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.getMonth() + 1; // getMonth() returns 0-11
+            return `${day}/${month}`;
+        }
 
-            if (msgElement) {
-                let message = '';
-                let showMessage = false;
+        Array.from(openTimeElements).forEach(element => {
+            element.textContent = formatDate(element.textContent);
+        });
 
-                switch (hash) {
-                    case '#edit_success':
-                    msgElement.classList.add("bg-green-400");
-                        message = '<b><span class="icon-[fa6-solid--circle-check]"></span> Saved!</b><br>The Contest has been modified successfully!';
-                        showMessage = true;
-                        break;
-                    case '#add_success':
-                    msgElement.classList.add("bg-green-400");
-                        message = '<b><span class="icon-[fa6-solid--circle-check]"></span> Added!</b><br>The Contest has been added successfully!';
-                        showMessage = true;
-                        break;
-                    case '#delete_success':
-                    msgElement.classList.add("bg-red-400");
-                        message = '<b><span class="icon-[fa6-solid--circle-check]"></span> Deleted!</b><br>The Contest has been deleted successfully!';
-                        showMessage = true;
-                        break;
-                }
+        Array.from(closeTimeElements).forEach(element => {
+            element.textContent = formatDate(element.textContent);
+        });
 
-                if (showMessage) {
-                    console.log("Shown");
-                    msgElement.style.display = 'block';
-                    msgElement.innerHTML = message;
-                    setTimeout(() => {
-                        msgElement.style.opacity = '0';
-                        msgElement.style.pointerEvents = 'none';
-                    }, 5000);
-                }
-            }
-
+        // Tab handling
         const tabs = document.querySelectorAll('button[data-tabs-target]');
         const tabPanels = document.querySelectorAll('[role="tabpanel"]');
-
-        const ids = ['toggleOpen'];
-    ids.forEach(id => {
-        const element = document.getElementById(id);
-        const state = localStorage.getItem(id);
-        if (state === 'open') {
-            element.style.display = 'flex';
-        } else if (state === 'closed') {
-            element.style.display = 'none';
-        }
-    });
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -492,75 +801,76 @@
                 // Show the selected tab panel
                 targetPanel.classList.remove('hidden');
 
-                // Remove bg-gray-200 and shadow-sm from all tabs
+                // Remove active styles from all tabs
                 tabs.forEach(t => {
                     t.setAttribute('aria-selected', 'false');
-                    t.classList.remove('bg-gray-200', 'shadow-sm', 'dark:bg-slate-700', 'dark:bg-slate-800');
+                    t.classList.remove('bg-gray-700');
+                    t.classList.add('text-gray-300');
+                    t.classList.remove('text-white');
                 });
 
-                // Set aria-selected="true" and add bg-gray-200 and shadow-sm to the clicked tab
+                // Set active styles to the clicked tab
                 tab.setAttribute('aria-selected', 'true');
-                tab.classList.add('bg-gray-200', 'shadow-sm', 'dark:bg-slate-700');
+                tab.classList.add('bg-gray-700');
+                tab.classList.remove('text-gray-300');
+                tab.classList.add('text-white');
             });
         });
+
+        // Show success/error messages
+        const hash = window.location.hash;
+        if (hash) {
+            let message = '';
+            let messageClass = '';
+
+            switch (hash) {
+                case '#edit_success':
+                    message = '<div class="flex items-center"><img src="/assets/icon/check-circle.svg" alt="Success" class="h-5 w-5 mr-2 invert" /><span>Contest updated successfully</span></div>';
+                    messageClass = 'bg-green-600/20 border-green-600/30 text-green-400';
+                    break;
+                case '#add_success':
+                    message = '<div class="flex items-center"><img src="/assets/icon/check-circle.svg" alt="Success" class="h-5 w-5 mr-2 invert" /><span>Contest created successfully</span></div>';
+                    messageClass = 'bg-green-600/20 border-green-600/30 text-green-400';
+                    break;
+                case '#delete_success':
+                    message = '<div class="flex items-center"><img src="/assets/icon/check-circle.svg" alt="Success" class="h-5 w-5 mr-2 invert" /><span>Contest deleted successfully</span></div>';
+                    messageClass = 'bg-red-600/20 border-red-600/30 text-red-400';
+                    break;
+            }
+
+            if (message) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `p-4 mb-6 rounded-lg border ${messageClass}`;
+                alertDiv.innerHTML = message;
+
+                const tabContent = document.querySelector('#default-tab-content');
+                tabContent.prepend(alertDiv);
+
+                setTimeout(() => {
+                    alertDiv.style.opacity = '0';
+                    alertDiv.style.transition = 'opacity 0.5s ease-out';
+                    setTimeout(() => alertDiv.remove(), 500);
+                }, 5000);
+            }
+        }
     });
-    </script>
 
-    <script>
-    // Get elements by class name
-    const openTimeElements = document.getElementsByClassName('openTime');
-    const closeTimeElements = document.getElementsByClassName('closeTime');
-
-    // Function to format date
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = date.getDate();
-        const month = date.getMonth() + 1; // getMonth() returns 0-11
-        return `${day}/${month}`;
-    }
-
-    function toggleOpen(id) {
-        const element = document.getElementById(id);
-        if (element.style.display === 'none') {
-            element.style.display = 'flex';
-            localStorage.setItem(id, 'open');
-        } else {
-            element.style.display = 'none';
-            localStorage.setItem(id, 'closed');
+    function deleteEntry(contestId) {
+        if (confirm("Are you sure you want to delete this contest? This action cannot be undone.")) {
+            fetch(`/panel/contests/delete/${contestId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = "/panel/contests#delete_success";
+                } else {
+                    alert("Failed to delete contest.");
+                }
+            });
         }
     }
+</script>
 
-    // Update elements with the formatted date
-    Array.from(openTimeElements).forEach(element => {
-        element.textContent = formatDate(element.textContent);
-    });
-
-    Array.from(closeTimeElements).forEach(element => {
-        element.textContent = formatDate(element.textContent);
-    });
-
-    function deleteEntry(entryId) {
-      // Ask for confirmation
-      const isConfirmed = confirm(
-        "Are you sure you want to delete this Contest? This action cannot be undone."
-      );
-
-      // Proceed only if the user confirmed
-      if (isConfirmed) {
-        fetch(`/panel/contests/delete/${entryId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then((response) => {
-          if (response.ok) {
-            window.location.reload();
-          } else {
-            alert("Failed to delete entry.");
-          }
-        });
-      }
-    }
-    </script>
-  </body>
-</html>
+{{ template "footer.html" . }}
