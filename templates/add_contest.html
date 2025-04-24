@@ -1,283 +1,302 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Add Contest | CMOC Control Panel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
-      rel="stylesheet"
-    />
-    <link href="/assets/output.css" rel="stylesheet" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="https://www.wiilink24.com/img/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="https://www.wiilink24.com/img/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="https://www.wiilink24.com/img/favicon-16x16.png"
-    />
-    <link rel="manifest" href="https://www.wiilink24.com/img/site.webmanifest" />
-    <link rel="mask-icon" href="https://www.wiilink24.com/img/safari-pinned-tab.svg" color="#5bbad5" />
-    <link rel="shortcut icon" href="https://www.wiilink24.com/img/favicon.ico" />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-config" content="https://www.wiilink24.com/img/browserconfig.xml" />
-    <meta name="theme-color" content="#ffffff" />
-  </head>
-  <body class="dark:text-white dark:bg-slate-800">
-    <main class="container py-20">
-      <div class="pb-6 flex items-center justify-between">
-        <div class="flex flex-row gap-3 items-center">
-          <img
-            src="https://www.wiilink24.com/img/IS-logo.png"
-            class="!h-[60px] dark:invert"
-          />
-          <span
-            class="icon-[fa6-solid--chevron-right] text-2xl cursor-pointer"
-            onclick="toggleOpen('toggleOpen');"
-          ></span>
-          <div
-            id="toggleOpen"
-            class="p-2 flex-row items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-500 hidden"
-          >
-            <a href="/panel/contests"
-              ><button
-                class="p-2 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"
-              >
-              <span class="icon-[fa6-solid--flag-checkered]"></span> Contests
-              </button></a
-            >
-            |
-            <a href="/panel/contests/add"
-              ><button
-                class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
-              >
-              <span class="icon-[fa6-solid--circle-plus]"></span> Add Contest
-              </button></a
-            >
-            |
-            <a href="/panel/plaza"
-              ><button
-                class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
-              >
-              <span class="icon-[fa6-solid--users]"></span> Plaza
-              </button></a
-            >
-            |
-            <a href="/panel/artisans"
-              ><button
-                class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
-              >
-              <span class="icon-[fa6-solid--brush]"></span> Mii Artisans
-              </button></a
-            >
+{{ template "base.html" . }}
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="mb-6 text-2xl font-bold text-white">Add New Contest</h1>
+
+  <div class="relative group mb-10">
+    <div class="relative bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 p-8">
+      <div class="flex items-center mb-6 pb-4 border-b border-gray-700">
+        <div class="p-2 bg-blue-600/20 rounded-lg text-blue-400 mr-3">
+          <img src="/assets/icon/flag.svg" alt="Contest Icon" class="h-6 w-6 invert" />
+        </div>
+        <h2 class="text-xl font-bold text-white">Contest Details</h2>
+      </div>
+
+      <div class="mb-8">
+        <div class="w-full bg-[url('/assets/img/contest_bg.png')] rounded-xl overflow-hidden shadow-lg">
+          <div class="p-2 rounded-xl border-[5px] border-white bg-[rgb(76,130,163)]">
+            <p class="ml-1 text-white text-lg">
+              <span id="randomDays">7</span> days remaining
+            </p>
+            <div class="mt-2 bg-white p-1 rounded-xl flex flex-row items-center">
+              <img id="thumbnailPreview" src="/assets/img/placeholder-portrait.png" alt="Thumbnail Preview"
+                class="p-1 mr-4 w-32 h-32 rounded-xl" />
+              <h2 id="contestNamePreview" class="text-2xl text-black font-medium">Contest Name</h2>
+            </div>
           </div>
         </div>
-        <h2 class="text-right text-lg">
-          <b>CMOC</b><br />
-          Control Panel
-        </h2>
+        <img id="souvenirPreview" class="w-64 hidden rounded-xl shadow-xl absolute right-8 -translate-y-1/2 rotate-3" />
       </div>
-      <hr class="pt-6" />
-      <div class="flex items-center justify-between">
-        <a
-          class="col-span-2 inline-flex gap-3 items-center"
-          href="/panel/contests"
-          ><span class="icon-[fa6-solid--chevron-left]"></span>
-          <p class="hover:underline">Return to Contests</p></a
-        >
-        <p class="opacity-50">
-          CMOC <span class="icon-[fa6-solid--caret-right]"></span> Contests
-          <span class="icon-[fa6-solid--caret-right]"></span> Add Contest
-        </p>
-      </div>
-      <br />
+
       {{if .Error}}
-      <p style="color: red">{{.Error}}</p>
+      <div class="p-4 mb-6 rounded-lg bg-red-500/20 border border-red-600/30">
+        <p class="text-red-400 text-sm">{{.Error}}</p>
+      </div>
       {{end}}
-      <div
-        class="w-100 h-50 p-20 rounded-3xl bg-[url('https://rc24.xyz/goodies/wallpapers/CMO_Channel_BG_orange_1600x900.png')] shadow-[0px 0px 60px #d3d68c60]"
-      >
-        <div
-          class="p-2 rounded-3xl border-[5px] border-white bg-[rgb(76,130,163)] shadow-2xl z-10 relative"
-        >
-          <p class="ml-1 text-white text-lg">
-            <span id="randomInt"></span> days remaining
-          </p>
-          <div class="mt-2 bg-white p-1 rounded-xl flex flex-row items-center">
-            <img
-              id="thumbnailPreview"
-              src="https://www.wiilink24.com/img/placeholder-portrait.png"
-              alt="Thumbnail Preview"
-              class="p-1 mr-40 w-32 h-32 rounded-xl"
-            />
-            <h2
-              id="contestName"
-              class="col-start-1 col-span-full text-2xl text-black"
-            ></h2>
+
+      <form action="/panel/contests/add" method="post" enctype="multipart/form-data" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div class="md:col-span-8">
+            <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Contest Name:</label>
+            <div class="relative rounded-md shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <img src="/assets/icon/type.svg" alt="Name" class="w-5 h-5 invert opacity-70" />
+              </div>
+              <input type="text" name="name" id="name" required placeholder="Enter contest name"
+                class="bg-gray-700 border border-gray-600 text-white pl-10 w-full px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                oninput="updateContestName(event)" />
+            </div>
+            <p class="mt-1 text-xs text-gray-400">The display name for this contest</p>
+          </div>
+
+          <div class="md:col-span-4">
+            <label for="open_time" class="block text-sm font-medium text-gray-300 mb-2">
+              <div class="flex items-center justify-between">
+                <span>Open Time:</span>
+                <span class="cursor-pointer"
+                  title="Contests will automatically close after a week of being open. They will be judged after a month.">
+                  <img src="/assets/icon/circle-help.svg" alt="Help" class="w-4 h-4 invert opacity-70" />
+                </span>
+              </div>
+            </label>
+            <div class="relative rounded-md shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <img src="/assets/icon/calendar.svg" alt="Date" class="w-5 h-5 invert opacity-70" />
+              </div>
+              <input type="date" name="open_time" id="open_time" required
+                class="bg-gray-700 border border-gray-600 text-white pl-10 w-full px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            </div>
+            <p class="mt-1 text-xs text-gray-400">When the contest should start</p>
           </div>
         </div>
-        <img
-          id="souvenirPreview2"
-          class="w-80 hidden rounded-3xl shadow-2xl z-0 absolute !right-0 -translate-x-full -translate-y-[70%] rotate-3"
-        />
-      </div>
-      <br />
-      <br />
-      <div></div>
-      <form
-        action="/panel/contests/add"
-        method="post"
-        enctype="multipart/form-data"
-        class="col-start-1 col-span-full main_grid rounded-xl"
-      >
-        <div
-          class="input col-start-1 col-span-8 p-2 border rounded-xl bg-neutral-100 dark:bg-slate-600 dark:border-slate-500"
-        >
-          <label>Contest Name</label>
-          <input
-            type="text"
-            name="name"
-            required
-            placeholder="Contest Name"
-            class="border rounded-lg p-2 text-black"
-            oninput="updateContestName(event)"
-          />
-        </div>
-        <div
-          class="input col-start-9 col-span-4 p-2 border rounded-xl bg-neutral-100 dark:bg-slate-600 dark:border-slate-500"
-        >
-          <label class="flex items-center justify-between"
-            >Open Time
-            <span
-              class="icon-[fa6-solid--circle-question] opacity-60 cursor-pointer"
-              title="Polls will automatically close after a week of being created. They will be judged after a month."
-            ></span
-          ></label>
-          <input
-            type="date"
-            name="open_time"
-            required
-            class="rounded-xl px-5 py-2 border border-slate-200 text-black"
-          />
-        </div>
-        <div
-          class="input col-start-1 col-span-3 p-2 border rounded-xl bg-neutral-100 dark:bg-slate-600 dark:border-slate-500"
-        >
-          <span>Has Special Award?</span>
-          <label class="inline-flex items-center cursor-pointer">
-            <input type="checkbox" name="special_award" class="sr-only peer" />
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div class="md:col-span-3">
+            <label for="special_award" class="block text-sm font-medium text-gray-300 mb-2">Special Award:</label>
+            <div class="flex items-center my-2">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="special_award" id="special_award" class="sr-only peer">
+                <div
+                  class="!w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                </div>
+              </label>
+            </div>
+            <span class="text-sm font-medium text-gray-300">Enable Special Award</span>
+            <p class="mt-1 text-xs text-gray-400">Award prize to winners</p>
+          </div>
+
+          <!-- Modify your thumbnail upload area -->
+          <div class="md:col-span-4">
+            <label for="thumbnail" class="block text-sm font-medium text-gray-300 mb-2">Contest Thumbnail:</label>
             <div
-              class="text-black relative w-full p-4 bg-gray-50 border rounded-xl hover:scale-105 hover:-rotate-1 transition-all peer peer-checked:-rotate-1 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white before:content-['No'] peer-checked:after:content-['Yes'] peer-checked:before:content-[''] after:content-[''] after:text-white after:bg-blue-500 after:border-0 after:rounded-full after:transition-all peer-checked:bg-blue-500"
-            ></div>
-          </label>
+              class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-md hover:border-blue-500 transition-colors duration-200"
+              id="thumbnailDropArea">
+              <div class="space-y-1 text-center">
+                <div class="mx-auto h-20 w-20 flex items-center justify-center">
+                  <img src="/assets/icon/image.svg" alt="Upload" class="h-12 w-12 invert opacity-70"
+                    id="thumbnailIcon" />
+                  <img id="thumbnailAreaPreview" src="#" alt="Thumbnail Preview"
+                    class="h-24 w-24 object-cover rounded-md hidden" />
+                </div>
+                <div class="flex text-sm text-gray-400 justify-center">
+                  <label for="thumbnail"
+                    class="relative cursor-pointer bg-gray-700 rounded-md font-medium text-blue-400 hover:text-blue-300 px-3 py-1">
+                    <span>Upload thumbnail</span>
+                    <input id="thumbnail" name="thumbnail" type="file" accept="image/*" class="sr-only"
+                      onchange="previewImage(event, 'thumbnailPreview', 'thumbnailIcon', 'thumbnailAreaPreview')" />
+                  </label>
+                </div>
+                <p class="text-xs text-gray-400">
+                  PNG, JPG up to 1MB
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modify your souvenir upload area -->
+          <div class="md:col-span-5">
+            <label for="souvenir" class="block text-sm font-medium text-gray-300 mb-2">Contest Souvenir:</label>
+            <div
+              class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-md hover:border-blue-500 transition-colors duration-200"
+              id="souvenirDropArea">
+              <div class="space-y-1 text-center">
+                <div class="mx-auto h-20 w-20 flex items-center justify-center">
+                  <img src="/assets/icon/gift.svg" alt="Upload" class="h-12 w-12 invert opacity-70" id="souvenirIcon" />
+                  <img id="souvenirAreaPreview" src="#" alt="Souvenir Preview"
+                    class="h-24 w-24 object-contain rounded-md hidden" />
+                </div>
+                <div class="flex text-sm text-gray-400 justify-center">
+                  <label for="souvenir"
+                    class="relative cursor-pointer bg-gray-700 rounded-md font-medium text-blue-400 hover:text-blue-300 px-3 py-1">
+                    <span>Upload souvenir</span>
+                    <input id="souvenir" name="souvenir" type="file" accept="image/*" class="sr-only"
+                      onchange="previewImage(event, 'souvenirPreview', 'souvenirIcon', 'souvenirAreaPreview')" />
+                  </label>
+                </div>
+                <p class="text-xs text-gray-400">
+                  PNG, JPG image
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div
-          class="input col-start-4 col-span-3 p-2 border rounded-xl bg-neutral-100 dark:bg-slate-600 dark:border-slate-500"
-        >
-          <span>Thumbnail</span>
-          <label
-            class="bg-white cursor-pointer p-4 rounded-lg transition-all hover:bg-gray-200 dark:text-black flex items-center justify-between gap-3"
-            ><span class="icon-[fa6-solid--circle-plus]"></span>Add file
-            <input
-              type="file"
-              name="thumbnail"
-              type="image/png"
-              class="hidden"
-              onchange="previewImage(event, 'thumbnailPreview', 'thumbnailPreview2')"
-            />
-            <img
-              id="thumbnailPreview2"
-              class="w-5 scale-150 hidden rounded-md shadow-md rotate-3"
-            />
-          </label>
+
+        <div class="flex justify-end space-x-3 pt-6 border-t border-gray-700">
+          <a href="/panel/contests"
+            class="px-5 py-2 border border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 transition-colors duration-200 flex items-center">
+            <img src="/assets/icon/x.svg" alt="Cancel" class="h-4 w-4 mr-1.5 invert" />
+            Cancel
+          </a>
+          <button type="submit"
+            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200 flex items-center text-sm">
+            <img src="/assets/icon/save.svg" alt="Save" class="h-4 w-4 mr-1.5 invert" />
+            Create Contest
+          </button>
         </div>
-        <div
-          class="input col-start-7 col-span-6 p-2 border rounded-xl bg-neutral-100 dark:bg-slate-600 dark:border-slate-500"
-        >
-          <span>Souvenir</span>
-          <label
-            class="bg-white cursor-pointer p-4 rounded-lg transition-all hover:bg-gray-200 dark:text-black flex items-center justify-between gap-3"
-            ><span class="icon-[fa6-solid--circle-plus]"></span>Add file
-            <input
-              type="file"
-              name="souvenir"
-              type="image/png"
-              class="hidden"
-              onchange="previewImage(event, 'souvenirPreview', 'souvenirPreview2')"
-            />
-            <img
-              id="souvenirPreview"
-              class="w-5 scale-150 hidden rounded-md shadow-md rotate-3"
-            />
-          </label>
-        </div>
-        <input
-          type="submit"
-          value="Submit"
-          class="font-bold submit_button col-end-13 place-self-end"
-        />
       </form>
-      <br />
-      <hr />
-      <br />
-      <p>©2020 - 2024 WiiLink Team</p>
-    </main>
-  </body>
+    </div>
+  </div>
 
-  <script>
-    function previewImage(event, id, id2) {
-      const reader = new FileReader();
-      reader.onload = function () {
-        const output = document.getElementById(id);
-        const output2 = document.getElementById(id2);
-        output.src = reader.result;
-        output2.src = reader.result;
-        output.classList.remove("hidden");
-        output2.classList.remove("hidden");
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
+  <div class="relative group">
+    <div class="relative bg-gray-800/80 border border-gray-700 rounded-lg p-6">
+      <div class="flex">
+        <div class="p-2 bg-blue-600/20 rounded-lg text-blue-400 mr-3 self-start">
+          <img src="/assets/icon/info.svg" alt="Info" class="h-5 w-5 invert" />
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-white mb-2">About Contest Creation</h3>
+          <div class="text-sm text-gray-300 space-y-2">
+            <p>Create a new Mii Contest Channel contest that will be available to all users.</p>
+            <p>Contests will automatically progress through phases based on the timeline:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li>Waiting: Before the start date</li>
+              <li>Open: 7 days for submission</li>
+              <li>Judging: 1 day for system processing</li>
+              <li>Results: 3 weeks to view results</li>
+              <li>Closed: After the contest ends</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    function updateContestName(event) {
-      document.getElementById("contestName").textContent = event.target.value;
-    }
+<script>
+  function previewImage(event, previewId, iconId, areaPreviewId) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      // Update the main preview
+      const output = document.getElementById(previewId);
+      output.src = reader.result;
+      output.classList.remove("hidden");
 
-    document.addEventListener("DOMContentLoaded", function () {
-      const ids = ["toggleOpen"];
-      ids.forEach((id) => {
-        const element = document.getElementById(id);
-        const state = localStorage.getItem(id);
-        if (state === "open") {
-          element.style.display = "flex";
-        } else if (state === "closed") {
-          element.style.display = "none";
-        }
-      });
+      // If we have an icon element, hide it when preview is shown
+      if (iconId) {
+        const icon = document.getElementById(iconId);
+        if (icon) icon.classList.add("hidden");
+      }
 
-      document.getElementById("randomInt").innerHTML = Math.floor(
-        Math.random() * (10 - 2 + 1) + 2
-      );
+      // Update the preview inside the upload area too
+      if (areaPreviewId) {
+        const areaPreview = document.getElementById(areaPreviewId);
+        areaPreview.src = reader.result;
+        areaPreview.classList.remove("hidden");
+      }
+
+      // If this is the thumbnail, update the contest preview
+      if (previewId === "thumbnailPreview") {
+        document.getElementById("thumbnailDropArea").classList.add("border-blue-500", "bg-blue-500/10");
+      } else if (previewId === "souvenirPreview") {
+        document.getElementById("souvenirDropArea").classList.add("border-blue-500", "bg-blue-500/10");
+      }
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  function updateContestName(event) {
+    document.getElementById("contestNamePreview").textContent = event.target.value || "Contest Name";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Set random days remaining
+    document.getElementById("randomDays").textContent = Math.floor(Math.random() * (10 - 2 + 1) + 2);
+
+    // Set today's date as minimum date for open_time
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    document.getElementById("open_time").min = formattedDate;
+
+    // Add drag and drop functionality
+    const thumbnailDropArea = document.getElementById("thumbnailDropArea");
+    const souvenirDropArea = document.getElementById("souvenirDropArea");
+    const thumbnailInput = document.getElementById("thumbnail");
+    const souvenirInput = document.getElementById("souvenir");
+
+    // Handle drag and drop for thumbnail
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      thumbnailDropArea.addEventListener(eventName, preventDefaults, false);
+      souvenirDropArea.addEventListener(eventName, preventDefaults, false);
     });
 
-    function toggleOpen(id) {
-      const element = document.getElementById(id);
-      if (element.style.display === "none") {
-        element.style.display = "flex";
-        localStorage.setItem(id, "open");
-      } else {
-        element.style.display = "none";
-        localStorage.setItem(id, "closed");
-      }
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
-  </script>
-</html>
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      thumbnailDropArea.addEventListener(eventName, highlight.bind(null, thumbnailDropArea), false);
+      souvenirDropArea.addEventListener(eventName, highlight.bind(null, souvenirDropArea), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      thumbnailDropArea.addEventListener(eventName, unhighlight.bind(null, thumbnailDropArea), false);
+      souvenirDropArea.addEventListener(eventName, unhighlight.bind(null, souvenirDropArea), false);
+    });
+
+    function highlight(element) {
+      element.classList.add('border-blue-500', 'bg-blue-500/10');
+    }
+
+    function unhighlight(element) {
+      element.classList.remove('border-blue-500', 'bg-blue-500/10');
+    }
+
+    thumbnailDropArea.addEventListener('drop', handleThumbnailDrop, false);
+    souvenirDropArea.addEventListener('drop', handleSouvenirDrop, false);
+
+    function handleThumbnailDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      thumbnailInput.files = files;
+
+      // Create a custom event object with the file
+      const customEvent = {
+        target: {
+          files: files
+        }
+      };
+
+      // Call the preview function directly
+      previewImage(customEvent, 'thumbnailPreview', 'thumbnailIcon', 'thumbnailAreaPreview');
+    }
+
+    function handleSouvenirDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      souvenirInput.files = files;
+
+      // Create a custom event object with the file
+      const customEvent = {
+        target: {
+          files: files
+        }
+      };
+
+      // Call the preview function directly
+      previewImage(customEvent, 'souvenirPreview', 'souvenirIcon', 'souvenirAreaPreview');
+    }
+  });
+</script>
+
+{{ template "footer.html" . }}

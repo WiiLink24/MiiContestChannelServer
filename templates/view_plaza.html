@@ -1,766 +1,704 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plaza | CMOC Control Panel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
-      rel="stylesheet"
-    />
-    <link href="/assets/output.css" rel="stylesheet" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="https://www.wiilink24.com/img/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="https://www.wiilink24.com/img/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="https://www.wiilink24.com/img/favicon-16x16.png"
-    />
-    <link
-      rel="manifest"
-      href="https://www.wiilink24.com/img/site.webmanifest"
-    />
-    <link
-      rel="mask-icon"
-      href="https://www.wiilink24.com/img/safari-pinned-tab.svg"
-      color="#5bbad5"
-    />
-    <link
-      rel="shortcut icon"
-      href="https://www.wiilink24.com/img/favicon.ico"
-    />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta
-      name="msapplication-config"
-      content="https://www.wiilink24.com/img/browserconfig.xml"
-    />
-    <meta name="theme-color" content="#ffffff" />
-  </head>
-  <body class="dark:text-white dark:bg-slate-800">
-    <main class="container py-20 space-y-4">
-      <div class="pb-2 flex items-center justify-between">
-        <div class="flex flex-row gap-3 items-center">
-          <img
-            src="https://www.wiilink24.com/img/IS-logo.png"
-            class="!h-[60px] dark:invert"
-          />
-          <span
-            class="icon-[fa6-solid--chevron-right] text-2xl cursor-pointer"
-            onclick="toggleOpen('toggleOpen');"
-          ></span>
-          <div
-            id="toggleOpen"
-            class="p-2 flex-row items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-500 hidden"
-          >
-            <a href="/panel/contests"
-              ><button
-                class="p-2 hover:bg-gray-300 dark:hover:bg-slate-800 rounded-md transition-all"
-              >
-              <span class="icon-[fa6-solid--flag-checkered]"></span> Contests
-              </button></a
-            >
-            |
-            <a href="/panel/contests/add"
-              ><button
-                class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
-              >
-              <span class="icon-[fa6-solid--circle-plus]"></span> Add Contest
-              </button></a
-            >
-            |
-            <a href="/panel/plaza"
-              ><button
-                class="p-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
-              >
-              <span class="icon-[fa6-solid--users]"></span> Plaza
-              </button></a
-            >
-            |
-            <a href="/panel/artisans"
-              ><button
-                class="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-md transition-all"
-              >
-              <span class="icon-[fa6-solid--brush]"></span> Mii Artisans
-              </button></a
-            >
+{{ template "base.html" . }}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex flex-col sm:flex-row items-end justify-between gap-6 mb-10">
+    <a href="/panel/admin"
+      class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition duration-200 flex items-center text-sm">
+      <img src="/assets/icon/arrow-left.svg" alt="Back Icon" class="h-4 w-4 mr-2 invert" />
+      Return to Dashboard
+    </a>
+
+    <div class="w-full sm:w-auto relative group rounded-xl overflow-hidden">
+      <div
+        class="relative p-6 rounded-xl bg-gray-800/80 border border-gray-700 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="text-gray-400 text-sm font-medium uppercase tracking-wider">
+              Total Miis
+            </p>
+            <p class="text-3xl text-white font-bold mt-1">
+              {{ .numberOfMiis }}
+            </p>
+          </div>
+          <div class="p-3 rounded-full bg-gradient-to-br from-pink-600 to-pink-800 shadow-lg">
+            <img src="/assets/icon/users.svg" alt="Plaza Icon" class="h-6 w-6 invert" />
           </div>
         </div>
-        <h2 class="text-right text-lg">
-          <b>CMOC</b><br />
-          Control Panel
-        </h2>
       </div>
-      <hr class="pt-2" />
-      <div class="flex items-center justify-end">
-        <p class="opacity-50">
-          CMOC <span class="icon-[fa6-solid--caret-right]"></span> Plaza
-        </p>
-      </div>
-      {{if .Error}}
-      <p style="color: red">{{.Error}}</p>
-      {{end}}
-      <div class="flex items-center justify-between">
-        <h1>Plaza</h1>
-        <div class="flex flex-row gap-1">
-          <form
-            action="/panel/plaza/search"
-            method="post"
-            enctype="multipart/form-data"
-          >
-            <input
-              type="text"
-              name="search"
-              placeholder="There are {{ .numberOfMiis }} Miis in the Plaza..."
-              class="p-3 bg-gray-200 dark:bg-slate-500 hover:bg-gray-300 dark:hover:bg-slate-600 focus:bg-gray-300 dark:focus:bg-slate-700 transition-all relative rounded-l-[18px] rounded-r-[4px]"
-              required
-            />
-            <button
-              type="submit"
-              class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all rounded-r-[18px] rounded-l-[4px]"
-            >
-            <span class="icon-[fa6-solid--search]"></span>
+    </div>
+  </div>
+
+  <div id="plaza" class="relative group mb-10">
+    <div class="absolute rounded-lg blur opacity-10 group-hover:opacity-20 transition duration-200"></div>
+    <div class="relative bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-6 border-b border-gray-700">
+        <div class="flex items-center">
+          <div class="p-2 bg-pink-600/20 rounded-lg text-pink-400 mr-3">
+            <img src="/assets/icon/users.svg" alt="Plaza Icon" class="h-5 w-5 invert" />
+          </div>
+          <h2 class="text-xl font-bold text-white">Plaza</h2>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <form action="/panel/plaza/search" method="post" enctype="multipart/form-data"
+            class="relative flex-grow sm:flex-grow-0">
+            <input type="text" name="search" placeholder="There are {{ .numberOfMiis }} Miis in the Plaza..."
+              class="w-full sm:w-64 pl-4 pr-10 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              required />
+            <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2">
+              <img src="/assets/icon/search.svg" alt="Search" class="h-4 w-4 invert opacity-70" />
             </button>
           </form>
-          <div
-            id="currentFilter"
-            class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all cursor-pointer rounded-[18px]"
-            onclick="toggleOpen('filter');"
-          >
-          <span class="icon-[fa6-solid--spinner]"></span>
-          </div>
-          <div
-            id="filter"
-            class="p-2 bg-gray-200 dark:bg-slate-600 z-10 focus:bg-gray-300 dark:focus:bg-slate-700 rounded-2xl shadow-md flex flex-col gap-2 absolute hidden translate-x-[200px] translate-y-[60px]"
-          >
-            <a
-              href="/panel/plaza"
-              class="p-2 pl-3 pr-3 rounded-xl hover:bg-gray-300 dark:hover:bg-slate-700"
-            >
-            <span class="icon-[fa6-solid--arrow-down-1-9] text-2xl"></span> Sort
-              by ID
+
+          <button id="currentFilter"
+            class="p-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition duration-200 flex items-center"
+            onclick="toggleOpen('filter');">
+            <img src="/assets/icon/list-filter.svg" alt="Filter" class="h-5 w-5 invert" />
+          </button>
+
+          <div id="filter"
+            class="p-3 bg-gray-700 z-10 rounded-lg shadow-md flex flex-col gap-2 absolute hidden translate-x-[150px] translate-y-[60px] border border-gray-600">
+            <a href="/panel/plaza"
+              class="p-2 rounded-lg hover:bg-gray-600 text-white transition flex items-center gap-2">
+              <img src="/assets/icon/arrow-down-0-1.svg" alt="Sort by ID" class="h-4 w-4 invert" />
+              Sort by ID
             </a>
-            <a
-              href="/panel/plaza/top"
-              class="p-2 pl-3 pr-3 rounded-xl hover:bg-gray-300 dark:hover:bg-slate-700"
-            >
-            <span class="icon-[fa6-solid--medal] text-2xl"></span> Sort by Likes
+            <a href="/panel/plaza/top"
+              class="p-2 rounded-lg hover:bg-gray-600 text-white transition flex items-center gap-2">
+              <img src="/assets/icon/award.svg" alt="Sort by Likes" class="h-4 w-4 invert" />
+              Sort by Likes
             </a>
-            <a
-              href="/panel/plaza/new"
-              class="p-2 pl-3 pr-3 rounded-xl hover:bg-gray-300 dark:hover:bg-slate-700"
-            >
-            <span class="icon-[fa6-solid--box-open] text-2xl"></span> Sort by New
+            <a href="/panel/plaza/new"
+              class="p-2 rounded-lg hover:bg-gray-600 text-white transition flex items-center gap-2">
+              <img src="/assets/icon/package.svg" alt="Sort by New" class="h-4 w-4 invert" />
+              Sort by New
             </a>
           </div>
-          <div
-        id="sizeIcon"
-        class="p-3 pl-4 pr-4 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-700 transition-all cursor-pointer rounded-[18px]"
-        onclick="toggleSize();"
-      >
-      <span class="icon-[fa6-solid--square-plus]"></span>
-      </div>
+
+          <button id="sizeIcon"
+            class="p-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition duration-200 flex items-center"
+            onclick="toggleSize();">
+            <img src="/assets/icon/grid.svg" alt="Toggle Grid Size" class="h-5 w-5 invert" />
+          </button>
         </div>
       </div>
-      <div id="small" class="grid magic_grid gap-3">
-        {{ range .Plaza }}
-        <div
-          class="flex flex-col gap-3 rounded-xl border-2 border-gray-100 bg-gray-50 dark:border-slate-600 dark:bg-slate-700 hover:scale-102 hover:shadow-lg transition-all"
-        >
-          <a
-            href="/panel/plaza/details/{{.EntryId}}"
-            class="innerJustify flex flex-row items-center justify-between"
-          >
-            <div class="miiMain flex flex-row items-center">
-              <p class="miiData hidden">{{.MiiDataEncoded}}</p>
-              <img src="" class="miiImage h-28" />
-              <div class="flex flex-col justify-center">
-                <p class="flag text-9xl"></p>
-                <h1 class="mb-3 nickname flex flex-col items-center justify-center">
-                  {{.Nickname}}
-                  <p class="mt-1 opacity-30 font-normal font-serif text-sm">{{.Initials}}</p>
-                </h1>
-                <div class="flex flex-row gap-3 items-center">
-                  <p class="gender">{{.Gender}}</p>
-                  |
-                  <p class="flex flex-row gap-1 items-center"><span class="countryFlag">{{.CountryId}}</span><span class="country">{{.CountryId}}</span></p>
-                  <p class="flex flex-row flex-nowrap items-center gap-1"> | <span class="icon-[fa6-solid--angle-up]"></span></i> {{.Likes}} | <span class="icon-[fa6-solid--angles-up]"></span> {{.PermLikes}}</p>
+
+      <div class="p-6">
+        <div id="small" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {{ range .Plaza }}
+          <div
+            class="bg-gray-700/30 hover:bg-gray-700/50 rounded-xl border border-gray-600/50 transition-all duration-300 overflow-hidden group relative">
+            <div class="p-5">
+              <a href="/panel/plaza/details/{{.EntryId}}"
+                class="innerJustify flex flex-row items-center justify-between">
+                <div class="miiMain flex flex-row items-center">
+                  <p class="miiData hidden">{{.MiiDataEncoded}}</p>
+                  <div
+                    class="relative flex-shrink-0 h-32 w-32 rounded-full overflow-hidden ring-4 ring-gray-600 ring-offset-4 ring-offset-gray-800 bg-gradient-to-br from-blue-900/30 to-purple-900/30">
+                    <div class="absolute inset-0 flex items-center justify-center loading-indicator">
+                      <img src="/assets/icon/loading.gif" alt="Loading" class="h-8 w-8 brightness-[5000%] opacity-50" />
+                    </div>
+                    <img src="" class="miiImage h-full w-full object-cover opacity-0 transition-opacity duration-300"
+                      onload="this.style.opacity = '1'; this.previousElementSibling.style.display = 'none';" />
+                  </div>
+                  <div class="mt-3 flex flex-col">
+                    <p class="flag text-9xl display"></p>
+                    <h3 class="nickname text-lg font-medium text-white flex flex-col items-center justify-center">
+                      {{.Nickname}}
+                      <p class="mt-1 text-gray-400 text-sm font-mono">{{.Initials}}</p>
+                    </h3>
+                    <div class="items-center justify-center pt-2 flex flex-row gap-3">
+                      <div class="flex items-center space-x-1 text-gray-300 text-sm">
+                        <span class="countryFlag text-xl">{{.CountryId}}</span>
+                        <span class="country">{{.CountryId}}</span>
+                      </div>
+                      <p class="centerJustify flex flex-row flex-nowrap items-center gap-1">
+                        <span class="text-pink-300">|</span>
+                        <img src="/assets/icon/thumbs-up.svg" alt="Likes" class="h-4 w-4 invert opacity-70" />
+                        <span class="text-pink-300">{{.Likes}}</span>
+                        <span class="text-gray-400">|</span>
+                        <img src="/assets/icon/star.svg" alt="Permanent Likes" class="h-4 w-4 invert opacity-70" />
+                        <span class="text-yellow-300">{{.PermLikes}}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="miiId minData flex flex-col gap-3">
+                  <p class="text-xl text-right text-pink-300">
+                    <img src="/assets/icon/thumbs-up.svg" alt="Likes" class="h-5 w-5 inline mr-2 invert opacity-70" />
+                    {{.Likes}}
+                  </p>
+                  <p class="text-xl text-right text-yellow-300">
+                    <img src="/assets/icon/star.svg" alt="Permanent Likes"
+                      class="h-5 w-5 inline mr-2 invert opacity-70" />
+                    {{.PermLikes}}
+                  </p>
+                </div>
+              </a>
+
+              <div
+                class="wiiNum minData mt-4 pt-3 flex gap-3 flex-row items-center justify-between border-t border-gray-600/30">
+                <div class="space-y-1">
+                  <p class="text-xs text-gray-400">Wii Number</p>
+                  <p
+                    class="text-white font-mono w-care select-none cursor-pointer active:bg-white active:text-black transition-all">
+                    {{.WiiNumber}}</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs text-gray-400">Artisan</p>
+                  <a href="/panel/artisans/details/{{.ArtisanId}}"
+                    class="text-gray-300 hover:text-white">{{.ArtisanName}}</a>
                 </div>
               </div>
             </div>
-            <div class="miiId mr-6 flex flex-row gap-3">
-              <p class="text-xl">
-                <span class="icon-[fa6-solid--angle-up]"></span> {{.Likes}}
-              </p>
-              <p class="text-xl">
-                <span class="icon-[fa6-solid--angles-up]"></span> {{.PermLikes}}
-              </p>
+
+            <div class="px-5 py-3 bg-gray-700/50 border-t border-gray-600/30 flex justify-between">
+              <a href="/panel/plaza/details/{{.EntryId}}"
+                class="inline-flex items-center px-3 py-1.5 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition duration-200 text-xs">
+                <img src="/assets/icon/eye.svg" alt="View" class="h-3.5 w-3.5 mr-1.5 invert" />
+                <span class="minData">View Details</span>
+              </a>
+
+              <button onclick='deleteEntry("{{.EntryId}}")'
+                class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 text-xs">
+                <img src="/assets/icon/trash.svg" alt="Delete" class="h-3.5 w-3.5 mr-1.5 invert" />
+                <span class="deleteBtn minData">Delete</span>
+              </button>
             </div>
-          </a>
-          <div class="wiiNum w-care ml-5 mr-5 flex flex-row gap-3">
-            <p
-              class="w-full p-1 pl-3 pr-3 bg-gray-300 text-gray-300 dark:bg-slate-800 dark:text-slate-800 active:bg-white active:text-black transition-all rounded-full text-center cursor-pointer select-none"
-            >
-              Wii Number: {{.WiiNumber}}
+
+            <p class="minData absolute top-2 right-2 text-xs bg-gray-800/60 rounded-md px-2 py-1 text-gray-400">
+              ID: {{.EntryId}}
             </p>
-            <span
-              class="icon-[fa6-solid--circle-question] opacity-60 cursor-pointer"
-              title="Keep clicked to reveal this Mii's Wii Number"
-            ></span>
           </div>
-          <button class="delete_button flex flex-row gap-1 items-center justify-center" onclick='deleteEntry("{{.EntryId}}")'>
-            <span class="icon-[fa6-solid--trash]"></span> <span class="deleteBtn">Delete this Mii</span>
-          </button>
-          <p class="minData mr-5 mb-5 opacity-30 text-right flex flex-row items-center justify-end gap-1">
-            Id: {{.EntryId}} |
-            <a href="/panel/artisans/details/{{.ArtisanId}}" class="underline"
-              >{{.ArtisanName}} ({{.ArtisanId}})</a
-            >
-
-            <span class="icon-[fa6-solid--fingerprint]"></span>
-          </p>
+          {{end}}
         </div>
-        {{end}}
       </div>
-      <div id="pagination" class="pt-3 pb-6 flex flex-row items-center justify-between">
-        <p class="opacity-60">
-          Showing page <b id="pageNumber"></b> of <b>{{ .Pages }}</b>.
+
+      <!-- Pagination -->
+      <div id="pagination" class="flex justify-between items-center p-4 border-t border-gray-700">
+        <p class="text-sm text-gray-400">
+          Showing page <span class="font-medium text-white" id="pageNumber"></span> of <span
+            class="font-medium text-white">{{ .Pages }}</span>
         </p>
-        <div>
-          <a
-            id="prevPage"
-            class="p-3 pl-4 pr-4 rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
-            ><span class="icon-[fa6-solid--chevron-left]"></span></a>
-          <a
-            id="nextPage"
-            class="p-3 pl-4 pr-4 rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
-            ><span class="icon-[fa6-solid--chevron-right]"></span></a>
+        <div class="flex space-x-2">
+          <a id="prevPage" href="#"
+            class="inline-flex items-center px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition duration-200 text-sm">
+            <img src="/assets/icon/chevron-left.svg" alt="Previous" class="h-4 w-4 invert" />
+          </a>
+          <a id="nextPage" href="#"
+            class="inline-flex items-center px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition duration-200 text-sm">
+            <img src="/assets/icon/chevron-right.svg" alt="Next" class="h-4 w-4 invert" />
+          </a>
         </div>
       </div>
+
       <p id="pages" class="hidden">{{ .Pages }}</p>
-      <hr />
-      <p class="pt-2">©2020 - 2024 WiiLink Team</p>
-    </main>
-  </body>
+    </div>
+  </div>
+</div>
 
-  <script>
-    function deleteEntry(entryId) {
-      // Ask for confirmation
-      const isConfirmed = confirm(
-        "Are you sure you want to delete this Mii? This action cannot be undone."
-      );
+{{ template "footer.html" . }}
 
-      // Proceed only if the user confirmed
-      if (isConfirmed) {
-        fetch(`/panel/plaza/delete/${entryId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then((response) => {
-          if (response.ok) {
-            window.location.reload();
-          } else {
-            alert("Failed to delete entry.");
-          }
-        });
-      }
+<script>
+  function deleteEntry(entryId) {
+    // Ask for confirmation
+    const isConfirmed = confirm(
+      "Are you sure you want to delete this Mii? This action cannot be undone."
+    );
+
+    // Proceed only if the user confirmed
+    if (isConfirmed) {
+      fetch(`/panel/plaza/delete/${entryId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          alert("Failed to delete entry.");
+        }
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    applySavedSizeSetting();
+
+    let urlParts = window.location.pathname.split("/");
+    const plazaIndex = urlParts.indexOf("plaza");
+    let iconHtml = "";
+
+    // Check if the segment after "plaza" exists and what it is
+    const nextSegment =
+      plazaIndex >= 0 && plazaIndex < urlParts.length - 1
+        ? urlParts[plazaIndex + 1]
+        : "";
+    console.log(nextSegment);
+
+    if (!isNaN(parseInt(nextSegment))) {
+      // If the next segment is a number, it's a page number, default to the ID icon
+      iconHtml = '<img src="/assets/icon/arrow-down-0-1.svg" alt="Sort by ID" class="h-5 w-5 invert" />';
+    } else if (nextSegment === "top") {
+      iconHtml = '<img src="/assets/icon/award.svg" alt="Sort by Likes" class="h-5 w-5 invert" />';
+    } else if (nextSegment === "new") {
+      iconHtml = '<img src="/assets/icon/package.svg" alt="Sort by New" class="h-5 w-5 invert" />';
+    } else {
+      iconHtml = '<img src="/assets/icon/filter.svg" alt="Filter" class="h-5 w-5 invert" />';
+    }
+    document.getElementById("currentFilter").innerHTML = iconHtml;
+
+    // Split the URL path and parse the current page number
+    const currentPageNumber = parseInt(urlParts.pop(), 10); // Remove and parse the last part as the current page number
+    document.getElementById("pageNumber").textContent = currentPageNumber;
+
+    // Hide pagination if the current page number is not a number
+    if (isNaN(currentPageNumber)) {
+      document.getElementById("pagination").style.display = "none";
     }
 
-    document.addEventListener("DOMContentLoaded", async function () {
-      applySavedSizeSetting();
+    // Handle previous page link
+    if (currentPageNumber > 1) {
+      const newPageNumber = currentPageNumber - 1; // For previous page, decrement the current page number
+      const newUrl = `${urlParts.join('/')}/${newPageNumber}`;
+      document.getElementById("prevPage").href = newUrl;
+    } else {
+      document.getElementById("prevPage").style.opacity = "0.3";
+      document.getElementById("prevPage").style.pointerEvents = "none";
+    }
 
-      let urlParts = window.location.pathname.split("/");
-      const plazaIndex = urlParts.indexOf("plaza");
-        let iconHtml = "";
+    // Handle next page link
+    const totalPages = parseInt(document.getElementById("pages").textContent, 10); // Parse total pages as an integer
+    if (currentPageNumber < totalPages) {
+      const newPageNumber = currentPageNumber + 1; // For next page, increment the current page number
+      const newUrl = `${urlParts.join('/')}/${newPageNumber}`;
+      document.getElementById("nextPage").href = newUrl;
+    } else {
+      document.getElementById("nextPage").style.opacity = "0.3";
+      document.getElementById("nextPage").style.pointerEvents = "none";
+    }
 
-        // Check if the segment after "plaza" exists and what it is
-        const nextSegment =
-          plazaIndex >= 0 && plazaIndex < urlParts.length - 1
-            ? urlParts[plazaIndex + 1]
-            : "";
-            console.log(nextSegment);
+    const miiElements = document.querySelectorAll(".miiData");
+    miiElements.forEach(async (miiElement) => {
+      const base64String = miiElement.innerHTML;
+      if (base64String) {
+        try {
+          const container = miiElement.closest('.miiMain').querySelector('.relative');
+          const loadingIndicator = container.querySelector('.loading-indicator');
+          const imgElement = container.querySelector('.miiImage');
 
-        if (!isNaN(parseInt(nextSegment))) {
-          // If the next segment is a number, it's a page number, default to the ID icon
-          iconHtml =
-            '<span class="icon-[fa6-solid--arrow-down-1-9]"></span>';
-        } else if (nextSegment === "top") {
-          iconHtml = '<span class="icon-[fa6-solid--medal]"></span>';
-        } else if (nextSegment === "new") {
-          iconHtml = '<span class="icon-[fa6-solid--box-open]"></span>';
+          loadingIndicator.style.display = 'flex';
+          imgElement.style.opacity = '0';
+
+          const miiImageUrl = await renderMii(base64String);
+
+          imgElement.src = miiImageUrl;
+        } catch (error) {
+          console.error("Failed to render Mii:", error);
+
+          const container = miiElement.closest('.miiMain').querySelector('.relative');
+          const loadingIndicator = container.querySelector('.loading-indicator');
+          const imgElement = container.querySelector('.miiImage');
+
+          loadingIndicator.style.display = 'none';
+
+          imgElement.src = '/assets/icon/alert-triangle.svg';
+          imgElement.classList.add('p-6', 'invert', 'opacity-50');
+          imgElement.classList.remove('opacity-0');
+          imgElement.style.opacity = '1';
         }
-
-        document.getElementById("currentFilter").innerHTML = iconHtml;
-
-                // Split the URL path and parse the current page number
-                const currentPageNumber = parseInt(urlParts.pop(), 10); // Remove and parse the last part as the current page number
-        document.getElementById("pageNumber").textContent = currentPageNumber;
-
-        // Hide pagination if the current page number is not a number
-        if (isNaN(currentPageNumber)) {
-          document.getElementById("pagination").style.display = "none";
-        }
-
-        // Handle previous page link
-        if (currentPageNumber > 1) {
-          const newPageNumber = currentPageNumber - 1; // For previous page, decrement the current page number
-          const newUrl = `${urlParts.join('/')}/${newPageNumber}`;
-          document.getElementById("prevPage").href = newUrl;
-        } else {
-          document.getElementById("prevPage").style.opacity = "0.3";
-          document.getElementById("prevPage").style.pointerEvents = "none";
-        }
-
-        // Handle next page link
-        const totalPages = parseInt(document.getElementById("pages").textContent, 10); // Parse total pages as an integer
-        if (currentPageNumber < totalPages) {
-          const newPageNumber = currentPageNumber + 1; // For next page, increment the current page number
-          const newUrl = `${urlParts.join('/')}/${newPageNumber}`;
-          document.getElementById("nextPage").href = newUrl;
-        } else {
-          document.getElementById("nextPage").style.opacity = "0.3";
-          document.getElementById("nextPage").style.pointerEvents = "none";
-        }
-
-      const miiElements = document.querySelectorAll(".miiData"); // Select all elements with the class 'miiData'
-      miiElements.forEach(async (miiElement) => {
-        const base64String = miiElement.innerHTML; // Assuming the base64 string is directly within the element
-        if (base64String) {
-          try {
-            const miiImageUrl = await renderMii(base64String);
-            // Assuming there's a way to associate the miiImage with the miiElement, like a data attribute or adjacent element
-            const imgElement = miiElement.nextElementSibling; // Example: the <img> is right next to the miiElement
-            imgElement.src = miiImageUrl;
-          } catch (error) {
-            console.error("Failed to render Mii:", error);
-          }
-        }
-
-        const ids = ["toggleOpen"];
-        ids.forEach((id) => {
-          const element = document.getElementById(id);
-          const state = localStorage.getItem(id);
-          if (state === "open") {
-            element.style.display = "flex";
-          } else if (state === "closed") {
-            element.style.display = "none";
-          }
-        });
-      });
-
-      const countryElements = document.querySelectorAll(".country"); // Select all elements with the class 'country'
-      const flagElements = document.querySelectorAll(".countryFlag"); // Select all elements with the class 'flag'
-
-      countryElements.forEach((countryElement) => {
-        const countryCode = parseInt(countryElement.textContent, 10); // Use textContent and specify radix 10
-        if (!isNaN(countryCode)) {
-          const countryData = getCountryName(countryCode); // Assuming this function returns an object with 'name' and possibly 'flag'
-          countryElement.textContent = countryData.name; // Use textContent for safer text updates
-        }
-      });
-
-      flagElements.forEach((flagElement) => {
-        const countryCode = parseInt(flagElement.textContent, 10); // Use textContent and specify radix 10
-        if (!isNaN(countryCode)) {
-          const countryData = getCountryName(countryCode); // Reuse getCountryName or a similar function to get flag data
-          // Assuming countryData includes a 'flag' property that is the URL or emoji of the flag
-          flagElement.innerHTML = countryData.flag; // Use innerHTML if flag data includes HTML (e.g., an <img> tag for the flag)
-        }
-      });
-
-      const genderElements = document.querySelectorAll(".gender");
-      genderElements.forEach((genderElement) => {
-        const gender = parseInt(genderElement.innerHTML);
-        const genderName = getGender(gender);
-        genderElement.innerHTML = genderName;
-      });
+      }
     });
 
-    function renderMii(base64String) {
-      // Decode base64 string
-      let binaryString = atob(base64String);
-      let binaryLen = binaryString.length;
-      // Create binary array from base64 decoded string
-      let bytes = new Uint8Array(binaryLen);
-      // Fill the binary array
-      for (let i = 0; i < binaryLen; i++) {
-        let ascii = binaryString.charCodeAt(i);
-        bytes[i] = ascii;
+    const countryElements = document.querySelectorAll(".country");
+    const flagElements = document.querySelectorAll(".countryFlag");
+
+    countryElements.forEach((countryElement) => {
+      const countryCode = parseInt(countryElement.textContent, 10);
+      if (!isNaN(countryCode)) {
+        const countryData = getCountryName(countryCode);
+        countryElement.textContent = countryData.name;
       }
+    });
 
-      // Create a blob object
-      let blob = new Blob([bytes], { type: "application/octet-stream" });
+    flagElements.forEach((flagElement) => {
+      const countryCode = parseInt(flagElement.textContent, 10);
+      if (!isNaN(countryCode)) {
+        const countryData = getCountryName(countryCode);
+        flagElement.innerHTML = countryData.flag;
+      }
+    });
 
-      // Create a file object from the blob
-      let file = new File([blob], "file.miigx");
+    const genderElements = document.querySelectorAll(".gender");
+    genderElements.forEach((genderElement) => {
+      const gender = parseInt(genderElement.innerHTML);
+      const genderName = getGender(gender);
+      genderElement.innerHTML = genderName;
+    });
+  });
 
-      // Send the file to the server
-      let formData = new FormData();
-      formData.append("platform", "wii");
-      formData.append("data", file);
-
-      // Use larsen's funky studio.cgi to get the data needed to render the mii
-      return fetch("https://miicontestp.wii.rc24.xyz/cgi-bin/studio.cgi", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          let mii = data.mii;
-
-          // Render the mii using Nintendo's servers
-          var src =
-            "https://studio.mii.nintendo.com/miis/image.png?data=" +
-            mii +
-            "&type=face_only&expression=normal&width=270&bgColor=FFFFFF00";
-
-          // Return the mii image
-          return src;
-        });
+  function renderMii(base64String) {
+    let binaryString = atob(base64String);
+    let binaryLen = binaryString.length;
+    let bytes = new Uint8Array(binaryLen);
+    for (let i = 0; i < binaryLen; i++) {
+      let ascii = binaryString.charCodeAt(i);
+      bytes[i] = ascii;
     }
 
-    function getGender(gender) {
-      switch (gender) {
-        case 1:
-          return '<span class="icon-[fa6-solid--person]"></span>';
-        case 2:
-          return '<span class="icon-[fa6-solid--person-dress]"></span>';
-        case 3:
-          return '<span class="icon-[fa6-solid--circle-question]"></span>';
-      }
+    let blob = new Blob([bytes], { type: "application/octet-stream" });
+    let file = new File([blob], "file.miigx");
+
+    let formData = new FormData();
+    formData.append("platform", "wii");
+    formData.append("data", file);
+
+    return fetch("https://miicontestp.wii.rc24.xyz/cgi-bin/studio.cgi", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        let mii = data.mii;
+
+        var src =
+          "https://studio.mii.nintendo.com/miis/image.png?data=" +
+          mii +
+          "&type=face_only&expression=normal&width=270&bgColor=FFFFFF00";
+
+        return src;
+      });
+  }
+
+  function getGender(gender) {
+    switch (gender) {
+      case 1:
+        return '<span class="icon-[fa6-solid--person]"></span>';
+      case 2:
+        return '<span class="icon-[fa6-solid--person-dress]"></span>';
+      case 3:
+        return '<span class="icon-[fa6-solid--circle-question]"></span>';
     }
+  }
 
-    function getCountryName(countryCode) {
-      switch (countryCode) {
-        case 1:
-          return { flag: "🇯🇵", name: "Japan" };
+  function getCountryName(countryCode) {
+    switch (countryCode) {
+      case 1:
+        return { flag: "🇯🇵", name: "Japan" };
 
-        case 8:
-          return { flag: "🇦🇮", name: "Anguilla" };
-        case 9:
-          return { flag: "🇦🇬", name: "Antigua and Barbuda" };
-        case 10:
-          return { flag: "🇦🇷", name: "Argentina" };
-        case 11:
-          return { flag: "🇦🇼", name: "Aruba" };
-        case 12:
-          return { flag: "🇧🇸", name: "Bahamas" };
-        case 13:
-          return { flag: "🇧🇧", name: "Barbados" };
-        case 14:
-          return { flag: "🇧🇿", name: "Belize" };
-        case 15:
-          return { flag: "🇧🇴", name: "Bolivia" };
-        case 16:
-          return { flag: "🇧🇷", name: "Brazil" };
-        case 17:
-          return { flag: "🇻🇬", name: "British Virgin Islands" };
-        case 18:
-          return { flag: "🇨🇦", name: "Canada" };
-        case 19:
-          return { flag: "🇰🇾", name: "Cayman Islands" };
-        case 20:
-          return { flag: "🇨🇱", name: "Chile" };
-        case 21:
-          return { flag: "🇨🇴", name: "Colombia" };
-        case 22:
-          return { flag: "🇨🇷", name: "Costa Rica" };
-        case 23:
-          return { flag: "🇩🇲", name: "Dominica" };
-        case 24:
-          return { flag: "🇩🇴", name: "Dominican Republic" };
-        case 25:
-          return { flag: "🇪🇨", name: "Ecuador" };
-        case 26:
-          return { flag: "🇸🇻", name: "El Salvador" };
-        case 27:
-          return { flag: "🇫🇷", name: "French Guiana" };
-        case 28:
-          return { flag: "🇬🇩", name: "Grenada" };
-        case 29:
-          return { flag: "🇬🇵", name: "Guadeloupe" };
-        case 30:
-          return { flag: "🇬🇹", name: "Guatemala" };
-        case 31:
-          return { flag: "🇬🇾", name: "Guyana" };
-        case 32:
-          return { flag: "🇭🇹", name: "Haiti" };
-        case 33:
-          return { flag: "🇭🇳", name: "Honduras" };
-        case 34:
-          return { flag: "🇯🇲", name: "Jamaica" };
-        case 35:
-          return { flag: "🇲🇶", name: "Martinique" };
-        case 36:
-          return { flag: "🇲🇽", name: "Mexico" };
-        case 37:
-          return { flag: "🇲🇸", name: "Montserrat" };
-        case 38:
-          return { flag: "🇳🇱", name: "Netherlands Antilles" };
-        case 39:
-          return { flag: "🇳🇮", name: "Nicaragua" };
-        case 40:
-          return { flag: "🇵🇦", name: "Panama" };
-        case 41:
-          return { flag: "🇵🇾", name: "Paraguay" };
-        case 42:
-          return { flag: "🇵🇪", name: "Peru" };
-        case 43:
-          return { flag: "🇰🇳", name: "St. Kitts and Nevis" };
-        case 44:
-          return { flag: "🇱🇨", name: "St. Lucia" };
-        case 45:
-          return { flag: "🇻🇨", name: "St. Vincent and the Grenadines" };
-        case 46:
-          return { flag: "🇸🇷", name: "Suriname" };
-        case 47:
-          return { flag: "🇹🇹", name: "Trinidad and Tobago" };
-        case 48:
-          return { flag: "🇹🇨", name: "Turks and Caicos Islands" };
-        case 49:
-          return { flag: "🇺🇸", name: "United States" };
-        case 50:
-          return { flag: "🇺🇾", name: "Uruguay" };
-        case 51:
-          return { flag: "🇻🇮", name: "US Virgin Islands" };
-        case 52:
-          return { flag: "🇻🇪", name: "Venezuela" };
+      case 8:
+        return { flag: "🇦🇮", name: "Anguilla" };
+      case 9:
+        return { flag: "🇦🇬", name: "Antigua and Barbuda" };
+      case 10:
+        return { flag: "🇦🇷", name: "Argentina" };
+      case 11:
+        return { flag: "🇦🇼", name: "Aruba" };
+      case 12:
+        return { flag: "🇧🇸", name: "Bahamas" };
+      case 13:
+        return { flag: "🇧🇧", name: "Barbados" };
+      case 14:
+        return { flag: "🇧🇿", name: "Belize" };
+      case 15:
+        return { flag: "🇧🇴", name: "Bolivia" };
+      case 16:
+        return { flag: "🇧🇷", name: "Brazil" };
+      case 17:
+        return { flag: "🇻🇬", name: "British Virgin Islands" };
+      case 18:
+        return { flag: "🇨🇦", name: "Canada" };
+      case 19:
+        return { flag: "🇰🇾", name: "Cayman Islands" };
+      case 20:
+        return { flag: "🇨🇱", name: "Chile" };
+      case 21:
+        return { flag: "🇨🇴", name: "Colombia" };
+      case 22:
+        return { flag: "🇨🇷", name: "Costa Rica" };
+      case 23:
+        return { flag: "🇩🇲", name: "Dominica" };
+      case 24:
+        return { flag: "🇩🇴", name: "Dominican Republic" };
+      case 25:
+        return { flag: "🇪🇨", name: "Ecuador" };
+      case 26:
+        return { flag: "🇸🇻", name: "El Salvador" };
+      case 27:
+        return { flag: "🇫🇷", name: "French Guiana" };
+      case 28:
+        return { flag: "🇬🇩", name: "Grenada" };
+      case 29:
+        return { flag: "🇬🇵", name: "Guadeloupe" };
+      case 30:
+        return { flag: "🇬🇹", name: "Guatemala" };
+      case 31:
+        return { flag: "🇬🇾", name: "Guyana" };
+      case 32:
+        return { flag: "🇭🇹", name: "Haiti" };
+      case 33:
+        return { flag: "🇭🇳", name: "Honduras" };
+      case 34:
+        return { flag: "🇯🇲", name: "Jamaica" };
+      case 35:
+        return { flag: "🇲🇶", name: "Martinique" };
+      case 36:
+        return { flag: "🇲🇽", name: "Mexico" };
+      case 37:
+        return { flag: "🇲🇸", name: "Montserrat" };
+      case 38:
+        return { flag: "🇳🇱", name: "Netherlands Antilles" };
+      case 39:
+        return { flag: "🇳🇮", name: "Nicaragua" };
+      case 40:
+        return { flag: "🇵🇦", name: "Panama" };
+      case 41:
+        return { flag: "🇵🇾", name: "Paraguay" };
+      case 42:
+        return { flag: "🇵🇪", name: "Peru" };
+      case 43:
+        return { flag: "🇰🇳", name: "St. Kitts and Nevis" };
+      case 44:
+        return { flag: "🇱🇨", name: "St. Lucia" };
+      case 45:
+        return { flag: "🇻🇨", name: "St. Vincent and the Grenadines" };
+      case 46:
+        return { flag: "🇸🇷", name: "Suriname" };
+      case 47:
+        return { flag: "🇹🇹", name: "Trinidad and Tobago" };
+      case 48:
+        return { flag: "🇹🇨", name: "Turks and Caicos Islands" };
+      case 49:
+        return { flag: "🇺🇸", name: "United States" };
+      case 50:
+        return { flag: "🇺🇾", name: "Uruguay" };
+      case 51:
+        return { flag: "🇻🇮", name: "US Virgin Islands" };
+      case 52:
+        return { flag: "🇻🇪", name: "Venezuela" };
 
-        case 64:
-          return { flag: "🇦🇱", name: "Albania" };
-        case 65:
-          return { flag: "🇦🇺", name: "Australia" };
-        case 66:
-          return { flag: "🇦🇹", name: "Austria" };
-        case 67:
-          return { flag: "🇧🇪", name: "Belgium" };
-        case 68:
-          return { flag: "🇧🇦", name: "Bosnia and Herzegovina" };
-        case 69:
-          return { flag: "🇧🇼", name: "Botswana" };
-        case 70:
-          return { flag: "🇧🇬", name: "Bulgaria" };
-        case 71:
-          return { flag: "🇭🇷", name: "Croatia" };
-        case 72:
-          return { flag: "🇨🇾", name: "Cyprus" };
-        case 73:
-          return { flag: "🇨🇿", name: "Czech Republic" };
-        case 74:
-          return { flag: "🇩🇰", name: "Denmark" };
-        case 75:
-          return { flag: "🇪🇪", name: "Estonia" };
-        case 76:
-          return { flag: "🇫🇮", name: "Finland" };
-        case 77:
-          return { flag: "🇫🇷", name: "France" };
-        case 78:
-          return { flag: "🇩🇪", name: "Germany" };
-        case 79:
-          return { flag: "🇬🇷", name: "Greece" };
-        case 80:
-          return { flag: "🇭🇺", name: "Hungary" };
-        case 81:
-          return { flag: "🇮🇸", name: "Iceland" };
-        case 82:
-          return { flag: "🇮🇪", name: "Ireland" };
-        case 83:
-          return { flag: "🇮🇹", name: "Italy" };
-        case 84:
-          return { flag: "🇱🇻", name: "Latvia" };
-        case 85:
-          return { flag: "🇱🇸", name: "Lesotho" };
-        case 86:
-          return { flag: "🇱🇮", name: "Lichtenstein" };
-        case 87:
-          return { flag: "🇱🇹", name: "Lithuania" };
-        case 88:
-          return { flag: "🇱🇺", name: "Luxembourg" };
-        case 89:
-          return { flag: "🇲🇰", name: "F.Y.R of Macedonia" };
-        case 90:
-          return { flag: "🇲🇹", name: "Malta" };
-        case 91:
-          return { flag: "🇲🇪", name: "Montenegro" };
-        case 92:
-          return { flag: "🇲🇿", name: "Mozambique" };
-        case 93:
-          return { flag: "🇳🇦", name: "Namibia" };
-        case 94:
-          return { flag: "🇳🇱", name: "Netherlands" };
-        case 95:
-          return { flag: "🇳🇿", name: "New Zealand" };
-        case 96:
-          return { flag: "🇳🇴", name: "Norway" };
-        case 97:
-          return { flag: "🇵🇱", name: "Poland" };
-        case 98:
-          return { flag: "🇵🇹", name: "Portugal" };
-        case 99:
-          return { flag: "🇷🇴", name: "Romania" };
-        case 100:
-          return { flag: "🇷🇺", name: "Russia" };
-        case 101:
-          return { flag: "🇷🇸", name: "Serbia" };
-        case 102:
-          return { flag: "🇸🇰", name: "Slovakia" };
-        case 103:
-          return { flag: "🇸🇮", name: "Slovenia" };
-        case 104:
-          return { flag: "🇿🇦", name: "South Africa" };
-        case 105:
-          return { flag: "🇪🇸", name: "Spain" };
-        case 106:
-          return { flag: "🇸🇿", name: "Swaziland" };
-        case 107:
-          return { flag: "🇸🇪", name: "Sweden" };
-        case 108:
-          return { flag: "🇨🇭", name: "Switzerland" };
-        case 109:
-          return { flag: "🇹🇷", name: "Turkey" };
-        case 110:
-          return { flag: "🇬🇧", name: "United Kingdom" };
-        case 111:
-          return { flag: "🇿🇲", name: "Zambia" };
-        case 112:
-          return { flag: "🇿🇼", name: "Zimbabwe" };
-        case 113:
-          return { flag: "🇦🇿", name: "Azerbaijan" };
-        case 114:
-          return {
-            flag: "🇲🇷",
-            name: "Mauritania (Islamic Republic of Mauritania)",
-          };
-        case 115:
-          return { flag: "🇲🇱", name: "Mali (Republic of Mali)" };
-        case 116:
-          return { flag: "🇳🇪", name: "Niger (Republic of Niger)" };
-        case 117:
-          return { flag: "🇹🇩", name: "Chad (Republic of Chad)" };
-        case 118:
-          return { flag: "🇸🇩", name: "Sudan (Republic of the Sudan)" };
-        case 119:
-          return { flag: "🇪🇷", name: "Eritrea (State of Eritrea)" };
-        case 120:
-          return { flag: "🇩🇯", name: "Djibouti (Republic of Djibouti)" };
-        case 121:
-          return { flag: "🇸🇴", name: "Somalia (Somali Republic)" };
+      case 64:
+        return { flag: "🇦🇱", name: "Albania" };
+      case 65:
+        return { flag: "🇦🇺", name: "Australia" };
+      case 66:
+        return { flag: "🇦🇹", name: "Austria" };
+      case 67:
+        return { flag: "🇧🇪", name: "Belgium" };
+      case 68:
+        return { flag: "🇧🇦", name: "Bosnia and Herzegovina" };
+      case 69:
+        return { flag: "🇧🇼", name: "Botswana" };
+      case 70:
+        return { flag: "🇧🇬", name: "Bulgaria" };
+      case 71:
+        return { flag: "🇭🇷", name: "Croatia" };
+      case 72:
+        return { flag: "🇨🇾", name: "Cyprus" };
+      case 73:
+        return { flag: "🇨🇿", name: "Czech Republic" };
+      case 74:
+        return { flag: "🇩🇰", name: "Denmark" };
+      case 75:
+        return { flag: "🇪🇪", name: "Estonia" };
+      case 76:
+        return { flag: "🇫🇮", name: "Finland" };
+      case 77:
+        return { flag: "🇫🇷", name: "France" };
+      case 78:
+        return { flag: "🇩🇪", name: "Germany" };
+      case 79:
+        return { flag: "🇬🇷", name: "Greece" };
+      case 80:
+        return { flag: "🇭🇺", name: "Hungary" };
+      case 81:
+        return { flag: "🇮🇸", name: "Iceland" };
+      case 82:
+        return { flag: "🇮🇪", name: "Ireland" };
+      case 83:
+        return { flag: "🇮🇹", name: "Italy" };
+      case 84:
+        return { flag: "🇱🇻", name: "Latvia" };
+      case 85:
+        return { flag: "🇱🇸", name: "Lesotho" };
+      case 86:
+        return { flag: "🇱🇮", name: "Lichtenstein" };
+      case 87:
+        return { flag: "🇱🇹", name: "Lithuania" };
+      case 88:
+        return { flag: "🇱🇺", name: "Luxembourg" };
+      case 89:
+        return { flag: "🇲🇰", name: "F.Y.R of Macedonia" };
+      case 90:
+        return { flag: "🇲🇹", name: "Malta" };
+      case 91:
+        return { flag: "🇲🇪", name: "Montenegro" };
+      case 92:
+        return { flag: "🇲🇿", name: "Mozambique" };
+      case 93:
+        return { flag: "🇳🇦", name: "Namibia" };
+      case 94:
+        return { flag: "🇳🇱", name: "Netherlands" };
+      case 95:
+        return { flag: "🇳🇿", name: "New Zealand" };
+      case 96:
+        return { flag: "🇳🇴", name: "Norway" };
+      case 97:
+        return { flag: "🇵🇱", name: "Poland" };
+      case 98:
+        return { flag: "🇵🇹", name: "Portugal" };
+      case 99:
+        return { flag: "🇷🇴", name: "Romania" };
+      case 100:
+        return { flag: "🇷🇺", name: "Russia" };
+      case 101:
+        return { flag: "🇷🇸", name: "Serbia" };
+      case 102:
+        return { flag: "🇸🇰", name: "Slovakia" };
+      case 103:
+        return { flag: "🇸🇮", name: "Slovenia" };
+      case 104:
+        return { flag: "🇿🇦", name: "South Africa" };
+      case 105:
+        return { flag: "🇪🇸", name: "Spain" };
+      case 106:
+        return { flag: "🇸🇿", name: "Swaziland" };
+      case 107:
+        return { flag: "🇸🇪", name: "Sweden" };
+      case 108:
+        return { flag: "🇨🇭", name: "Switzerland" };
+      case 109:
+        return { flag: "🇹🇷", name: "Turkey" };
+      case 110:
+        return { flag: "🇬🇧", name: "United Kingdom" };
+      case 111:
+        return { flag: "🇿🇲", name: "Zambia" };
+      case 112:
+        return { flag: "🇿🇼", name: "Zimbabwe" };
+      case 113:
+        return { flag: "🇦🇿", name: "Azerbaijan" };
+      case 114:
+        return {
+          flag: "🇲🇷",
+          name: "Mauritania (Islamic Republic of Mauritania)",
+        };
+      case 115:
+        return { flag: "🇲🇱", name: "Mali (Republic of Mali)" };
+      case 116:
+        return { flag: "🇳🇪", name: "Niger (Republic of Niger)" };
+      case 117:
+        return { flag: "🇹🇩", name: "Chad (Republic of Chad)" };
+      case 118:
+        return { flag: "🇸🇩", name: "Sudan (Republic of the Sudan)" };
+      case 119:
+        return { flag: "🇪🇷", name: "Eritrea (State of Eritrea)" };
+      case 120:
+        return { flag: "🇩🇯", name: "Djibouti (Republic of Djibouti)" };
+      case 121:
+        return { flag: "🇸🇴", name: "Somalia (Somali Republic)" };
 
-        case 128:
-          return { flag: "🇹🇼", name: "Taiwan" };
-        case 136:
-          return { flag: "🇰🇷", name: "South Korea" };
-        case 144:
-          return { flag: "🇭🇰", name: "Hong Kong" };
-        case 145:
-          return { flag: "🇲🇴", name: "Macao" };
-        case 152:
-          return { flag: "🇮🇩", name: "Indonesia" };
-        case 153:
-          return { flag: "🇸🇬", name: "Singapore" };
-        case 154:
-          return { flag: "🇹🇭", name: "Thailand" };
-        case 155:
-          return { flag: "🇵🇭", name: "Philippines" };
-        case 156:
-          return { flag: "🇲🇾", name: "Malaysia" };
-        case 160:
-          return { flag: "🇨🇳", name: "China" };
+      case 128:
+        return { flag: "🇹🇼", name: "Taiwan" };
+      case 136:
+        return { flag: "🇰🇷", name: "South Korea" };
+      case 144:
+        return { flag: "🇭🇰", name: "Hong Kong" };
+      case 145:
+        return { flag: "🇲🇴", name: "Macao" };
+      case 152:
+        return { flag: "🇮🇩", name: "Indonesia" };
+      case 153:
+        return { flag: "🇸🇬", name: "Singapore" };
+      case 154:
+        return { flag: "🇹🇭", name: "Thailand" };
+      case 155:
+        return { flag: "🇵🇭", name: "Philippines" };
+      case 156:
+        return { flag: "🇲🇾", name: "Malaysia" };
+      case 160:
+        return { flag: "🇨🇳", name: "China" };
 
-        case 168:
-          return { flag: "🇦🇪", name: "U.A.E." };
-        case 169:
-          return { flag: "🇮🇳", name: "India" };
-        case 170:
-          return { flag: "🇪🇬", name: "Egypt" };
-        case 171:
-          return { flag: "🇴🇲", name: "Oman" };
-        case 172:
-          return { flag: "🇶🇦", name: "Qatar" };
-        case 173:
-          return { flag: "🇰🇼", name: "Kuwait" };
-        case 174:
-          return { flag: "🇸🇦", name: "Saudi Arabia" };
-        case 175:
-          return { flag: "🇸🇾", name: "Syria" };
-        case 176:
-          return { flag: "🇧🇭", name: "Bahrain" };
-        case 177:
-          return { flag: "🇯🇴", name: "Jordan" };
+      case 168:
+        return { flag: "🇦🇪", name: "U.A.E." };
+      case 169:
+        return { flag: "🇮🇳", name: "India" };
+      case 170:
+        return { flag: "🇪🇬", name: "Egypt" };
+      case 171:
+        return { flag: "🇴🇲", name: "Oman" };
+      case 172:
+        return { flag: "🇶🇦", name: "Qatar" };
+      case 173:
+        return { flag: "🇰🇼", name: "Kuwait" };
+      case 174:
+        return { flag: "🇸🇦", name: "Saudi Arabia" };
+      case 175:
+        return { flag: "🇸🇾", name: "Syria" };
+      case 176:
+        return { flag: "🇧🇭", name: "Bahrain" };
+      case 177:
+        return { flag: "🇯🇴", name: "Jordan" };
 
-        default:
-          return { flag: "🏳️", name: "Unknown country" };
-      }
+      default:
+        return { flag: "🏳️", name: "Unknown country" };
     }
+  }
 
-    function toggleOpen(id) {
-      const element = document.getElementById(id);
-      if (element.classList.contains("hidden")) {
-        element.classList.remove("hidden");
-        localStorage.setItem(id, "open");
-      } else {
-        element.classList.add("hidden");
-        localStorage.setItem(id, "closed");
-      }
+  function toggleOpen(id) {
+    const element = document.getElementById(id);
+    if (element.classList.contains("hidden")) {
+      element.classList.remove("hidden");
+      localStorage.setItem(id, "open");
+    } else {
+      element.classList.add("hidden");
+      localStorage.setItem(id, "closed");
     }
+  }
 
-    function toggleSize() {
-      const grid = document.getElementById("small");
-      if (grid.classList.contains("big")) {
-        grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(400px, 1fr))";
-        document.getElementById("sizeIcon").innerHTML = '<span class="icon-[fa6-solid--square-plus]"></span>';
-        document.querySelectorAll(".wiiNum").forEach(element => element.style.display = "flex");
-        document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "row");
-        document.querySelectorAll(".miiId").forEach(element => element.style.display = "block");
-        document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "28px");
-        document.querySelectorAll(".country").forEach(element => element.style.display = "flex");   
-        document.querySelectorAll(".display").forEach(element => element.style.display = "none");     
-        document.querySelectorAll(".innerJustify").forEach(element => element.style.justifyContent = "space-between");
-        document.querySelectorAll(".deleteBtn").forEach(element => element.style.display = "block");
-        document.querySelectorAll(".delete_button").forEach(element => element.style.marginBottom = "0px");
-        document.querySelectorAll(".minData").forEach(element => element.style.display = "flex");
-        grid.classList.remove("big");
-        localStorage.setItem("gridSize", "small");
-      } else {
-        grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
-        document.getElementById("sizeIcon").innerHTML = '<span class="icon-[fa6-solid--square-minus]"></span>';
-        document.querySelectorAll(".wiiNum").forEach(element => element.style.display = "none");
-        document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "column");
-        document.querySelectorAll(".miiMain").forEach(element => element.style.alignItems = "center");
-        document.querySelectorAll(".miiId").forEach(element => element.style.display = "none");
-        document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "24px");
-        document.querySelectorAll(".country").forEach(element => element.style.display = "none");
-        document.querySelectorAll(".display").forEach(element => element.style.display = "block");
-        document.querySelectorAll(".innerJustify").forEach(element => element.style.justifyContent = "center");
-        document.querySelectorAll(".deleteBtn").forEach(element => element.style.display = "none");
-        document.querySelectorAll(".delete_button").forEach(element => element.style.marginBottom = "16px");
-        document.querySelectorAll(".minData").forEach(element => element.style.display = "none");
-        grid.classList.add("big");
-        localStorage.setItem("gridSize", "big");
-      }
+  function toggleSize() {
+    const grid = document.getElementById("small");
+    if (grid.classList.contains("big")) {
+      grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(400px, 1fr))";
+      document.getElementById("sizeIcon").innerHTML = '<img src="/assets/icon/grid.svg" alt="Toggle Grid Size" class="h-5 w-5 invert" />';
+      document.querySelectorAll(".wiiNum").forEach(element => element.style.display = "flex");
+      document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "row");
+      document.querySelectorAll(".miiId").forEach(element => element.style.display = "block");
+      document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "28px");
+      document.querySelectorAll(".country").forEach(element => element.style.display = "flex");
+      document.querySelectorAll(".display").forEach(element => element.style.display = "none");
+      document.querySelectorAll(".innerJustify").forEach(element => element.style.justifyContent = "space-between");
+      document.querySelectorAll(".deleteBtn").forEach(element => element.style.display = "block");
+      document.querySelectorAll(".delete_button").forEach(element => element.style.marginBottom = "0px");
+      document.querySelectorAll(".minData").forEach(element => element.style.display = "flex");
+      grid.classList.remove("big");
+      localStorage.setItem("gridSize", "small");
+    } else {
+      grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
+      document.getElementById("sizeIcon").innerHTML = '<img src="/assets/icon/grid-3x3.svg" alt="Toggle Grid Size" class="h-5 w-5 invert" />';
+      document.querySelectorAll(".wiiNum").forEach(element => element.style.display = "none");
+      document.querySelectorAll(".miiMain").forEach(element => element.style.flexDirection = "column");
+      document.querySelectorAll(".miiMain").forEach(element => element.style.alignItems = "center");
+      document.querySelectorAll(".miiId").forEach(element => element.style.display = "none");
+      document.querySelectorAll(".nickname").forEach(element => element.style.fontSize = "24px");
+      document.querySelectorAll(".country").forEach(element => element.style.display = "none");
+      document.querySelectorAll(".display").forEach(element => element.style.display = "block");
+      document.querySelectorAll(".innerJustify").forEach(element => element.style.justifyContent = "center");
+      document.querySelectorAll(".deleteBtn").forEach(element => element.style.display = "none");
+      document.querySelectorAll(".delete_button").forEach(element => element.style.marginBottom = "16px");
+      document.querySelectorAll(".minData").forEach(element => element.style.display = "none");
+      grid.classList.add("big");
+      localStorage.setItem("gridSize", "big");
     }
+  }
 
-    // Function to apply the saved size setting on page load
-    function applySavedSizeSetting() {
-      const savedSize = localStorage.getItem("gridSize");
-      const grid = document.getElementById("small");
-      if (savedSize === "big" && !grid.classList.contains("big")) {
-        toggleSize(); // This will switch to big if it's not already set
-      } else if (savedSize === "small" && grid.classList.contains("big")) {
-        toggleSize(); // This will switch to small if it's not already set
-      }
+  // Function to apply the saved size setting on page load
+  function applySavedSizeSetting() {
+    const savedSize = localStorage.getItem("gridSize");
+    const grid = document.getElementById("small");
+    if (savedSize === "big" && !grid.classList.contains("big")) {
+      toggleSize(); // This will switch to big if it's not already set
+    } else if (savedSize === "small" && grid.classList.contains("big")) {
+      toggleSize(); // This will switch to small if it's not already set
     }
-  </script>
-</html>
+  }
+</script>
