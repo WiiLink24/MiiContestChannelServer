@@ -13,6 +13,9 @@ import (
 	"golang.org/x/oauth2"
 	"log"
 	"net/http"
+
+	/* "go.opentelemetry.io/otel" */
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 var (
@@ -58,6 +61,22 @@ func main() {
 	// Set up HTTP
 	r := gin.Default()
 	r.Use(cors.Default())
+
+	if config.UseOTLP {
+		tp, err := initTracer(config)
+		if err != nil {
+			log.Fatalf("Failed to initialize tracer: %v", err)
+		}
+
+		defer func() {
+			if err := tp.Shutdown(context.Background()); err != nil {
+				log.Printf("Error shutting down tracer provider: %v", err)
+			}
+		}()
+
+		r.Use(otelgin.Middleware("MiiContestChannelServer", otelgin.WithTracerProvider(tp)))
+	}
+
 	if gin.Mode() == gin.DebugMode {
 		r.Static("/assets", "./assets") // Serve static files
 	}

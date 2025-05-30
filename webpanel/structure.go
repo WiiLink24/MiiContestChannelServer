@@ -41,6 +41,8 @@ type Config struct {
 	AssetsPath      string     `xml:"assetsPath"`
 	OIDCConfig      OIDCConfig `xml:"oidc"`
 	AuthMode        bool       `xml:"auth_mode"`
+	UseOTLP		  bool       `xml:"use_otlp"`
+	OTLPEndpoint    string     `xml:"otlp_endpoint",omitempty`
 }
 
 type AppAuthConfig struct {
