@@ -43,6 +43,7 @@ type Config struct {
 	AuthMode        bool       `xml:"auth_mode"`
 	RedisAddress    string     `xml:"redisAddress"`
 	RedisPassword   string     `xml:"redisPassword"`
+	SessionSecret  string     `xml:"sessionSecret"`
 }
 
 type AppAuthConfig struct {

@@ -59,7 +59,7 @@ func main() {
 	pool, err = pgxpool.ConnectConfig(ctx, dbConf)
 	checkError(err)
 
-	store, _ := redis.NewStoreWithDB(10, "tcp", config.RedisAddress, "", config.RedisPassword, "1", []byte("kill me"))
+	store, _ := redis.NewStoreWithDB(10, "tcp", config.RedisAddress, "", config.RedisPassword, "1", []byte(config.SessionSecret))
 	store.Options(sessions.Options{
 		Path: "/",
 		MaxAge: 86400 * 90,
