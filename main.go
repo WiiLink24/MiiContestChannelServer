@@ -6,13 +6,17 @@ import (
 	"MiiContestChannelServer/webpanel"
 	"context"
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"golang.org/x/oauth2"
-	"log"
-	"net/http"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/redis"
 )
 
 var (
@@ -55,9 +59,16 @@ func main() {
 	pool, err = pgxpool.ConnectConfig(ctx, dbConf)
 	checkError(err)
 
+	store, _ := redis.NewStoreWithDB(10, "tcp", config.RedisAddress, "", config.RedisPassword, "1", []byte("kill me"))
+	store.Options(sessions.Options{
+		Path: "/",
+		MaxAge: 86400 * 90,
+	})
+
 	// Set up HTTP
 	r := gin.Default()
 	r.Use(cors.Default())
+	r.Use(sessions.Sessions("cmoc_session", store))
 	if gin.Mode() == gin.DebugMode {
 		r.Static("/assets", "./assets") // Serve static files
 	}
@@ -77,7 +88,7 @@ func main() {
 
 	auth := r.Group("/panel")
 	if config.AuthMode {
-		auth.Use(middleware.AuthenticationMiddleware(verifier))
+		auth.Use(middleware.AuthenticationMiddleware())
 	}
 	{
 		auth.GET("/admin", panel.AdminPage)

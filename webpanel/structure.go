@@ -41,6 +41,8 @@ type Config struct {
 	AssetsPath      string     `xml:"assetsPath"`
 	OIDCConfig      OIDCConfig `xml:"oidc"`
 	AuthMode        bool       `xml:"auth_mode"`
+	RedisAddress    string     `xml:"redisAddress"`
+	RedisPassword   string     `xml:"redisPassword"`
 }
 
 type AppAuthConfig struct {
