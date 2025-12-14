@@ -30,7 +30,7 @@ func Render(c *gin.Context) {
 	studioMii := CreateStudioMii(m, Wii)
 
 	queryParams := url.Values{
-		"data":          {studioMii},
+		"data":          {studioMii.Mii},
 		"type":          {"face"},
 		"width":         {"512"},
 		"instanceCount": {"1"},
