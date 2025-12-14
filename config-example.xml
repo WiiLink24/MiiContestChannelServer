@@ -23,4 +23,8 @@
         <scopes></scopes>
         <provider></provider>
     </oidc>
+
+    <!-- Session management -->
+    <redisAddress></redisAddress>
+    <sessionSecret></sessionSecret>
 </Config>

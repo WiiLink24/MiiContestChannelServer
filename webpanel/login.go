@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -75,19 +76,20 @@ func (w *WebPanel) FinishPanelHandler(c *gin.Context) {
 		return
 	}
 
-	idToken, err := w.Verifier.Verify(c, rawIdtoken)
-	if err != nil {
-		c.HTML(http.StatusBadRequest, "error.html", gin.H{
-			"Error": "Failed to verify id_token: " + err.Error(),
+	session := sessions.Default(c)
+	session.Set("authenticated", true)
+	session.Set("id_token", rawIdtoken)
+	if err := session.Save(); err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
+			"Error": "Failed to save session: " + err.Error(),
 		})
 		return
 	}
 
-	c.SetCookie("token", rawIdtoken, idToken.Expiry.Second(), "", "", false, true)
+	c.SetCookie("state", "", -1, "/", "", c.Request.TLS != nil, true)
 
-	//redirect to admin page
+	// Redirect to admin page
 	c.Redirect(http.StatusMovedPermanently, "/panel/contests")
-
 }
 
 func (w *WebPanel) LoginPage(c *gin.Context) {
@@ -96,4 +98,16 @@ func (w *WebPanel) LoginPage(c *gin.Context) {
 
 func (w *WebPanel) AdminPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin.html", nil)
+}
+
+func (w *WebPanel) LogoutHandler(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Clear()
+	if err := session.Save(); err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
+			"Error": "Failed to clear session: " + err.Error(),
+		})
+		return
+	}
+	c.Redirect(http.StatusMovedPermanently, "/panel/login")
 }
