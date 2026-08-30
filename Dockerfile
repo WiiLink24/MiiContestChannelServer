@@ -15,9 +15,7 @@ RUN go mod download
 
 # Copy necessary parts of the Mail-Go source into builder's source
 COPY *.go ./
-COPY assets assets
 COPY webpanel webpanel
-COPY templates templates
 COPY middleware middleware
 COPY mii mii
 
@@ -33,5 +31,7 @@ WORKDIR /home/server
 
 # Copy executable
 COPY --from=builder /home/server/app .
+COPY assets assets
+COPY templates templates
 
 CMD ["./app"]
