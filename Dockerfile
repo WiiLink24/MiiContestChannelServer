@@ -1,14 +1,17 @@
-FROM golang:1.24.11-alpine as builder
+FROM golang:alpine AS builder
 
 # We assume only git is needed for all dependencies.
 # openssl is already built-in.
 RUN apk add -U --no-cache git
 
-WORKDIR /opt/wiilink/cmoc/MiiContestChannelServer/
+RUN adduser -D server
+USER server
+WORKDIR /home/server
 
 # Cache pulled dependencies if not updated.
 COPY go.mod .
 COPY go.sum .
+RUN go mod download
 
 # Copy necessary parts of the Mail-Go source into builder's source
 COPY *.go ./
@@ -21,6 +24,14 @@ COPY mii mii
 # Build to name "app".
 RUN go build -o app .
 
-EXPOSE 2001
-# Wait until there's an actual MySQL connection we can use to start.
+# Runner
+FROM alpine:latest
+
+RUN adduser -D server
+USER server
+WORKDIR /home/server
+
+# Copy executable
+COPY --from=builder /home/server/app .
+
 CMD ["./app"]
